@@ -233,9 +233,9 @@ label.f{display:block;font-size:14px;font-weight:600;margin:0 0 6px;color:var(--
       <div class="card">
         <p class="step-label"><i>4</i> بياناتك</p>
         <div class="field"><label class="f" for="bName">الاسم بالكامل</label>
-          <input class="input" id="bName" autocomplete="name" placeholder="مثال: أحمد محمد علي"></div>
+          <input class="input" id="bName" autocomplete="off" placeholder="مثال: أحمد محمد علي"></div>
         <div class="field"><label class="f" for="bPhone">رقم الموبايل</label>
-          <input class="input" id="bPhone" type="tel" inputmode="tel" dir="ltr" autocomplete="tel" placeholder="01xxxxxxxxx"></div>
+          <input class="input" id="bPhone" type="tel" inputmode="tel" dir="ltr" autocomplete="off" placeholder="01xxxxxxxxx"></div>
         <div class="field"><label class="f" for="bNotes">ملاحظات (اختياري)</label>
           <textarea class="input" id="bNotes" rows="2" placeholder="أي حاجة تحب تقولهالنا"></textarea></div>
       </div>
@@ -258,7 +258,7 @@ label.f{display:block;font-size:14px;font-weight:600;margin:0 0 6px;color:var(--
     <section id="track" class="screen hidden">
       <form class="card" id="tForm">
         <div class="field"><label class="f" for="tQuery">رقم الموبايل أو رقم الطلب</label>
-          <input class="input" id="tQuery" dir="ltr" autocapitalize="characters" autocomplete="tel" placeholder="01xxxxxxxxx  أو  Q-1001"></div>
+          <input class="input" id="tQuery" dir="ltr" autocapitalize="characters" autocomplete="off" placeholder="01xxxxxxxxx  أو  Q-1001"></div>
         <div id="tErr" class="err hidden"></div>
         <button class="btn" id="tSubmit" type="submit">عرض الطلب</button>
         <p class="muted" style="margin:10px 0 0;text-align:center">اكتب رقم الموبايل اللي سجلت بيه، أو رقم الطلب المكتوب في الإيصال</p>
@@ -427,8 +427,6 @@ function renderCal(){
 }
 let bookReady = false;
 async function initBook(){
-  $('#bName').value ||= store.get('name');
-  $('#bPhone').value ||= store.get('phone');
   if (bookReady) return;
   $('#types').innerHTML = $('#days').innerHTML = '<span class="spinner dark"></span>';
   try {
@@ -481,7 +479,6 @@ $('#bSubmit').onclick = async () => {
   const name = $('#bName').value.trim(), phone = normPhone($('#bPhone').value);
   try {
     const r = await api('book', { name, phone, date:B.date, time:B.time, type:B.type, notes:$('#bNotes').value.trim() });
-    store.set('name', name); store.set('phone', phone);
     const pending = r.status !== 'مؤكد';
     $('#doneTitle').textContent = pending ? 'طلب الحجز وصل' : 'تم تأكيد الحجز';
     $('#doneSub').textContent = pending ? 'هنكلمك قريب عشان نأكد الميعاد' : 'مستنيينك في الميعاد';
@@ -500,9 +497,7 @@ $('#bSubmit').onclick = async () => {
 };
 
 /* ---------- Tracking ---------- */
-function initTrack(){
-  $('#tQuery').value ||= store.get('track') || store.get('phone');
-}
+function initTrack(){}
 $('#tForm').onsubmit = async e => {
   e.preventDefault();
   const btn = $('#tSubmit'), err = $('#tErr'), out = $('#tResult');
@@ -512,7 +507,6 @@ $('#tForm').onsubmit = async e => {
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>'; out.innerHTML = '';
   try {
     const r = await api('track', { q });
-    store.set('track', q);
     renderOrders(r);
   } catch (ex) { err.textContent = ex.message; err.classList.remove('hidden'); }
   finally { btn.disabled = false; btn.textContent = 'عرض الطلب'; }
@@ -568,6 +562,10 @@ $('#closeModal').onclick = () => $('#installModal').classList.add('hidden');
 $('#installModal').onclick = e => { if (e.target.id === 'installModal') $('#installModal').classList.add('hidden'); };
 
 /* ---------- Start ---------- */
+// كل فتحة بتبدأ فاضية: امسح أي بيانات اتحفظت قبل كده على الجهاز
+try { Object.keys(localStorage).filter(k => k.startsWith('qudra.')).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+document.querySelectorAll('input, textarea').forEach(el => { el.value = ''; });
+window.addEventListener('pageshow', e => { if (e.persisted) location.reload(); });
 if (DEMO) $('#demoBar').classList.remove('hidden');
 const startAt = location.hash.slice(1);
 history.replaceState({ id:'home' }, '', location.pathname + location.search);
