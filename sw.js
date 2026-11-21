@@ -1,5 +1,5 @@
 // غيّر رقم النسخة لما تعدّل أي ملف، عشان الموبايلات تاخد التحديث
-const VERSION = 'qudra-v1';
+const VERSION = 'qudra-v2';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'logo-white.png',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-180.png', 'icons/maskable-512.png'];
 
