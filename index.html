@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>قدرة | مركز الأطراف الصناعية</title>
+<meta name="description" content="احجز ميعادك وتابع طلبك في مركز قدرة للأطراف الصناعية">
+<meta name="theme-color" content="#093c71">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="قدرة">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#093c71; --blue:#3370e7; --teal:#00dfbe; --white:#fff;
+  --ink:#0d2440; --muted:#5f7390; --line:#e3eaf3; --bg:#f3f7fb; --danger:#d64545;
+  --radius:18px; --safe-top:env(safe-area-inset-top,0px); --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Cairo",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;font-size:16px;line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{max-width:520px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+
+/* Header */
+header{background:var(--navy);color:#fff;padding:calc(var(--safe-top) + 14px) 18px 16px;position:sticky;top:0;z-index:5;
+  display:flex;align-items:center;gap:12px;min-height:64px}
+header .logo{height:30px;display:block}
+header .title{font-weight:700;font-size:17px;flex:1}
+.back{background:rgba(255,255,255,.12);border:0;width:40px;height:40px;border-radius:12px;color:#fff;display:grid;place-items:center;cursor:pointer}
+.back svg{width:22px;height:22px}
+.hidden{display:none!important}
+
+main{flex:1;padding:18px 16px calc(var(--safe-bottom) + 28px)}
+.screen{animation:in .25s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* Home */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#0d4f94 55%,var(--blue) 100%);color:#fff;border-radius:24px;
+  padding:26px 22px 24px;margin:-4px 0 18px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;inset:auto -60px -80px auto;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,223,190,.45),transparent 65%)}
+.hero h1{margin:0 0 6px;font-size:24px;font-weight:800;line-height:1.35}
+.hero p{margin:0;opacity:.85;font-size:15px}
+.actions{display:grid;gap:12px}
+.action{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px;text-align:right;cursor:pointer;box-shadow:0 4px 14px rgba(9,60,113,.06);transition:transform .15s}
+.action:active{transform:scale(.98)}
+.action .ic{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;flex:none}
+.action .ic svg{width:26px;height:26px}
+.ic.teal{background:rgba(0,223,190,.14);color:#00a88f}
+.ic.blue{background:rgba(51,112,231,.12);color:var(--blue)}
+.action b{display:block;font-size:17px}
+.action span{color:var(--muted);font-size:14px}
+.action .chev{margin-inline-start:auto;color:#a9b7c9}
+
+.section-title{font-size:15px;font-weight:700;color:var(--muted);margin:24px 4px 10px}
+.contacts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.contact{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 4px;text-align:center;
+  text-decoration:none;color:var(--ink);font-size:13px;font-weight:600}
+.contact svg{width:24px;height:24px;display:block;margin:0 auto 4px;color:var(--navy)}
+.address{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-top:10px;font-size:14px;color:var(--muted)}
+.install-cta{margin-top:18px;width:100%;background:transparent;border:1.5px dashed #b9c8da;color:var(--navy);
+  border-radius:16px;padding:12px;font-weight:700;cursor:pointer}
+
+/* Forms */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.step-label{display:flex;align-items:center;gap:8px;font-weight:700;margin:0 0 12px}
+.step-label i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;
+  display:grid;place-items:center;font-size:13px}
+label.f{display:block;font-size:14px;font-weight:600;margin:0 0 6px;color:var(--muted)}
+.input{width:100%;border:1.5px solid var(--line);background:#fbfdff;border-radius:14px;padding:12px 14px;outline:none;font-size:16px}
+.input:focus{border-color:var(--blue);background:#fff}
+.input[dir=ltr]{text-align:right}
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;cursor:pointer;font-size:14px;font-weight:600}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+
+.days{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.day{flex:none;width:68px;border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:8px 0;text-align:center;
+  cursor:pointer;scroll-snap-align:start}
+.day small{display:block;font-size:12px;color:var(--muted)}
+.day b{display:block;font-size:20px;line-height:1.3}
+.day.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.day.on small{color:rgba(255,255,255,.8)}
+
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.slot{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:9px 0;text-align:center;cursor:pointer;font-weight:700;font-size:14px}
+.slot.on{background:var(--teal);border-color:var(--teal);color:var(--navy)}
+.slot:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+.empty{color:var(--muted);font-size:14px;text-align:center;padding:12px 0}
+
+.btn{width:100%;border:0;border-radius:16px;padding:15px;font-size:17px;font-weight:800;cursor:pointer;
+  background:var(--navy);color:#fff;box-shadow:0 8px 20px rgba(9,60,113,.2)}
+.btn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line);box-shadow:none}
+.err{background:#fdeeee;color:var(--danger);border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:12px}
+
+/* Success */
+.done{text-align:center;padding:10px 4px}
+.done .tick{width:84px;height:84px;border-radius:50%;background:rgba(0,223,190,.16);color:#00a88f;display:grid;place-items:center;margin:10px auto 14px}
+.done .tick svg{width:44px;height:44px}
+.done h2{margin:0 0 6px;font-size:22px}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.kv:last-child{border-bottom:0}
+.kv span{color:var(--muted)}
+.kv b{text-align:left}
+
+/* Tracking */
+.order-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.order-head h3{margin:0;font-size:18px}
+.badge{display:inline-block;background:rgba(0,223,190,.16);color:#008a75;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700;white-space:nowrap}
+.muted{color:var(--muted);font-size:14px}
+.timeline{list-style:none;margin:16px 0 4px;padding:0}
+.timeline li{position:relative;padding:0 34px 18px 0;color:#9aabbf;font-weight:600}
+.timeline li:last-child{padding-bottom:0}
+.timeline li:before{content:"";position:absolute;right:7px;top:8px;bottom:-8px;width:2px;background:var(--line)}
+.timeline li:last-child:before{display:none}
+.timeline li:after{content:"";position:absolute;right:0;top:5px;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #c9d5e3}
+.timeline li.done{color:var(--ink)}
+.timeline li.done:after{background:var(--teal);border-color:var(--teal)}
+.timeline li.done:before{background:var(--teal)}
+.timeline li.now{color:var(--navy);font-weight:800}
+.timeline li.now:after{background:var(--navy);border-color:var(--navy);box-shadow:0 0 0 5px rgba(9,60,113,.14)}
+.delivery{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-radius:16px;padding:16px;margin:14px 0 0;display:flex;align-items:center;gap:12px}
+.delivery svg{width:30px;height:30px;flex:none;color:var(--teal)}
+.delivery small{display:block;opacity:.8}
+.delivery b{font-size:18px}
+.money{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.money div{background:var(--bg);border-radius:14px;padding:12px 4px}
+.money span{display:block;font-size:12px;color:var(--muted)}
+.money b{font-size:16px}
+.money .rem{background:rgba(51,112,231,.1)}
+.money .rem b{color:var(--blue)}
+.note{background:#fff8e6;border-radius:12px;padding:10px 12px;font-size:14px;margin-top:12px}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(9,30,60,.5);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.sheet{background:#fff;width:100%;max-width:520px;border-radius:24px 24px 0 0;padding:22px 20px calc(var(--safe-bottom) + 22px);animation:up .25s ease}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.sheet h3{margin:0 0 12px;font-size:19px}
+.sheet ol{margin:0 0 18px;padding:0 20px 0 0}
+.sheet li{margin-bottom:8px}
+.tabs{display:flex;background:var(--bg);border-radius:12px;padding:4px;margin-bottom:14px}
+.tabs button{flex:1;border:0;background:transparent;padding:8px;border-radius:9px;font-weight:700;cursor:pointer}
+.tabs button.on{background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.demo{background:#fff3cd;color:#7a5b00;font-size:13px;text-align:center;padding:6px}
+.spinner{width:22px;height:22px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
+.spinner.dark{border-color:var(--line);border-top-color:var(--navy)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.center{text-align:center;padding:16px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div id="demoBar" class="demo hidden">وضع تجريبي: البيانات دي للتجربة بس ومش متوصلة بالشيت</div>
+  <header>
+    <button id="backBtn" class="back hidden" aria-label="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <img class="logo" id="hdrLogo" src="logo-white.png" alt="قدرة">
+    <div class="title hidden" id="hdrTitle"></div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section id="home" class="screen">
+      <div class="hero">
+        <h1>أهلاً بيك في مركز قدرة</h1>
+        <p>احجز ميعادك وتابع طلبك من موبايلك</p>
+      </div>
+      <div class="actions">
+        <button class="action" data-go="book">
+          <div class="ic teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 3v3M16 3v3M3 9.5h18M12 13v4M10 15h4"/></svg></div>
+          <div><b>احجز ميعاد</b><span>كشف، مقاسات، بروفة أو صيانة</span></div>
+          <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <button class="action" data-go="track">
+          <div class="ic blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg></div>
+          <div><b>تابع طلبك</b><span>حالة الطرف، ميعاد الاستلام والتكلفة</span></div>
+          <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+      </div>
+
+      <div id="contactWrap" class="hidden">
+        <div class="section-title">تواصل معانا</div>
+        <div class="contacts" id="contacts"></div>
+        <div class="address hidden" id="address"></div>
+      </div>
+
+      <button class="install-cta hidden" id="installBtn">📲 ثبّت الأبلكيشن على موبايلك</button>
+    </section>
+
+    <!-- BOOK -->
+    <section id="book" class="screen hidden">
+      <div class="card">
+        <p class="step-label"><i>1</i> نوع الزيارة</p>
+        <div class="chips" id="types"></div>
+      </div>
+      <div class="card">
+        <p class="step-label"><i>2</i> اختار اليوم</p>
+        <div class="days" id="days"></div>
+        <p class="step-label" style="margin-top:14px"><i>3</i> اختار الساعة</p>
+        <div id="slots"><div class="empty">اختار يوم الأول</div></div>
+      </div>
+      <div class="card">
+        <p class="step-label"><i>4</i> بياناتك</p>
+        <div class="field"><label class="f" for="bName">الاسم بالكامل</label>
+          <input class="input" id="bName" autocomplete="name" placeholder="مثال: أحمد محمد علي"></div>
+        <div class="field"><label class="f" for="bPhone">رقم الموبايل</label>
+          <input class="input" id="bPhone" type="tel" inputmode="tel" dir="ltr" autocomplete="tel" placeholder="01xxxxxxxxx"></div>
+        <div class="field"><label class="f" for="bNotes">ملاحظات (اختياري)</label>
+          <textarea class="input" id="bNotes" rows="2" placeholder="أي حاجة تحب تقولهالنا"></textarea></div>
+      </div>
+      <div id="bErr" class="err hidden"></div>
+      <button class="btn" id="bSubmit" disabled>تأكيد الحجز</button>
+    </section>
+
+    <!-- BOOK DONE -->
+    <section id="booked" class="screen hidden">
+      <div class="done">
+        <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+        <h2 id="doneTitle">تم الحجز</h2>
+        <p class="muted" id="doneSub"></p>
+      </div>
+      <div class="card" id="doneCard"></div>
+      <button class="btn" data-go="home">الرجوع للرئيسية</button>
+    </section>
+
+    <!-- TRACK -->
+    <section id="track" class="screen hidden">
+      <form class="card" id="tForm">
+        <div class="field"><label class="f" for="tPhone">رقم الموبايل</label>
+          <input class="input" id="tPhone" type="tel" inputmode="tel" dir="ltr" autocomplete="tel" placeholder="01xxxxxxxxx"></div>
+        <div class="field"><label class="f" for="tOrder">رقم الطلب</label>
+          <input class="input" id="tOrder" dir="ltr" autocapitalize="characters" placeholder="Q-1001"></div>
+        <div id="tErr" class="err hidden"></div>
+        <button class="btn" id="tSubmit" type="submit">عرض الطلب</button>
+        <p class="muted" style="margin:10px 0 0;text-align:center">رقم الطلب مكتوب في الإيصال أو في رسالة المركز</p>
+      </form>
+      <div id="tResult"></div>
+    </section>
+  </main>
+</div>
+
+<!-- Install modal -->
+<div class="modal hidden" id="installModal">
+  <div class="sheet">
+    <h3>ثبّت أبلكيشن قدرة</h3>
+    <div class="tabs"><button data-os="ios">آيفون</button><button data-os="android">أندرويد</button></div>
+    <ol id="osIos">
+      <li>افتح اللينك ده من <b>Safari</b></li>
+      <li>دوس على زرار المشاركة <b>⬆︎</b> تحت</li>
+      <li>اختار <b>"إضافة إلى الشاشة الرئيسية"</b></li>
+      <li>دوس <b>"إضافة"</b></li>
+    </ol>
+    <ol id="osAndroid" class="hidden">
+      <li>افتح اللينك من <b>Chrome</b></li>
+      <li>دوس على النقط التلاتة <b>⋮</b> فوق</li>
+      <li>اختار <b>"تثبيت التطبيق"</b> أو <b>"إضافة إلى الشاشة الرئيسية"</b></li>
+    </ol>
+    <button class="btn ghost" id="closeModal">تمام</button>
+  </div>
+</div>
+
+<script>
+/* ══════════ الإعداد: حط هنا لينك الـ Web App بتاع Apps Script ══════════ */
+const API_URL = "https://script.google.com/macros/s/AKfycbxdbMf_KsuX3jxbJgy8QXi0ehY4ttbkWtGMB9UvM4kAud-7mC9MAl_2eklYWQ_0OFibUw/exec";
+/* ═════════════════════════════════════════════════════════════════════ */
+
+const DEMO = !/^https:\/\/script\.google\.com\//.test(API_URL);
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const DAY_AR = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const ICON = {
+  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/></svg>',
+  wa:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 001.8-1.2 2.2 2.2 0 00.1-1.2c0-.1-.2-.2-.5-.3z"/></svg>',
+  map:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0119 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+  fb:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 8V6.5c0-.8.2-1.2 1.4-1.2H17V2.2A20 20 0 0014.6 2C12.2 2 10.6 3.4 10.6 6v2H8v3.4h2.6V22H14V11.4h2.7L17 8z"/></svg>',
+  truck:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 3v3M16 3v3M3 9.5h18M8.5 14.5l2.5 2.5 4.5-4.5"/></svg>'
+};
+
+/* ---------- helpers ---------- */
+const store = {
+  get(k){ try{ return localStorage.getItem('qudra.'+k) || ''; }catch(e){ return ''; } },
+  set(k,v){ try{ localStorage.setItem('qudra.'+k, v); }catch(e){} }
+};
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toLatin = s => String(s||'').replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+const ymdToDate = ymd => { const [y,m,d] = ymd.split('-').map(Number); return new Date(y, m-1, d); };
+const toYmd = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const fmtDay = ymd => ymd ? new Intl.DateTimeFormat('ar-EG',{weekday:'long',day:'numeric',month:'long'}).format(ymdToDate(ymd)) : '—';
+const fmtTime = t => { if(!t) return ''; let [h,m] = t.split(':').map(Number); const pm = h >= 12; h = h % 12 || 12;
+  return new Intl.NumberFormat('ar-EG').format(h) + ':' + new Intl.NumberFormat('ar-EG',{minimumIntegerDigits:2}).format(m) + (pm ? ' م' : ' ص'); };
+const money = n => new Intl.NumberFormat('ar-EG').format(Math.round(n||0)) + ' ج';
+const normPhone = v => { let p = toLatin(v).replace(/\D/g,''); if(p.startsWith('0020')) p = p.slice(4); else if(p.startsWith('20') && p.length===12) p = p.slice(2);
+  if(p.length===10 && p[0]==='1') p = '0'+p; return p; };
+const validPhone = p => /^01[0125]\d{8}$/.test(p);
+
+/* ---------- API ---------- */
+async function api(action, data = {}){
+  if (DEMO) return demoApi(action, data);
+  const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({ action, ...data }) });
+  const json = await res.json();
+  if (!json.ok) throw new Error(json.error || 'حصل خطأ، جرّب تاني');
+  return json;
+}
+
+/* ---------- Demo mode (لحد ما تحط لينك الـ API) ---------- */
+const demoBooked = {};
+async function demoApi(action, d){
+  await new Promise(r => setTimeout(r, 350));
+  const today = toYmd(new Date());
+  if (action === 'config') return { ok:true, name:'مركز قدرة للأطراف الصناعية', workDays:[6,0,1,2,3,4], daysAhead:14, holidays:[], today,
+    visitTypes:['كشف واستشارة','أخذ مقاسات','بروفة','استلام الطرف','صيانة'],
+    orderStatuses:['تم أخذ المقاسات','تحت التصنيع','جاهز للبروفة','جاهز للاستلام','تم الاستلام'],
+    contact:{ phone:'01000000000', whatsapp:'01000000000', address:'العنوان هيتكتب هنا من شيت الإعدادات', maps:'https://maps.google.com', facebook:'https://facebook.com' } };
+  if (action === 'slots') { const out = []; for (let m = 600; m + 30 <= 1080; m += 30) { const t = String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+      out.push({ time:t, available: !demoBooked[d.date+t] && (m/30) % 5 !== 2 }); } return { ok:true, slots: out }; }
+  if (action === 'book') { demoBooked[d.date+d.time] = 1; return { ok:true, ref:'A-DEMO-1', date:d.date, time:d.time, status:'في انتظار التأكيد' }; }
+  if (action === 'track') {
+    if (normPhone(d.phone) !== '01000000000' || toLatin(d.order).toUpperCase().replace(/\s/g,'') !== 'Q-1001')
+      throw new Error('مفيش طلب بالبيانات دي. للتجربة: 01000000000 و Q-1001');
+    const del = new Date(); del.setDate(del.getDate()+10);
+    return { ok:true, statuses:['تم أخذ المقاسات','تحت التصنيع','جاهز للبروفة','جاهز للاستلام','تم الاستلام'],
+      order:{ id:'Q-1001', name:'مريض تجريبي', type:'طرف سفلي تحت الركبة', measureDate:today, fittingDate:'', deliveryDate:toYmd(del),
+        status:'تحت التصنيع', cost:25000, paid:10000, remaining:15000, note:'هنكلمك قبل ميعاد البروفة بيوم' },
+      appointments:[{ date:toYmd(del), time:'11:00', type:'استلام الطرف', status:'مؤكد' }] };
+  }
+}
+
+/* ---------- Navigation ---------- */
+const TITLES = { book:'احجز ميعاد', booked:'تأكيد الحجز', track:'تابع طلبك' };
+function go(id, push = true){
+  $$('main > section').forEach(s => s.classList.add('hidden'));
+  $('#'+id).classList.remove('hidden');
+  const isHome = id === 'home';
+  $('#backBtn').classList.toggle('hidden', isHome);
+  $('#hdrLogo').classList.toggle('hidden', !isHome);
+  $('#hdrTitle').classList.toggle('hidden', isHome);
+  $('#hdrTitle').textContent = TITLES[id] || '';
+  if (id === 'book') initBook();
+  if (id === 'track') initTrack();
+  window.scrollTo(0,0);
+  if (push) history.pushState({ id }, '', id === 'home' ? '#' : '#'+id);
+}
+window.addEventListener('popstate', e => go((e.state && e.state.id) || 'home', false));
+document.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) go(b.dataset.go); });
+$('#backBtn').onclick = () => history.length > 1 ? history.back() : go('home');
+
+/* ---------- Config / Home ---------- */
+let CFG = null;
+async function loadConfig(){
+  if (CFG) return CFG;
+  CFG = await api('config');
+  const c = CFG.contact || {}, list = [];
+  const intl = p => { const n = normPhone(p); return n.startsWith('0') ? '20'+n.slice(1) : n; };
+  if (c.phone) list.push(`<a class="contact" href="tel:${esc(normPhone(c.phone))}">${ICON.phone}اتصل</a>`);
+  if (c.whatsapp) list.push(`<a class="contact" href="https://wa.me/${esc(intl(c.whatsapp))}" target="_blank" rel="noopener">${ICON.wa}واتساب</a>`);
+  if (c.maps) list.push(`<a class="contact" href="${esc(c.maps)}" target="_blank" rel="noopener">${ICON.map}الموقع</a>`);
+  if (c.facebook) list.push(`<a class="contact" href="${esc(c.facebook)}" target="_blank" rel="noopener">${ICON.fb}فيسبوك</a>`);
+  if (list.length) { $('#contacts').innerHTML = list.join(''); $('#contacts').style.gridTemplateColumns = `repeat(${list.length},1fr)`; $('#contactWrap').classList.remove('hidden'); }
+  if (c.address) { $('#address').textContent = '📍 ' + c.address; $('#address').classList.remove('hidden'); }
+  return CFG;
+}
+
+/* ---------- Booking ---------- */
+const B = { type:'', date:'', time:'' };
+let bookReady = false;
+async function initBook(){
+  $('#bName').value ||= store.get('name');
+  $('#bPhone').value ||= store.get('phone');
+  if (bookReady) return;
+  $('#types').innerHTML = $('#days').innerHTML = '<span class="spinner dark"></span>';
+  try {
+    const c = await loadConfig();
+    $('#types').innerHTML = c.visitTypes.map(t => `<button class="chip" data-type="${esc(t)}">${esc(t)}</button>`).join('');
+    const days = [], start = ymdToDate(c.today || toYmd(new Date()));
+    for (let i = 0; i <= c.daysAhead; i++) {
+      const d = new Date(start); d.setDate(start.getDate() + i);
+      const ymd = toYmd(d);
+      if (!c.workDays.includes(d.getDay()) || (c.holidays||[]).includes(ymd)) continue;
+      const label = i === 0 ? 'النهاردة' : i === 1 ? 'بكرة' : DAY_AR[d.getDay()];
+      days.push(`<button class="day" data-date="${ymd}"><small>${label}</small><b>${new Intl.NumberFormat('ar-EG').format(d.getDate())}</b><small>${new Intl.DateTimeFormat('ar-EG',{month:'short'}).format(d)}</small></button>`);
+    }
+    $('#days').innerHTML = days.join('') || '<div class="empty">مفيش أيام متاحة دلوقتي</div>';
+    bookReady = true;
+  } catch (e) { $('#types').innerHTML = `<div class="err">${esc(e.message)}</div>`; $('#days').innerHTML = ''; }
+}
+
+$('#types').addEventListener('click', e => { const b = e.target.closest('.chip'); if(!b) return;
+  $$('#types .chip').forEach(x => x.classList.toggle('on', x === b)); B.type = b.dataset.type; checkBook(); });
+
+$('#days').addEventListener('click', async e => { const b = e.target.closest('.day'); if(!b) return;
+  $$('#days .day').forEach(x => x.classList.toggle('on', x === b)); B.date = b.dataset.date; B.time = ''; checkBook();
+  const box = $('#slots'); box.innerHTML = '<div class="center"><span class="spinner dark"></span></div>';
+  try {
+    const r = await api('slots', { date: B.date });
+    if (B.date !== b.dataset.date) return;
+    const free = r.slots.filter(s => s.available).length;
+    box.innerHTML = r.slots.length && free ? `<div class="slots">${r.slots.map(s =>
+      `<button class="slot" data-time="${s.time}" ${s.available ? '' : 'disabled'}>${fmtTime(s.time)}</button>`).join('')}</div>`
+      : '<div class="empty">اليوم ده كامل، اختار يوم تاني</div>';
+  } catch (err) { box.innerHTML = `<div class="err">${esc(err.message)}</div>`; }
+});
+
+$('#slots').addEventListener('click', e => { const b = e.target.closest('.slot'); if(!b || b.disabled) return;
+  $$('#slots .slot').forEach(x => x.classList.toggle('on', x === b)); B.time = b.dataset.time; checkBook(); });
+
+['#bName','#bPhone'].forEach(s => $(s).addEventListener('input', checkBook));
+function checkBook(){
+  $('#bSubmit').disabled = !(B.type && B.date && B.time && $('#bName').value.trim().length >= 3 && validPhone(normPhone($('#bPhone').value)));
+}
+
+$('#bSubmit').onclick = async () => {
+  const btn = $('#bSubmit'), err = $('#bErr');
+  err.classList.add('hidden'); btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  const name = $('#bName').value.trim(), phone = normPhone($('#bPhone').value);
+  try {
+    const r = await api('book', { name, phone, date:B.date, time:B.time, type:B.type, notes:$('#bNotes').value.trim() });
+    store.set('name', name); store.set('phone', phone);
+    const pending = r.status !== 'مؤكد';
+    $('#doneTitle').textContent = pending ? 'طلب الحجز وصل' : 'تم تأكيد الحجز';
+    $('#doneSub').textContent = pending ? 'هنكلمك قريب عشان نأكد الميعاد' : 'مستنيينك في الميعاد';
+    $('#doneCard').innerHTML = `
+      <div class="kv"><span>نوع الزيارة</span><b>${esc(B.type)}</b></div>
+      <div class="kv"><span>اليوم</span><b>${fmtDay(r.date)}</b></div>
+      <div class="kv"><span>الساعة</span><b>${fmtTime(r.time)}</b></div>
+      <div class="kv"><span>رقم الحجز</span><b dir="ltr">${esc(r.ref)}</b></div>
+      <div class="kv"><span>الحالة</span><b>${esc(r.status)}</b></div>`;
+    Object.assign(B, { type:'', date:'', time:'' }); bookReady = false; $('#bNotes').value = ''; $('#slots').innerHTML = '<div class="empty">اختار يوم الأول</div>';
+    go('booked');
+  } catch (e) {
+    err.textContent = e.message; err.classList.remove('hidden');
+    if (/اتحجز/.test(e.message) && B.date) $(`.day[data-date="${B.date}"]`)?.click();
+  } finally { btn.textContent = 'تأكيد الحجز'; checkBook(); }
+};
+
+/* ---------- Tracking ---------- */
+function initTrack(){
+  $('#tPhone').value ||= store.get('phone');
+  $('#tOrder').value ||= store.get('order');
+}
+$('#tForm').onsubmit = async e => {
+  e.preventDefault();
+  const btn = $('#tSubmit'), err = $('#tErr'), out = $('#tResult');
+  const phone = normPhone($('#tPhone').value), order = toLatin($('#tOrder').value).trim().toUpperCase();
+  err.classList.add('hidden');
+  if (!validPhone(phone)) { err.textContent = 'رقم الموبايل مش صحيح'; err.classList.remove('hidden'); return; }
+  if (!order) { err.textContent = 'اكتب رقم الطلب'; err.classList.remove('hidden'); return; }
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>'; out.innerHTML = '';
+  try {
+    const r = await api('track', { phone, order });
+    store.set('phone', phone); store.set('order', order);
+    renderOrder(r);
+  } catch (ex) { err.textContent = ex.message; err.classList.remove('hidden'); }
+  finally { btn.disabled = false; btn.textContent = 'عرض الطلب'; }
+};
+
+function renderOrder(r){
+  const o = r.order, steps = r.statuses || [], idx = steps.indexOf(o.status);
+  const timeline = steps.map((s,i) => `<li class="${i < idx ? 'done' : i === idx ? (i === steps.length-1 ? 'done' : 'now') : ''}">${esc(s)}</li>`).join('');
+  const delivered = idx === steps.length - 1 && idx !== -1;
+  const appts = (r.appointments||[]).map(a => `<div class="kv"><span>${esc(a.type || 'ميعاد')}</span><b>${fmtDay(a.date)} - ${fmtTime(a.time)}</b></div>`).join('');
+  $('#tResult').innerHTML = `
+    <div class="card">
+      <div class="order-head"><div><h3>${esc(o.type || 'طلبك')}</h3><div class="muted">طلب رقم <span dir="ltr">${esc(o.id)}</span> · ${esc(o.name)}</div></div>
+        <span class="badge">${esc(o.status || '—')}</span></div>
+      ${idx !== -1 ? `<ul class="timeline">${timeline}</ul>` : ''}
+      ${o.deliveryDate && !delivered ? `<div class="delivery">${ICON.truck}<div><small>ميعاد الاستلام المتوقع</small><b>${fmtDay(o.deliveryDate)}</b></div></div>` : ''}
+      ${o.note ? `<div class="note">💬 ${esc(o.note)}</div>` : ''}
+    </div>
+    <div class="card">
+      <p class="step-label" style="margin-bottom:10px">التكلفة</p>
+      <div class="money">
+        <div><span>الإجمالي</span><b>${money(o.cost)}</b></div>
+        <div><span>المدفوع</span><b>${money(o.paid)}</b></div>
+        <div class="rem"><span>الباقي</span><b>${money(o.remaining)}</b></div>
+      </div>
+    </div>
+    ${(o.measureDate || o.fittingDate) ? `<div class="card">
+      ${o.measureDate ? `<div class="kv"><span>تاريخ المقاسات</span><b>${fmtDay(o.measureDate)}</b></div>` : ''}
+      ${o.fittingDate ? `<div class="kv"><span>تاريخ البروفة</span><b>${fmtDay(o.fittingDate)}</b></div>` : ''}
+    </div>` : ''}
+    ${appts ? `<div class="card"><p class="step-label" style="margin-bottom:4px">مواعيدك الجاية</p>${appts}</div>` : ''}
+    <button class="btn ghost" data-go="book">احجز ميعاد</button>`;
+  $('#tResult').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* ---------- Install ---------- */
+let deferredPrompt = null;
+const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+if (!standalone) $('#installBtn').classList.remove('hidden');
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; });
+window.addEventListener('appinstalled', () => $('#installBtn').classList.add('hidden'));
+function showOs(os){ $$('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.os === os));
+  $('#osIos').classList.toggle('hidden', os !== 'ios'); $('#osAndroid').classList.toggle('hidden', os !== 'android'); }
+$('#installBtn').onclick = async () => {
+  if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; return; }
+  showOs(isIOS ? 'ios' : 'android'); $('#installModal').classList.remove('hidden');
+};
+$$('.tabs button').forEach(b => b.onclick = () => showOs(b.dataset.os));
+$('#closeModal').onclick = () => $('#installModal').classList.add('hidden');
+$('#installModal').onclick = e => { if (e.target.id === 'installModal') $('#installModal').classList.add('hidden'); };
+
+/* ---------- Start ---------- */
+if (DEMO) $('#demoBar').classList.remove('hidden');
+const startAt = location.hash.slice(1);
+history.replaceState({ id:'home' }, '', location.pathname + location.search);
+loadConfig().catch(() => {});
+if (TITLES[startAt] && startAt !== 'booked') go(startAt);
+if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+</script>
+</body>
+</html>
