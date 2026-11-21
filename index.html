@@ -232,6 +232,10 @@ label.f{display:block;font-size:14px;font-weight:600;margin:0 0 6px;color:var(--
       <div class="card">
         <p class="step-label"><i>1</i> نوع الزيارة</p>
         <div class="chips" id="types"></div>
+        <div id="levelWrap" class="hidden">
+          <p class="step-label" style="margin-top:16px"><i>+</i> مستوى البتر</p>
+          <div class="chips" id="levels"></div>
+        </div>
       </div>
       <div class="card">
         <p class="step-label"><i>2</i> اختار اليوم</p>
@@ -356,6 +360,7 @@ async function demoApi(action, d){
   const today = toYmd(new Date());
   if (action === 'config') return { ok:true, name:'مركز قدرة للأطراف الصناعية', workDays:[6,0,1,2,3,4], daysAhead:14, holidays:[], today,
     visitTypes:['كشف واستشارة','أخذ مقاسات','بروفة','استلام الطرف','صيانة'],
+    levels:['تحت الركبة','فوق الركبة','مفصل الركبة','مفصل الحوض','القدم','تحت الكوع','فوق الكوع','مفصل الكتف','اليد والأصابع','مش متأكد'],
     orderStatuses:['تم أخذ المقاسات','تحت التصنيع','جاهز للبروفة','جاهز للاستلام','تم الاستلام'],
     contact:{ phone:'01000000000', whatsapp:'01000000000', address:'العنوان هيتكتب هنا من شيت الإعدادات', maps:'https://maps.google.com', facebook:'https://facebook.com' } };
   if (action === 'slots') { const out = []; for (let m = 600; m + 30 <= 1080; m += 30) { const t = String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
@@ -409,7 +414,7 @@ async function loadConfig(){
 }
 
 /* ---------- Booking ---------- */
-const B = { type:'', date:'', time:'' };
+const B = { type:'', date:'', time:'', level:'' };
 let CAL = null;
 const WD_SAT_FIRST = ['سبت','حد','اتنين','تلات','أربع','خميس','جمعة'];
 function renderCal(){
@@ -450,6 +455,9 @@ async function initBook(){
   try {
     const c = await loadConfig();
     $('#types').innerHTML = c.visitTypes.map(t => `<button class="chip" data-type="${esc(t)}">${esc(t)}</button>`).join('');
+    const lv = c.levels || [];
+    $('#levels').innerHTML = lv.map(t => `<button class="chip" data-level="${esc(t)}">${esc(t)}</button>`).join('');
+    $('#levelWrap').classList.toggle('hidden', !lv.length);
     const today = c.today || toYmd(new Date()), start = ymdToDate(today), allowed = new Set();
     for (let k = 0; k <= c.daysAhead; k++) {
       const d = new Date(start); d.setDate(start.getDate() + k);
@@ -466,6 +474,9 @@ async function initBook(){
   } catch (e) { $('#types').innerHTML = `<div class="err">${esc(e.message)}</div>`; $('#days').innerHTML = ''; }
 }
 
+$('#levels').addEventListener('click', e => { const b = e.target.closest('.chip'); if(!b) return;
+  const same = B.level === b.dataset.level; B.level = same ? '' : b.dataset.level;
+  $$('#levels .chip').forEach(x => x.classList.toggle('on', !same && x === b)); });
 $('#types').addEventListener('click', e => { const b = e.target.closest('.chip'); if(!b) return;
   $$('#types .chip').forEach(x => x.classList.toggle('on', x === b)); B.type = b.dataset.type; checkBook(); });
 
@@ -529,18 +540,19 @@ $('#bSubmit').onclick = async () => {
   btn.innerHTML = '<span class="spinner"></span>' + (PHOTOS.length ? ' جاري رفع الصور...' : '');
   const name = $('#bName').value.trim(), phone = normPhone($('#bPhone').value);
   try {
-    const r = await api('book', { name, phone, date:B.date, time:B.time, type:B.type, notes:$('#bNotes').value.trim(), photos: PHOTOS });
+    const r = await api('book', { name, phone, date:B.date, time:B.time, type:B.type, notes:$('#bNotes').value.trim(), photos: PHOTOS, level: B.level });
     const pending = r.status !== 'مؤكد';
     $('#doneTitle').textContent = pending ? 'طلب الحجز وصل' : 'تم تأكيد الحجز';
     $('#doneSub').textContent = pending ? 'هنكلمك قريب عشان نأكد الميعاد' : 'مستنيينك في الميعاد';
     $('#doneCard').innerHTML = `
       <div class="kv"><span>نوع الزيارة</span><b>${esc(B.type)}</b></div>
+      ${B.level ? `<div class="kv"><span>مستوى البتر</span><b>${esc(B.level)}</b></div>` : ''}
       <div class="kv"><span>اليوم</span><b>${fmtDay(r.date)}</b></div>
       <div class="kv"><span>الساعة</span><b>${fmtTime(r.time)}</b></div>
       <div class="kv"><span>رقم الحجز</span><b dir="ltr">${esc(r.ref)}</b></div>
       <div class="kv"><span>الحالة</span><b>${esc(r.status)}</b></div>
       ${r.photos ? `<div class="kv"><span>الصور</span><b>وصلت ${new Intl.NumberFormat('ar-EG').format(r.photos)} ✓</b></div>` : ''}`;
-    Object.assign(B, { type:'', date:'', time:'' }); bookReady = false; $('#bNotes').value = ''; PHOTOS = []; renderThumbs(); $('#slots').innerHTML = '<div class="empty">اختار يوم الأول</div>';
+    Object.assign(B, { type:'', date:'', time:'', level:'' }); bookReady = false; $('#bNotes').value = ''; PHOTOS = []; renderThumbs(); $('#slots').innerHTML = '<div class="empty">اختار يوم الأول</div>';
     go('booked');
   } catch (e) {
     err.textContent = e.message; err.classList.remove('hidden');
