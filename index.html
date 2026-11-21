@@ -93,6 +93,24 @@ label.f{display:block;font-size:14px;font-weight:600;margin:0 0 6px;color:var(--
 .day.on{background:var(--navy);border-color:var(--navy);color:#fff}
 .day.on small{color:rgba(255,255,255,.8)}
 
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.cal-head b{font-size:16px}
+.cal-nav{width:38px;height:38px;border-radius:12px;border:1.5px solid var(--line);background:#fff;cursor:pointer;display:grid;place-items:center;color:var(--navy)}
+.cal-nav svg{width:20px;height:20px}
+.cal-nav:disabled{opacity:.3;cursor:not-allowed}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+.cal-wd{font-size:12px;color:var(--muted);font-weight:700;padding:2px 0 4px}
+.cday{aspect-ratio:1;border:0;border-radius:12px;background:#eef4fa;font-weight:700;font-size:15px;cursor:pointer;color:var(--ink);padding:0}
+.cday:disabled{background:transparent;color:#c3cfdc;cursor:not-allowed;font-weight:600}
+.cday.today{box-shadow:inset 0 0 0 2px var(--teal)}
+.cday.on{background:var(--navy);color:#fff;box-shadow:none}
+.cday.blank{visibility:hidden}
+.cday.off{background:#fdeeee;color:#d64545;opacity:1;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
+.cday.off small{font-size:9px;font-weight:700}
+.off-note{background:#fdeeee;color:#b03a3a;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:700;margin-top:10px}
+.sel-day{margin:12px 0 0;font-weight:700;color:var(--navy);font-size:15px}
+.cal-legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:10px}
+.cal-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:4px;vertical-align:middle}
 .slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .slot{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:9px 0;text-align:center;cursor:pointer;font-weight:700;font-size:14px}
 .slot.on{background:var(--teal);border-color:var(--teal);color:var(--navy)}
@@ -208,8 +226,8 @@ label.f{display:block;font-size:14px;font-weight:600;margin:0 0 6px;color:var(--
       </div>
       <div class="card">
         <p class="step-label"><i>2</i> اختار اليوم</p>
-        <div class="days" id="days"></div>
-        <p class="step-label" style="margin-top:14px"><i>3</i> اختار الساعة</p>
+        <div id="days"></div>
+        <p class="step-label" style="margin-top:16px"><i>3</i> اختار الساعة</p>
         <div id="slots"><div class="empty">اختار يوم الأول</div></div>
       </div>
       <div class="card">
@@ -374,6 +392,39 @@ async function loadConfig(){
 
 /* ---------- Booking ---------- */
 const B = { type:'', date:'', time:'' };
+let CAL = null;
+const WD_SAT_FIRST = ['سبت','حد','اتنين','تلات','أربع','خميس','جمعة'];
+function renderCal(){
+  const box = $('#days');
+  if (!CAL.allowed.size) { box.innerHTML = '<div class="empty">مفيش أيام متاحة دلوقتي</div>'; return; }
+  const m = CAL.month, y = m.getFullYear(), mo = m.getMonth();
+  const daysIn = new Date(y, mo + 1, 0).getDate();
+  const lead = (new Date(y, mo, 1).getDay() + 1) % 7;
+  const nf = new Intl.NumberFormat('ar-EG');
+  let cells = WD_SAT_FIRST.map(w => `<div class="cal-wd">${w}</div>`).join('');
+  for (let k = 0; k < lead; k++) cells += '<span class="cday blank"></span>';
+  for (let d = 1; d <= daysIn; d++) {
+    const dt = new Date(y, mo, d), ymd = toYmd(dt), ok = CAL.allowed.has(ymd);
+    const off = !CAL.workDays.includes(dt.getDay()) || CAL.holidays.has(ymd);
+    cells += off
+      ? `<button class="cday off" disabled aria-label="${fmtDay(ymd)} - إجازة">${nf.format(d)}<small>إجازة</small></button>`
+      : `<button class="cday${ymd === CAL.today ? ' today' : ''}${ymd === B.date ? ' on' : ''}" data-date="${ymd}" ${ok ? '' : 'disabled'} aria-label="${fmtDay(ymd)}">${nf.format(d)}</button>`;
+  }
+  const offNames = [6,0,1,2,3,4,5].filter(k => !CAL.workDays.includes(k)).map(k => DAY_AR[k]);
+  const chev = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
+  box.innerHTML = `
+    <div class="cal-head">
+      <button class="cal-nav" id="calPrev" aria-label="الشهر اللي فات" ${m <= CAL.min ? 'disabled' : ''}>${chev('M9 6l6 6-6 6')}</button>
+      <b>${new Intl.DateTimeFormat('ar-EG',{month:'long',year:'numeric'}).format(m)}</b>
+      <button class="cal-nav" id="calNext" aria-label="الشهر الجاي" ${m >= CAL.max ? 'disabled' : ''}>${chev('M15 6l-6 6 6 6')}</button>
+    </div>
+    <div class="cal-grid">${cells}</div>
+    <div class="cal-legend"><span><i style="background:#eef4fa"></i>متاح</span><span><i style="background:var(--navy)"></i>اختيارك</span><span><i style="box-shadow:inset 0 0 0 2px var(--teal)"></i>النهاردة</span><span><i style="background:#fdeeee"></i>إجازة</span></div>
+    ${offNames.length ? `<div class="off-note">🚫 المركز إجازة يوم ${offNames.join(' و')}</div>` : ''}
+    ${B.date ? `<p class="sel-day">📅 ${fmtDay(B.date)}</p>` : ''}`;
+  $('#calPrev').onclick = () => { CAL.month = new Date(y, mo - 1, 1); renderCal(); };
+  $('#calNext').onclick = () => { CAL.month = new Date(y, mo + 1, 1); renderCal(); };
+}
 let bookReady = false;
 async function initBook(){
   $('#bName').value ||= store.get('name');
@@ -383,15 +434,18 @@ async function initBook(){
   try {
     const c = await loadConfig();
     $('#types').innerHTML = c.visitTypes.map(t => `<button class="chip" data-type="${esc(t)}">${esc(t)}</button>`).join('');
-    const days = [], start = ymdToDate(c.today || toYmd(new Date()));
-    for (let i = 0; i <= c.daysAhead; i++) {
-      const d = new Date(start); d.setDate(start.getDate() + i);
+    const today = c.today || toYmd(new Date()), start = ymdToDate(today), allowed = new Set();
+    for (let k = 0; k <= c.daysAhead; k++) {
+      const d = new Date(start); d.setDate(start.getDate() + k);
       const ymd = toYmd(d);
-      if (!c.workDays.includes(d.getDay()) || (c.holidays||[]).includes(ymd)) continue;
-      const label = i === 0 ? 'النهاردة' : i === 1 ? 'بكرة' : DAY_AR[d.getDay()];
-      days.push(`<button class="day" data-date="${ymd}"><small>${label}</small><b>${new Intl.NumberFormat('ar-EG').format(d.getDate())}</b><small>${new Intl.DateTimeFormat('ar-EG',{month:'short'}).format(d)}</small></button>`);
+      if (c.workDays.includes(d.getDay()) && !(c.holidays||[]).includes(ymd)) allowed.add(ymd);
     }
-    $('#days').innerHTML = days.join('') || '<div class="empty">مفيش أيام متاحة دلوقتي</div>';
+    const last = new Date(start); last.setDate(start.getDate() + c.daysAhead);
+    CAL = { today, allowed, workDays: c.workDays, holidays: new Set(c.holidays || []), min: new Date(start.getFullYear(), start.getMonth(), 1), max: new Date(last.getFullYear(), last.getMonth(), 1) };
+    CAL.month = new Date(CAL.min);
+    const firstFree = [...allowed][0];
+    if (firstFree) CAL.month = new Date(ymdToDate(firstFree).getFullYear(), ymdToDate(firstFree).getMonth(), 1);
+    renderCal();
     bookReady = true;
   } catch (e) { $('#types').innerHTML = `<div class="err">${esc(e.message)}</div>`; $('#days').innerHTML = ''; }
 }
@@ -399,12 +453,13 @@ async function initBook(){
 $('#types').addEventListener('click', e => { const b = e.target.closest('.chip'); if(!b) return;
   $$('#types .chip').forEach(x => x.classList.toggle('on', x === b)); B.type = b.dataset.type; checkBook(); });
 
-$('#days').addEventListener('click', async e => { const b = e.target.closest('.day'); if(!b) return;
-  $$('#days .day').forEach(x => x.classList.toggle('on', x === b)); B.date = b.dataset.date; B.time = ''; checkBook();
+$('#days').addEventListener('click', async e => { const b = e.target.closest('.cday[data-date]'); if(!b || b.disabled) return;
+  B.date = b.dataset.date; B.time = ''; checkBook(); renderCal();
+  const picked = B.date;
   const box = $('#slots'); box.innerHTML = '<div class="center"><span class="spinner dark"></span></div>';
   try {
     const r = await api('slots', { date: B.date });
-    if (B.date !== b.dataset.date) return;
+    if (B.date !== picked) return;
     const free = r.slots.filter(s => s.available).length;
     box.innerHTML = r.slots.length && free ? `<div class="slots">${r.slots.map(s =>
       `<button class="slot" data-time="${s.time}" ${s.available ? '' : 'disabled'}>${fmtTime(s.time)}</button>`).join('')}</div>`
@@ -440,7 +495,7 @@ $('#bSubmit').onclick = async () => {
     go('booked');
   } catch (e) {
     err.textContent = e.message; err.classList.remove('hidden');
-    if (/اتحجز/.test(e.message) && B.date) $(`.day[data-date="${B.date}"]`)?.click();
+    if (/اتحجز/.test(e.message) && B.date) $(`#days .cday[data-date="${B.date}"]`)?.click();
   } finally { btn.textContent = 'تأكيد الحجز'; checkBook(); }
 };
 
