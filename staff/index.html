@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>قدرة | الموظفين</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#093c71">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="قدرة موظفين">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#093c71;--blue:#3370e7;--teal:#00dfbe;--ink:#0d2440;--muted:#5f7390;--line:#e3eaf3;--bg:#f3f7fb;--danger:#d64545;--warn:#b7791f;
+  --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Cairo",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;font-size:16px;line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+.hidden{display:none!important}
+.app{max-width:760px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+header{background:var(--navy);color:#fff;padding:calc(var(--safe-top) + 12px) 16px 12px;position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px}
+header img{height:26px;display:block}
+header .tag{font-size:13px;background:rgba(255,255,255,.14);border-radius:999px;padding:2px 10px;font-weight:700}
+header .sp{flex:1}
+.hbtn{background:rgba(255,255,255,.12);border:0;color:#fff;border-radius:10px;padding:6px 12px;cursor:pointer;font-size:14px;font-weight:600}
+main{flex:1;padding:16px 14px calc(var(--safe-bottom) + 96px)}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.auth{max-width:420px;margin:30px auto}
+.auth h2{margin:0 0 4px;font-size:22px}
+.muted{color:var(--muted);font-size:14px}
+label.f{display:block;font-size:14px;font-weight:600;margin:0 0 6px;color:var(--muted)}
+.input,select.input{width:100%;border:1.5px solid var(--line);background:#fbfdff;border-radius:12px;padding:10px 12px;outline:none;font-size:16px}
+.input:focus{border-color:var(--blue);background:#fff}
+.input:disabled{opacity:.6}
+[dir=ltr].input{text-align:right}
+.field{margin-bottom:12px}
+.btn{border:0;border-radius:12px;padding:11px 16px;font-size:16px;font-weight:800;cursor:pointer;background:var(--navy);color:#fff}
+.btn.block{width:100%}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+.btn.danger{background:#fff;color:var(--danger);border:1.5px solid #f3c9c9}
+.btn.sm{padding:6px 12px;font-size:14px;border-radius:10px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.err{background:#fdeeee;color:var(--danger);border-radius:10px;padding:8px 12px;font-size:14px;margin-bottom:10px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;cursor:pointer;font-size:14px;font-weight:700}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.date-in{border:1.5px solid var(--line);border-radius:999px;padding:5px 12px;background:#fff}
+.day-h{font-weight:800;color:var(--navy);margin:16px 4px 8px;font-size:15px}
+.appt{display:flex;gap:12px;align-items:flex-start}
+.appt .time{min-width:64px;text-align:center;background:var(--bg);border-radius:12px;padding:8px 4px;font-weight:800;color:var(--navy);font-size:15px;line-height:1.3}
+.appt .time small{display:block;font-size:11px;color:var(--muted);font-weight:600}
+.appt .body{flex:1;min-width:0}
+.name{font-weight:800;font-size:16px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.pill{font-size:12.5px;font-weight:700;border-radius:999px;padding:2px 10px;background:var(--bg);color:var(--navy)}
+.pill.teal{background:rgba(0,223,190,.16);color:#007a68}
+.pill.blue{background:rgba(51,112,231,.12);color:var(--blue)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row .grow{flex:1;min-width:140px}
+a.tel{color:var(--blue);text-decoration:none;font-weight:700;direction:ltr;display:inline-block}
+.status-sel{border:1.5px solid var(--line);border-radius:10px;padding:5px 8px;background:#fff;font-weight:700;font-size:14px}
+.st-ok{border-color:#9fe3d6;background:#effcf9}
+.st-wait{border-color:#f1d9a6;background:#fff9ec}
+.st-bad{border-color:#f3c9c9;background:#fdf3f3}
+.money{display:flex;gap:6px;margin-top:8px}
+.money div{flex:1;background:var(--bg);border-radius:10px;padding:6px;text-align:center;font-size:13px}
+.money b{display:block;font-size:15px}
+.empty{color:var(--muted);text-align:center;padding:28px 0}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 6px calc(var(--safe-bottom) + 6px);z-index:6}
+nav.tabs .in{display:flex;max-width:760px;width:100%}
+nav.tabs button{flex:1;border:0;background:none;padding:6px 4px;border-radius:12px;cursor:pointer;color:var(--muted);font-weight:700;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav.tabs button svg{width:22px;height:22px}
+nav.tabs button.on{color:var(--navy);background:var(--bg)}
+.modal{position:fixed;inset:0;background:rgba(9,30,60,.5);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.sheet{background:#fff;width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 18px calc(var(--safe-bottom) + 18px)}
+@media(min-width:700px){.modal{align-items:center}.sheet{border-radius:20px}}
+.sheet h3{margin:0 0 12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.perms label{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;margin-bottom:6px;cursor:pointer;font-weight:600;font-size:15px}
+.perms input{width:18px;height:18px;accent-color:var(--navy)}
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.photos img{width:100%;border-radius:12px;display:block}
+.toast{position:fixed;bottom:calc(var(--safe-bottom) + 84px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;z-index:30;font-weight:700;font-size:14px;max-width:90%;text-align:center}
+.spinner{width:22px;height:22px;border:3px solid var(--line);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.center{text-align:center;padding:24px}
+.ulist .u{display:flex;align-items:center;gap:10px}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.off{opacity:.55}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <img src="../logo-white.png" alt="قدرة">
+    <span class="tag">الموظفين</span>
+    <span class="sp"></span>
+    <span id="who" class="hidden" style="font-size:14px;font-weight:700"></span>
+    <button class="hbtn hidden" id="acctBtn">حسابي</button>
+  </header>
+  <main id="main"><div class="center"><span class="spinner"></span></div></main>
+  <nav class="tabs hidden" id="tabs"><div class="in" id="tabsIn"></div></nav>
+</div>
+<div id="modalRoot"></div>
+
+<script>
+/* ═══ لينك الـ API (نفس لينك أبلكيشن المرضى) ═══ */
+const API_URL = "https://script.google.com/macros/s/AKfycbxdbMf_KsuX3jxbJgy8QXi0ehY4ttbkWtGMB9UvM4kAud-7mC9MAl_2eklYWQ_0OFibUw/exec";
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf = new Intl.NumberFormat('ar-EG');
+const toYmd = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const ymdToDate = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const fmtDay = s => s ? new Intl.DateTimeFormat('ar-EG',{weekday:'long',day:'numeric',month:'long'}).format(ymdToDate(s)) : '—';
+const fmtTime = t => { if(!t) return ''; let [h,m] = t.split(':').map(Number); const pm = h >= 12; h = h % 12 || 12; return nf.format(h)+':'+String(m).padStart(2,'0').replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]); };
+const ampm = t => t && +t.split(':')[0] >= 12 ? 'م' : 'ص';
+const money = n => nf.format(Math.round(n||0)) + ' ج';
+const ss = { get(k){ try{return sessionStorage.getItem('qs.'+k)||'';}catch(e){return '';} }, set(k,v){ try{ v ? sessionStorage.setItem('qs.'+k,v) : sessionStorage.removeItem('qs.'+k);}catch(e){} } };
+
+let TOKEN = ss.get('token'), ME = null, PERMS = [], VIEW = '';
+const can = p => !!ME && ME.perms.includes(p);
+
+async function api(action, data = {}){
+  const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({ action: 'staff.' + action, token: TOKEN, ...data }) });
+  const j = await res.json();
+  if (!j.ok) {
+    if (j.error === 'AUTH') { TOKEN = ''; ss.set('token',''); ME = null; showLogin('انتهت الجلسة، ادخل تاني'); throw new Error('AUTH'); }
+    throw new Error(j.error || 'حصل خطأ');
+  }
+  return j;
+}
+function toast(msg){ document.querySelectorAll('.toast').forEach(x => x.remove()); const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 3200); }
+function modal(html){ const r = $('#modalRoot'); r.innerHTML = `<div class="modal"><div class="sheet">${html}</div></div>`;
+  r.querySelector('.modal').onclick = e => { if (e.target.classList.contains('modal')) closeModal(); }; return r.querySelector('.sheet'); }
+function closeModal(){ $('#modalRoot').innerHTML = ''; }
+function busy(btn, on, label){ if(!btn) return; btn.disabled = on; if (on) { btn.dataset.l = btn.textContent; btn.innerHTML = '<span class="spinner" style="width:18px;height:18px;border-width:2px;border-top-color:#fff"></span>'; } else btn.textContent = label || btn.dataset.l || ''; }
+
+/* ═══ الدخول ═══ */
+function showSetup(){
+  $('#tabs').classList.add('hidden'); $('#who').classList.add('hidden'); $('#acctBtn').classList.add('hidden');
+  $('#main').innerHTML = `<div class="card auth"><h2>أول مرة: اعمل حساب الأونر</h2><p class="muted">الحساب ده بس هو اللي يقدر يعمل الموظفين ويحدد صلاحياتهم.</p>
+  <form id="f"><div class="field"><label class="f">اسمك</label><input class="input" id="n" required></div>
+  <div class="field"><label class="f">اسم المستخدم (إنجليزي)</label><input class="input" id="u" dir="ltr" autocapitalize="none" autocomplete="username" required></div>
+  <div class="field"><label class="f">الباسورد (6 على الأقل)</label><input class="input" id="p" type="password" dir="ltr" autocomplete="new-password" required></div>
+  <div class="field"><label class="f">تأكيد الباسورد</label><input class="input" id="p2" type="password" dir="ltr" autocomplete="new-password" required></div>
+  <div id="e" class="err hidden"></div><button class="btn block" id="b">إنشاء حساب الأونر</button></form></div>`;
+  $('#f').onsubmit = async e => { e.preventDefault(); const er = $('#e'); er.classList.add('hidden');
+    if ($('#p').value !== $('#p2').value) { er.textContent = 'الباسورد مش متطابق'; er.classList.remove('hidden'); return; }
+    busy($('#b'), true);
+    try { const r = await api('setupOwner', { name:$('#n').value, username:$('#u').value, password:$('#p').value }); onLogin(r); }
+    catch (x) { er.textContent = x.message; er.classList.remove('hidden'); busy($('#b'), false); } };
+}
+function showLogin(msg){
+  $('#tabs').classList.add('hidden'); $('#who').classList.add('hidden'); $('#acctBtn').classList.add('hidden'); closeModal();
+  $('#main').innerHTML = `<div class="card auth"><h2>تسجيل الدخول</h2><p class="muted">ادخل باليوزر والباسورد اللي الأونر عملهولك.</p>
+  <form id="f"><div class="field"><label class="f">اسم المستخدم</label><input class="input" id="u" dir="ltr" autocapitalize="none" autocomplete="username" required></div>
+  <div class="field"><label class="f">الباسورد</label><input class="input" id="p" type="password" dir="ltr" autocomplete="current-password" required></div>
+  <div id="e" class="err ${msg ? '' : 'hidden'}">${esc(msg||'')}</div><button class="btn block" id="b">دخول</button></form></div>`;
+  $('#f').onsubmit = async e => { e.preventDefault(); $('#e').classList.add('hidden'); busy($('#b'), true);
+    try { const r = await api('login', { username:$('#u').value, password:$('#p').value }); onLogin(r); }
+    catch (x) { if (x.message !== 'AUTH') { $('#e').textContent = x.message; $('#e').classList.remove('hidden'); } busy($('#b'), false); } };
+}
+function onLogin(r){ TOKEN = r.token || TOKEN; ss.set('token', TOKEN); ME = r.me; PERMS = r.perms || PERMS; startApp(); }
+
+/* ═══ التابات ═══ */
+const ICONS = {
+  appts:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 3v3M16 3v3M3 9.5h18"/></svg>',
+  orders:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg>',
+  settings:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>',
+  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0113 0M16 4.5a3.5 3.5 0 010 7M18 14a6 6 0 013.5 6"/></svg>'
+};
+function startApp(){
+  $('#who').textContent = ME.name; $('#who').classList.remove('hidden'); $('#acctBtn').classList.remove('hidden');
+  const tabs = [];
+  if (can('appts.view')) tabs.push(['appts','المواعيد']);
+  if (can('orders.view')) tabs.push(['orders','الطلبات']);
+  if (can('settings.edit')) tabs.push(['settings','الإعدادات']);
+  if (can('owner')) tabs.push(['users','المستخدمين']);
+  if (!tabs.length) { $('#tabs').classList.add('hidden'); $('#main').innerHTML = '<div class="card empty">حسابك لسه مالوش صلاحيات. كلّم الأونر.</div>'; return; }
+  $('#tabsIn').innerHTML = tabs.map(([k,l]) => `<button data-tab="${k}">${ICONS[k]}${l}</button>`).join('');
+  $('#tabs').classList.remove('hidden');
+  $('#tabsIn').onclick = e => { const b = e.target.closest('[data-tab]'); if (b) go(b.dataset.tab); };
+  go(tabs.some(t => t[0] === VIEW) ? VIEW : tabs[0][0]);
+}
+function go(v){ VIEW = v; document.querySelectorAll('#tabsIn button').forEach(b => b.classList.toggle('on', b.dataset.tab === v));
+  ({ appts: viewAppts, orders: viewOrders, settings: viewSettings, users: viewUsers })[v](); window.scrollTo(0,0); }
+
+/* ═══ المواعيد ═══ */
+let AR = { mode:'today', from:'', to:'' };
+function rangeFor(mode){ const t = new Date(); const d = n => { const x = new Date(t); x.setDate(t.getDate()+n); return toYmd(x); };
+  return mode === 'today' ? [d(0), d(0)] : mode === 'tomorrow' ? [d(1), d(1)] : mode === 'week' ? [d(0), d(6)] : [AR.from, AR.to]; }
+function stClass(s){ return /مؤكد|تم الحضور|تم الاستلام|جاهز/.test(s) ? 'st-ok' : /ملغي|لم يحضر/.test(s) ? 'st-bad' : 'st-wait'; }
+async function viewAppts(){
+  const [from, to] = rangeFor(AR.mode);
+  $('#main').innerHTML = `<div class="toolbar">
+    ${[['today','النهاردة'],['tomorrow','بكرة'],['week','الأسبوع']].map(([k,l]) => `<button class="chip ${AR.mode===k?'on':''}" data-m="${k}">${l}</button>`).join('')}
+    <input type="date" class="date-in" id="pick" value="${AR.mode==='pick'?AR.from:''}"></div><div id="list"><div class="center"><span class="spinner"></span></div></div>`;
+  document.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { AR.mode = b.dataset.m; viewAppts(); });
+  $('#pick').onchange = e => { if (!e.target.value) return; AR = { mode:'pick', from:e.target.value, to:e.target.value }; viewAppts(); };
+  try {
+    const r = await api('appts', { from, to });
+    if (!r.appts.length) { $('#list').innerHTML = '<div class="card empty">مفيش مواعيد في الفترة دي</div>'; return; }
+    let html = '', day = '';
+    r.appts.forEach(a => {
+      if (a.date !== day) { day = a.date; html += `<div class="day-h">${fmtDay(day)}</div>`; }
+      html += `<div class="card appt" data-ref="${esc(a.ref)}"><div class="time">${fmtTime(a.time)}<small>${ampm(a.time)}</small></div><div class="body">
+        <div class="name">${esc(a.name)}</div><a class="tel" href="tel:${esc(a.phone)}">${esc(a.phone)}</a>
+        <div class="meta"><span class="pill">${esc(a.type||'—')}</span>${a.level?`<span class="pill blue">${esc(a.level)}</span>`:''}${a.order?`<span class="pill teal">طلب ${esc(a.order)}</span>`:''}</div>
+        ${a.notes?`<div class="muted">💬 ${esc(a.notes)}</div>`:''}
+        <div class="row" style="margin-top:6px">
+          ${can('appts.status') ? `<select class="status-sel ${stClass(a.status)}" data-st="${esc(a.ref)}">${r.statuses.map(s => `<option ${s===a.status?'selected':''}>${esc(s)}</option>`).join('')}</select>` : `<span class="pill">${esc(a.status||'—')}</span>`}
+          ${a.photos && can('photos.view') ? `<button class="btn ghost sm" data-ph="${esc(a.ref)}">📷 الصور (${nf.format(a.photos)})</button>` : ''}
+        </div></div></div>`;
+    });
+    $('#list').innerHTML = html;
+    document.querySelectorAll('[data-st]').forEach(sel => { sel.dataset.prev = sel.value; sel.onchange = async () => {
+      const v = sel.value; sel.disabled = true;
+      try { const x = await api('setApptStatus', { ref: sel.dataset.st, status: v }); sel.dataset.prev = v; sel.className = 'status-sel ' + stClass(v);
+        toast(x.order ? `اتسجل الحضور، والطلب \u2068${x.order}\u2069 جاهز` : 'اتحفظت الحالة'); if (x.order) viewAppts(); }
+      catch (e) { if (e.message !== 'AUTH') toast(e.message); sel.value = sel.dataset.prev; }
+      finally { sel.disabled = false; } }; });
+    document.querySelectorAll('[data-ph]').forEach(b => b.onclick = () => showPhotos(b.dataset.ph));
+  } catch (e) { if (e.message !== 'AUTH') $('#list').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+async function showPhotos(ref){
+  const s = modal('<h3>صور المريض</h3><div class="center"><span class="spinner"></span></div><button class="btn ghost block" onclick="closeModal()">قفل</button>');
+  try { const r = await api('photos', { ref }); s.querySelector('.center').outerHTML = r.images.length ? `<div class="photos" style="margin-bottom:12px">${r.images.map(i => `<img src="${i}" alt="صورة">`).join('')}</div>` : '<div class="empty">مفيش صور</div>'; }
+  catch (e) { s.querySelector('.center').outerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+
+/* ═══ الطلبات ═══ */
+let OQ = { q:'', status:'' }, OSTAT = [];
+async function viewOrders(){
+  $('#main').innerHTML = `<div class="toolbar"><input class="input" style="flex:1;min-width:180px" id="q" placeholder="ابحث بالاسم أو الموبايل أو رقم الطلب" value="${esc(OQ.q)}">
+    <select class="status-sel" id="sf"><option value="">كل الحالات</option></select>
+    ${can('orders.edit') ? '<button class="btn sm" id="newO">+ طلب جديد</button>' : ''}</div><div id="list"><div class="center"><span class="spinner"></span></div></div>`;
+  let t; $('#q').oninput = e => { clearTimeout(t); t = setTimeout(() => { OQ.q = e.target.value.trim(); loadOrders(); }, 350); };
+  $('#sf').onchange = e => { OQ.status = e.target.value; loadOrders(); };
+  if ($('#newO')) $('#newO').onclick = newOrder;
+  loadOrders();
+}
+async function loadOrders(){
+  try {
+    const r = await api('orders', OQ); OSTAT = r.statuses;
+    const sf = $('#sf'); if (sf && sf.options.length === 1) { sf.innerHTML += r.statuses.map(s => `<option ${s===OQ.status?'selected':''}>${esc(s)}</option>`).join(''); }
+    if (!r.orders.length) { $('#list').innerHTML = '<div class="card empty">مفيش طلبات</div>'; return; }
+    $('#list').innerHTML = r.orders.map(o => `<div class="card">
+      <div class="row"><div class="grow"><div class="name">${esc(o.name)} <span class="muted" style="font-weight:700" dir="ltr">${esc(o.id)}</span></div>
+      <a class="tel" href="tel:${esc(o.phone)}">${esc(o.phone)}</a></div>
+      ${can('orders.status') ? `<select class="status-sel ${stClass(o.status)}" data-ost="${esc(o.id)}"><option value="">—</option>${OSTAT.map(s => `<option ${s===o.status?'selected':''}>${esc(s)}</option>`).join('')}</select>` : `<span class="pill">${esc(o.status||'—')}</span>`}</div>
+      <div class="meta">${o.type?`<span class="pill blue">${esc(o.type)}</span>`:''}${o.deliveryDate?`<span class="pill teal">الاستلام: ${fmtDay(o.deliveryDate)}</span>`:''}</div>
+      ${o.cost !== undefined ? `<div class="money"><div>الإجمالي<b>${money(o.cost)}</b></div><div>المدفوع<b>${money(o.paid)}</b></div><div>الباقي<b>${money(o.remaining)}</b></div></div>` : ''}
+      <div style="margin-top:8px"><button class="btn ghost sm" data-od="${esc(o.id)}">التفاصيل${can('orders.edit')||can('money.edit')?' والتعديل':''}</button></div></div>`).join('');
+    const byId = Object.fromEntries(r.orders.map(o => [o.id, o]));
+    document.querySelectorAll('[data-ost]').forEach(sel => { sel.dataset.prev = sel.value; sel.onchange = async () => {
+      sel.disabled = true;
+      try { await api('updateOrder', { id: sel.dataset.ost, fields: { status: sel.value } }); sel.dataset.prev = sel.value; sel.className = 'status-sel ' + stClass(sel.value); toast('اتحفظت حالة الطلب'); }
+      catch (e) { if (e.message !== 'AUTH') toast(e.message); sel.value = sel.dataset.prev; } finally { sel.disabled = false; } }; });
+    document.querySelectorAll('[data-od]').forEach(b => b.onclick = () => orderDetails(byId[b.dataset.od]));
+  } catch (e) { if (e.message !== 'AUTH') $('#list').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+function orderDetails(o){
+  const ed = can('orders.edit'), me = can('money.edit'), mv = o.cost !== undefined;
+  const f = (k, l, v, type, ok, ltr) => `<div class="field"><label class="f">${l}</label><input class="input" data-k="${k}" type="${type||'text'}" value="${esc(v||'')}" ${ok?'':'disabled'} ${ltr?'dir="ltr"':''}></div>`;
+  const s = modal(`<h3>طلب <span dir="ltr">${esc(o.id)}</span></h3>
+    <div class="grid2">${f('name','اسم المريض',o.name,'text',ed)}${f('phone','الموبايل',o.phone,'tel',ed,true)}</div>
+    ${f('type','نوع الطرف',o.type,'text',ed)}
+    <div class="grid2">${f('measureDate','تاريخ المقاسات',o.measureDate,'date',ed)}${f('fittingDate','تاريخ البروفة',o.fittingDate,'date',ed)}</div>
+    ${f('deliveryDate','تاريخ الاستلام المتوقع',o.deliveryDate,'date',ed)}
+    ${mv ? `<div class="grid2">${f('cost','التكلفة الإجمالية',o.cost,'number',me)}${f('paid','المدفوع',o.paid,'number',me)}</div>` : ''}
+    <div class="field"><label class="f">ملاحظات للمريض (بتظهر له)</label><textarea class="input" data-k="note" rows="2" ${ed?'':'disabled'}>${esc(o.note)}</textarea></div>
+    <div class="field"><label class="f">ملاحظات داخلية</label><textarea class="input" data-k="internal" rows="2" ${ed?'':'disabled'}>${esc(o.internal)}</textarea></div>
+    <div id="e" class="err hidden"></div>
+    <div class="row">${ed||me ? '<button class="btn grow" id="sv">حفظ</button>' : ''}<button class="btn ghost grow" onclick="closeModal()">قفل</button></div>`);
+  const sv = s.querySelector('#sv'); if (!sv) return;
+  sv.onclick = async () => {
+    const fields = {}; s.querySelectorAll('[data-k]').forEach(el => { if (!el.disabled && String(el.value) !== String(o[el.dataset.k] ?? '')) fields[el.dataset.k] = el.value; });
+    if (!Object.keys(fields).length) { closeModal(); return; }
+    busy(sv, true);
+    try { await api('updateOrder', { id: o.id, fields }); closeModal(); toast('اتحفظ الطلب'); loadOrders(); }
+    catch (e) { if (e.message !== 'AUTH') { s.querySelector('#e').textContent = e.message; s.querySelector('#e').classList.remove('hidden'); } busy(sv, false); }
+  };
+}
+function newOrder(){
+  const s = modal(`<h3>طلب جديد</h3><div class="field"><label class="f">اسم المريض</label><input class="input" id="nn"></div>
+    <div class="field"><label class="f">الموبايل</label><input class="input" id="np" type="tel" dir="ltr"></div>
+    <div class="field"><label class="f">نوع الطرف</label><input class="input" id="nt"></div>
+    <div id="e" class="err hidden"></div><div class="row"><button class="btn grow" id="sv">إنشاء</button><button class="btn ghost grow" onclick="closeModal()">إلغاء</button></div>`);
+  s.querySelector('#sv').onclick = async () => { const b = s.querySelector('#sv'); busy(b, true);
+    try { const r = await api('createOrder', { name: s.querySelector('#nn').value, phone: s.querySelector('#np').value, type: s.querySelector('#nt').value }); closeModal(); toast('اتعمل الطلب \u2068' + r.id + '\u2069'); loadOrders(); }
+    catch (e) { if (e.message !== 'AUTH') { s.querySelector('#e').textContent = e.message; s.querySelector('#e').classList.remove('hidden'); } busy(b, false); } };
+}
+
+/* ═══ الإعدادات ═══ */
+async function viewSettings(){
+  $('#main').innerHTML = '<div class="center"><span class="spinner"></span></div>';
+  try {
+    const r = await api('settings');
+    $('#main').innerHTML = `<div class="card"><h3 style="margin:0 0 4px">إعدادات الحجز والمركز</h3><p class="muted" style="margin:0 0 12px">القوايم بتتفصل بفاصلة (,). أي تعديل بيظهر في أبلكيشن المرضى على طول.</p>
+      ${r.settings.map(x => `<div class="field"><label class="f">${esc(x.key)}</label><input class="input" data-key="${esc(x.key)}" value="${esc(x.value)}"></div>`).join('')}
+      <div id="e" class="err hidden"></div><button class="btn block" id="sv">حفظ الإعدادات</button></div>`;
+    $('#sv').onclick = async () => { const values = {}; document.querySelectorAll('[data-key]').forEach(i => values[i.dataset.key] = i.value); busy($('#sv'), true);
+      try { await api('saveSettings', { values }); toast('اتحفظت الإعدادات'); } catch (e) { if (e.message !== 'AUTH') { $('#e').textContent = e.message; $('#e').classList.remove('hidden'); } }
+      finally { busy($('#sv'), false); } };
+  } catch (e) { if (e.message !== 'AUTH') $('#main').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+
+/* ═══ المستخدمين (الأونر بس) ═══ */
+let USERS = [];
+async function viewUsers(){
+  $('#main').innerHTML = '<div class="toolbar"><h3 style="margin:0;flex:1">المستخدمين والصلاحيات</h3><button class="btn sm" id="nu">+ مستخدم جديد</button></div><div id="list"><div class="center"><span class="spinner"></span></div></div>';
+  $('#nu').onclick = () => userForm(null);
+  try { const r = await api('users'); USERS = r.users; PERMS = r.perms; renderUsers(); }
+  catch (e) { if (e.message !== 'AUTH') $('#list').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+function renderUsers(){
+  const label = k => (PERMS.find(p => p.key === k) || {}).label || k;
+  $('#list').innerHTML = `<div class="ulist">${USERS.map(u => `<div class="card ${u.active?'':'off'}"><div class="u"><div class="avatar">${esc((u.name||u.username).trim().charAt(0))}</div>
+    <div style="flex:1;min-width:0"><div class="name">${esc(u.name)} ${u.owner?'<span class="pill teal">الأونر</span>':''}${u.active?'':'<span class="pill" style="color:var(--danger)">موقوف</span>'}</div><div class="muted" dir="ltr" style="text-align:right">${esc(u.username)}</div></div>
+    <button class="btn ghost sm" data-eu="${esc(u.username)}">تعديل</button></div>
+    ${u.owner ? '<p class="muted" style="margin:8px 0 0">كل الصلاحيات</p>' : `<div class="meta">${u.perms.length ? u.perms.map(p => `<span class="pill">${esc(label(p))}</span>`).join('') : '<span class="muted">مالوش صلاحيات</span>'}</div>`}</div>`).join('')}</div>`;
+  document.querySelectorAll('[data-eu]').forEach(b => b.onclick = () => userForm(USERS.find(u => u.username === b.dataset.eu)));
+}
+function userForm(u){
+  const isNew = !u, owner = u && u.owner;
+  const s = modal(`<h3>${isNew ? 'مستخدم جديد' : 'تعديل ' + esc(u.name)}</h3>
+    <div class="field"><label class="f">الاسم</label><input class="input" id="un" value="${esc(u?u.name:'')}"></div>
+    <div class="field"><label class="f">اسم المستخدم (إنجليزي)</label><input class="input" id="uu" dir="ltr" autocapitalize="none" value="${esc(u?u.username:'')}" ${isNew?'':'disabled'}></div>
+    <div class="field"><label class="f">${isNew ? 'الباسورد (6 على الأقل)' : 'باسورد جديد (سيبه فاضي لو مش هتغيّره)'}</label><input class="input" id="up" type="text" dir="ltr" autocomplete="off"></div>
+    ${owner ? '<p class="muted">حساب الأونر ليه كل الصلاحيات دايمًا.</p>' : `<label class="f">الصلاحيات</label><div class="perms">${PERMS.map(p => `<label><input type="checkbox" value="${p.key}" ${u && u.perms.includes(p.key) ? 'checked' : ''}>${esc(p.label)}</label>`).join('')}</div>
+    <div class="perms" style="margin-top:10px"><label><input type="checkbox" id="ua" ${!u || u.active ? 'checked' : ''}>الحساب شغّال (شيل العلامة عشان توقفه)</label></div>`}
+    <div id="e" class="err hidden"></div>
+    <div class="row" style="margin-top:8px"><button class="btn grow" id="sv">حفظ</button>${!isNew && !owner ? '<button class="btn danger" id="rm">مسح</button>' : ''}<button class="btn ghost" onclick="closeModal()">إلغاء</button></div>`);
+  const err = m => { const e = s.querySelector('#e'); e.textContent = m; e.classList.remove('hidden'); };
+  s.querySelector('#sv').onclick = async () => { const b = s.querySelector('#sv'); busy(b, true);
+    const perms = [...s.querySelectorAll('.perms input[value]:checked')].map(i => i.value);
+    try { const r = await api('saveUser', { username: s.querySelector('#uu').value, name: s.querySelector('#un').value, password: s.querySelector('#up').value, perms, active: owner ? true : s.querySelector('#ua').checked });
+      USERS = r.users; closeModal(); renderUsers(); toast('اتحفظ المستخدم'); }
+    catch (e) { if (e.message !== 'AUTH') err(e.message); busy(b, false); } };
+  const rm = s.querySelector('#rm'); if (rm) rm.onclick = async () => {
+    if (rm.dataset.sure !== '1') { rm.dataset.sure = '1'; rm.textContent = 'متأكد؟ دوس تاني'; return; }
+    busy(rm, true); try { const r = await api('saveUser', { username: u.username, remove: true }); USERS = r.users; closeModal(); renderUsers(); toast('اتمسح المستخدم'); }
+    catch (e) { if (e.message !== 'AUTH') err(e.message); busy(rm, false); } };
+}
+
+/* ═══ حسابي ═══ */
+$('#acctBtn').onclick = () => {
+  const s = modal(`<h3>حسابي</h3><p class="muted" style="margin-top:-6px">${esc(ME.name)} · <span dir="ltr">${esc(ME.username)}</span></p>
+    <div class="field"><label class="f">الباسورد الحالي</label><input class="input" id="op" type="password" dir="ltr" autocomplete="current-password"></div>
+    <div class="field"><label class="f">الباسورد الجديد</label><input class="input" id="np" type="password" dir="ltr" autocomplete="new-password"></div>
+    <div id="e" class="err hidden"></div>
+    <div class="row"><button class="btn grow" id="cp">تغيير الباسورد</button><button class="btn danger grow" id="lo">تسجيل خروج</button></div>`);
+  s.querySelector('#cp').onclick = async () => { const b = s.querySelector('#cp'); busy(b, true);
+    try { await api('changePassword', { oldPassword: s.querySelector('#op').value, newPassword: s.querySelector('#np').value }); closeModal(); toast('اتغيّر الباسورد'); }
+    catch (e) { if (e.message !== 'AUTH') { s.querySelector('#e').textContent = e.message; s.querySelector('#e').classList.remove('hidden'); } busy(b, false); } };
+  s.querySelector('#lo').onclick = async () => { try { await api('logout'); } catch (e) {} TOKEN = ''; ss.set('token',''); ME = null; showLogin(); };
+};
+
+/* ═══ البداية ═══ */
+(async () => {
+  try {
+    if (TOKEN) { try { const r = await api('me'); ME = r.me; PERMS = r.perms; startApp(); return; } catch (e) { if (e.message === 'AUTH') return; } }
+    const st = await (await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'staff.status' }) })).json();
+    PERMS = st.perms || []; st.hasOwner ? showLogin() : showSetup();
+  } catch (e) { $('#main').innerHTML = `<div class="card err">مقدرناش نوصل للسيرفر. اتأكد من النت وجرّب تاني.</div>`; }
+})();
+</script>
+</body>
+</html>
