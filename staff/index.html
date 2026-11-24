@@ -114,6 +114,37 @@ nav.tabs button.on{color:var(--navy);background:var(--bg)}
 .kpi.flash{animation:flashk 1.6s}
 @keyframes flashk{0%{box-shadow:0 0 0 4px rgba(0,223,190,.7)}100%{box-shadow:0 0 0 0 rgba(0,223,190,0)}}
 @keyframes flash{0%{background:rgba(0,223,190,.35)}100%{background:transparent}}
+.who{display:flex;flex-wrap:wrap;gap:6px;padding:0 6px 10px 6px;margin-top:-2px}
+.who .nm{font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px;background:#fff;border:1.5px solid var(--line);color:var(--ink);cursor:default}
+.who .nm.go{cursor:pointer}.who .nm.go:hover{border-color:var(--blue);color:var(--blue)}
+.who .nm small{color:var(--muted);font-weight:700;margin-inline-start:4px}
+.who .more{font-size:13px;font-weight:800;color:var(--blue);padding:3px 6px;cursor:pointer;background:none;border:0}
+.dash{display:flex;flex-direction:column;gap:10px;height:calc(100dvh - 172px - var(--safe-top) - var(--safe-bottom));min-height:520px}
+.dtable{flex:1;min-height:150px;display:flex;flex-direction:column;margin:0;padding:12px 14px}
+.dtable .sec-h{margin-bottom:6px}
+.livetag{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:#007a68}
+.tw{flex:1;overflow:auto;margin:0 -6px}
+.tw table{width:100%;border-collapse:collapse;font-size:14px}
+.tw th{position:sticky;top:0;background:#fff;text-align:right;font-size:12px;color:var(--muted);font-weight:800;padding:4px 6px;border-bottom:1px solid var(--line)}
+.tw td{padding:7px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tw td.nm{font-weight:800;white-space:normal}
+.tw td.tm{font-weight:800;color:var(--navy)}.tw td.tm small{color:var(--muted);font-size:11px}
+.tw tr{cursor:pointer}.tw tr.dim{opacity:.5}
+.tw tr.next td{background:rgba(0,223,190,.1)}
+.nx{font-size:11px;background:var(--teal);color:#063b33;border-radius:999px;padding:0 7px;font-weight:800;vertical-align:middle}
+.sp{font-size:12px;font-weight:800;border-radius:999px;padding:1px 8px;background:color-mix(in srgb,var(--c) 18%,#fff);color:var(--ink);border:1px solid color-mix(in srgb,var(--c) 55%,#fff)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:none}
+@media(min-width:620px){.tiles{grid-template-columns:repeat(4,1fr)}}
+.tile{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 12px;cursor:pointer;min-width:0}
+.tile:hover{border-color:#c9d6e6}
+.tile .t{font-size:12.5px;font-weight:800;color:var(--muted)}
+.tile .big{font-size:26px;font-weight:800;color:var(--navy);line-height:1.15;margin-bottom:4px}
+.tile.late .big{color:var(--danger)}
+.tile .r{display:flex;justify-content:space-between;gap:6px;font-size:12.5px;line-height:1.75;font-weight:600}
+.tile .r span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.tile .r i{width:7px;height:7px;border-radius:50%;flex:none;display:inline-block}
+.tile .r b{color:var(--navy);flex:none}
+.tile.flash,.tile .r.flash{animation:flash 1.6s;border-radius:8px}
 .late-i{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
 .late-i:first-of-type{border-top:0}
 </style>
@@ -237,41 +268,50 @@ async function poll(){
 }
 document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
 
-/* ═══ اللوحة ═══ */
+/* ═══ اللوحة ═══
+   كلها في شاشة واحدة: جدول مواعيد النهاردة لايف فوق، وتحته مربعات الحجوزات والطلبات والمتأخرة والأسبوع. */
 const OCOL = { 'تم أخذ المقاسات':'#8fb3f5', 'تحت التصنيع':'#3370e7', 'جاهز للبروفة':'#f2b84b', 'جاهز للاستلام':'#00dfbe', 'تم الاستلام':'#093c71', '':'#c4d0de' };
 const ACOL = { 'في انتظار التأكيد':'#f2b84b', 'مؤكد':'#3370e7', 'تم الحضور':'#00dfbe', 'لم يحضر':'#d64545', 'ملغي':'#c4d0de' };
 let DPREV = {};
 function viewDash(){
-  $('#main').innerHTML = `<div class="dash-top"><span class="live"></span><span id="dAt">بيتحدث تلقائي</span></div><div id="dash"><div class="center"><span class="spinner"></span></div></div>`;
+  $('#main').innerHTML = `<div class="dash" id="dash"><div class="center"><span class="spinner"></span></div></div>`;
   DPREV = {}; loadDash();
 }
-function bars(statuses, counts, colors, kind){
-  const max = Math.max(1, ...statuses.map(s => counts[s] || 0));
-  const goable = kind === 'o' ? can('orders.view') : can('appts.view');
-  return `<div class="bars">${statuses.map(s => { const n = counts[s] || 0, key = kind + ':' + s, fl = DPREV[key] !== undefined && DPREV[key] !== n;
-    DPREV[key] = n;
-    return `<div class="b ${goable?'go':''} ${fl?'flash':''}" data-go="${kind}" data-s="${esc(s)}"><span class="lbl">${esc(s || 'من غير حالة')}</span>
-      <span class="trk"><span class="fill" style="display:block;width:${n ? Math.max(4, n / max * 100) : 0}%;background:${colors[s]||'#8fb3f5'}"></span></span><span class="n">${nf.format(n)}</span></div>`; }).join('')}</div>`;
+function fl(key, v){ const f = DPREV[key] !== undefined && DPREV[key] !== v; DPREV[key] = v; return f ? 'flash' : ''; }
+function tile(go, title, big, rows, cls){
+  return `<div class="tile ${cls||''} ${fl('t:'+title, big)}" data-go="${go}"><div class="t">${title}</div><div class="big">${nf.format(big)}</div>
+    ${rows.map(([l, n, c]) => `<div class="r ${fl('r:'+title+l, n)}"><span><i style="background:${c||'#c4d0de'}"></i>${esc(l)}</span><b>${typeof n === 'number' ? nf.format(n) : n}</b></div>`).join('')}</div>`;
 }
 async function loadDash(){
   try {
     const r = await api('dashboard'); STAMP = r.stamp;
     if (VIEW !== 'dash' || !$('#dash')) return;
-    const o = r.orders, a = r.appts;
-    const kpi = (l, v, cls, key) => { const fl = DPREV[key] !== undefined && DPREV[key] !== v; DPREV[key] = v; return `<div class="kpi ${cls||''} ${fl?'flash':''}"><div class="l">${l}</div><div class="v">${nf.format(v)}</div></div>`; };
-    const oStatuses = o.counts[''] ? [...o.statuses, ''] : o.statuses;
-    $('#dash').innerHTML = `<div class="kpis">
-        ${kpi('طلبات مفتوحة', o.open, 'hero', 'k:open')}
-        ${kpi('متأخرة عن ميعاد الاستلام', o.late, o.late ? 'bad' : '', 'k:late')}
-        ${kpi('استلام الأسبوع ده', o.dueWeek, '', 'k:week')}
-        ${kpi('مواعيد النهاردة', a.todayTotal, '', 'k:today')}</div>
-      <div class="card"><div class="sec-h"><h3>الطلبات حسب الحالة</h3><span class="muted">الإجمالي ${nf.format(o.total)}</span></div>${bars(oStatuses, o.counts, OCOL, 'o')}</div>
-      <div class="card"><div class="sec-h"><h3>مواعيد النهاردة حسب الحالة</h3><span class="muted">${nf.format(a.week)} في الأسبوع · ${nf.format(a.pending)} مستني تأكيد</span></div>${bars(a.statuses, a.today, ACOL, 'a')}</div>
-      ${r.money ? `<div class="card"><div class="sec-h"><h3>الفلوس (كل الطلبات)</h3></div><div class="money"><div>الإجمالي<b>${money(r.money.cost)}</b></div><div>المدفوع<b>${money(r.money.paid)}</b></div><div>الباقي<b>${money(r.money.remaining)}</b></div></div></div>` : ''}
-      ${o.lateList.length ? `<div class="card"><div class="sec-h"><h3 style="color:var(--danger)">طلبات متأخرة</h3></div>${o.lateList.map(x => `<div class="late-i"><div style="flex:1"><div class="name" style="font-size:15px">${esc(x.name)} <span class="muted" dir="ltr">${esc(x.id)}</span></div><div class="muted">كان المفروض يستلم ${fmtDay(x.deliveryDate)}</div></div><span class="pill">${esc(x.status||'—')}</span></div>`).join('')}</div>` : ''}`;
-    $('#dAt').textContent = 'بيتحدث تلقائي · آخر تحديث ' + fmtTime(r.at) + ' ' + ampm(r.at);
-    document.querySelectorAll('.b.go').forEach(b => b.onclick = () => {
-      if (b.dataset.go === 'o') { OQ = { q:'', status: b.dataset.s }; go('orders'); } else { AR.mode = 'today'; go('appts'); } });
+    const o = r.orders, a = r.appts, nowT = r.at;
+    const list = a.todayList || [];
+    const nextI = list.findIndex(x => x.time >= nowT && !/ملغي|لم يحضر|تم الحضور/.test(x.status));
+    const rows = list.map((x, i) => `<tr class="${i === nextI ? 'next' : ''} ${/ملغي|لم يحضر/.test(x.status) ? 'dim' : ''}">
+        <td class="tm">${fmtTime(x.time)} <small>${ampm(x.time)}</small></td>
+        <td class="nm">${esc(x.name)}${i === nextI ? ' <span class="nx">الجاي</span>' : ''}</td>
+        <td>${esc(x.level || '—')}</td>
+        <td><span class="sp" style="--c:${ACOL[x.status] || '#c4d0de'}">${esc(x.status || '—')}</span></td></tr>`).join('');
+    const oRows = (o.counts[''] ? [...o.statuses, ''] : o.statuses).map(s => [s || 'من غير حالة', o.counts[s] || 0, OCOL[s]]);
+    const weekRows = [['استلام متوقع', o.dueWeek, '#00dfbe'], ['مواعيد', a.week, '#3370e7'], ['مستني تأكيد', a.pending, '#f2b84b']];
+    if (r.money) weekRows.push(['الباقي فلوس', money(r.money.remaining), '#093c71']);
+    $('#dash').innerHTML = `
+      <div class="card dtable"><div class="sec-h"><h3>مواعيد النهاردة</h3><span class="livetag"><span class="live"></span>لايف <span class="muted" style="font-weight:700">آخر تحديث ${fmtTime(nowT)} ${ampm(nowT)}</span></span></div>
+        <div class="tw">${list.length ? `<table><thead><tr><th>الساعة</th><th>الاسم</th><th>مستوى البتر</th><th>الحالة</th></tr></thead><tbody>${rows}</tbody></table>` : '<div class="empty">مفيش مواعيد النهاردة</div>'}</div></div>
+      <div class="tiles">
+        ${tile('a', 'حجوزات النهاردة', a.todayTotal, a.statuses.map(s => [s, a.today[s] || 0, ACOL[s]]))}
+        ${tile('o', 'الطلبات المفتوحة', o.open, oRows)}
+        <div class="tile late ${fl('t:late', o.late)}" data-go="o"><div class="t">طلبات متأخرة</div><div class="big">${nf.format(o.late)}</div>
+          ${o.lateList.slice(0, 4).map(x => `<div class="r"><span><i style="background:#d64545"></i>${esc(x.name)}</span><b dir="ltr">${esc(x.id)}</b></div>`).join('') || '<div class="r"><span>مفيش تأخير 👌</span></div>'}
+          ${o.late > 4 ? `<div class="r"><span class="muted">+${nf.format(o.late - 4)} كمان</span></div>` : ''}</div>
+        ${tile('o', 'الأسبوع ده', o.dueWeek + a.week, weekRows)}
+      </div>`;
+    document.querySelectorAll('#dash [data-go]').forEach(t => t.onclick = () => {
+      if (t.dataset.go === 'o' && can('orders.view')) { OQ = { q:'', status:'' }; go('orders'); }
+      else if (t.dataset.go === 'a' && can('appts.view')) { AR.mode = 'today'; go('appts'); } });
+    document.querySelectorAll('#dash tbody tr').forEach(t => t.onclick = () => { if (can('appts.view')) { AR.mode = 'today'; go('appts'); } });
   } catch (e) { if (e.message !== 'AUTH' && $('#dash')) $('#dash').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
 }
 
