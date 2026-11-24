@@ -3,639 +3,497 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>قدرة | مركز الأطراف الصناعية</title>
-<meta name="description" content="احجز ميعادك وتابع طلبك في مركز قدرة للأطراف الصناعية">
+<title>قدرة | الموظفين</title>
+<meta name="robots" content="noindex">
 <meta name="theme-color" content="#093c71">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="قدرة">
+<meta name="apple-mobile-web-app-title" content="قدرة موظفين">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --navy:#093c71; --blue:#3370e7; --teal:#00dfbe; --white:#fff;
-  --ink:#0d2440; --muted:#5f7390; --line:#e3eaf3; --bg:#f3f7fb; --danger:#d64545;
-  --radius:18px; --safe-top:env(safe-area-inset-top,0px); --safe-bottom:env(safe-area-inset-bottom,0px);
-}
+:root{--navy:#093c71;--blue:#3370e7;--teal:#00dfbe;--ink:#0d2440;--muted:#5f7390;--line:#e3eaf3;--bg:#f3f7fb;--danger:#d64545;--warn:#b7791f;
+  --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Cairo",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;font-size:16px;line-height:1.6}
 button,input,select,textarea{font:inherit;color:inherit}
-.app{max-width:520px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
-
-/* Header */
-header{background:var(--navy);color:#fff;padding:calc(var(--safe-top) + 14px) 18px 16px;position:sticky;top:0;z-index:5;
-  display:flex;align-items:center;gap:12px;min-height:64px}
-header .logo{height:30px;display:block}
-header .title{font-weight:700;font-size:17px;flex:1}
-.back{background:rgba(255,255,255,.12);border:0;width:40px;height:40px;border-radius:12px;color:#fff;display:grid;place-items:center;cursor:pointer}
-.back svg{width:22px;height:22px}
 .hidden{display:none!important}
-
-main{flex:1;padding:18px 16px calc(var(--safe-bottom) + 28px)}
-.screen{animation:in .25s ease}
-@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-/* Home */
-.hero{background:linear-gradient(135deg,var(--navy) 0%,#0d4f94 55%,var(--blue) 100%);color:#fff;border-radius:24px;
-  padding:26px 22px 24px;margin:-4px 0 18px;position:relative;overflow:hidden}
-.hero:after{content:"";position:absolute;inset:auto -60px -80px auto;width:220px;height:220px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,223,190,.45),transparent 65%)}
-.hero h1{margin:0 0 6px;font-size:24px;font-weight:800;line-height:1.35}
-.hero p{margin:0;opacity:.85;font-size:15px}
-.actions{display:grid;gap:12px}
-.action{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);
-  padding:18px;text-align:right;cursor:pointer;box-shadow:0 4px 14px rgba(9,60,113,.06);transition:transform .15s}
-.action:active{transform:scale(.98)}
-.action .ic{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;flex:none}
-.action .ic svg{width:26px;height:26px}
-.ic.teal{background:rgba(0,223,190,.14);color:#00a88f}
-.ic.blue{background:rgba(51,112,231,.12);color:var(--blue)}
-.action b{display:block;font-size:17px}
-.action span{color:var(--muted);font-size:14px}
-.action .chev{margin-inline-start:auto;color:#a9b7c9}
-
-.section-title{font-size:15px;font-weight:700;color:var(--muted);margin:24px 4px 10px}
-.contacts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.contact{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 4px;text-align:center;
-  text-decoration:none;color:var(--ink);font-size:13px;font-weight:600}
-.contact svg{width:24px;height:24px;display:block;margin:0 auto 4px;color:var(--navy)}
-.address{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-top:10px;font-size:14px;color:var(--muted)}
-.install-cta{margin-top:18px;width:100%;background:transparent;border:1.5px dashed #b9c8da;color:var(--navy);
-  border-radius:16px;padding:12px;font-weight:700;cursor:pointer}
-
-/* Forms */
-.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:14px}
-.step-label{display:flex;align-items:center;gap:8px;font-weight:700;margin:0 0 12px}
-.step-label i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;
-  display:grid;place-items:center;font-size:13px}
-label.f{display:block;font-size:14px;font-weight:600;margin:0 0 6px;color:var(--muted)}
-.input{width:100%;border:1.5px solid var(--line);background:#fbfdff;border-radius:14px;padding:12px 14px;outline:none;font-size:16px}
-.input:focus{border-color:var(--blue);background:#fff}
-.input[dir=ltr]{text-align:right}
-.field{margin-bottom:14px}
-.field:last-child{margin-bottom:0}
-
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;cursor:pointer;font-size:14px;font-weight:600}
-.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
-
-.days{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scroll-snap-type:x mandatory;scrollbar-width:none}
-.days::-webkit-scrollbar{display:none}
-.day{flex:none;width:68px;border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:8px 0;text-align:center;
-  cursor:pointer;scroll-snap-align:start}
-.day small{display:block;font-size:12px;color:var(--muted)}
-.day b{display:block;font-size:20px;line-height:1.3}
-.day.on{background:var(--navy);border-color:var(--navy);color:#fff}
-.day.on small{color:rgba(255,255,255,.8)}
-
-.cal-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
-.cal-head b{font-size:16px}
-.cal-nav{width:38px;height:38px;border-radius:12px;border:1.5px solid var(--line);background:#fff;cursor:pointer;display:grid;place-items:center;color:var(--navy)}
-.cal-nav svg{width:20px;height:20px}
-.cal-nav:disabled{opacity:.3;cursor:not-allowed}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
-.cal-wd{font-size:12px;color:var(--muted);font-weight:700;padding:2px 0 4px}
-.cday{aspect-ratio:1;border:0;border-radius:12px;background:#eef4fa;font-weight:700;font-size:15px;cursor:pointer;color:var(--ink);padding:0}
-.cday:disabled{background:transparent;color:#c3cfdc;cursor:not-allowed;font-weight:600}
-.cday.today{box-shadow:inset 0 0 0 2px var(--teal)}
-.cday.on{background:var(--navy);color:#fff;box-shadow:none}
-.cday.blank{visibility:hidden}
-.cday.off{background:#fdeeee;color:#d64545;opacity:1;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
-.cday.off small{font-size:9px;font-weight:700}
-.off-note{background:#fdeeee;color:#b03a3a;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:700;margin-top:10px}
-.sel-day{margin:12px 0 0;font-weight:700;color:var(--navy);font-size:15px}
-.cal-legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:10px}
-.cal-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:4px;vertical-align:middle}
-.photo-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.photo-btn{display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px dashed #b9c8da;background:#fbfdff;border-radius:14px;padding:12px 6px;font-weight:700;color:var(--navy);cursor:pointer;font-size:14px}
-.photo-btn svg{width:20px;height:20px}
-.photo-btn.off{opacity:.4;pointer-events:none}
-.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.thumb{position:relative;width:78px;height:78px;border-radius:12px;overflow:hidden;background:var(--bg)}
-.thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.thumb button{position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(9,30,60,.75);color:#fff;font-size:15px;line-height:24px;padding:0;cursor:pointer}
-.hint{font-size:12px;color:var(--muted);margin:8px 0 0}
-.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.slot{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:9px 0;text-align:center;cursor:pointer;font-weight:700;font-size:14px}
-.slot.on{background:var(--teal);border-color:var(--teal);color:var(--navy)}
-.slot:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}
-.empty{color:var(--muted);font-size:14px;text-align:center;padding:12px 0}
-
-.btn{width:100%;border:0;border-radius:16px;padding:15px;font-size:17px;font-weight:800;cursor:pointer;
-  background:var(--navy);color:#fff;box-shadow:0 8px 20px rgba(9,60,113,.2)}
-.btn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
-.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line);box-shadow:none}
-.err{background:#fdeeee;color:var(--danger);border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:12px}
-
-/* Success */
-.done{text-align:center;padding:10px 4px}
-.done .tick{width:84px;height:84px;border-radius:50%;background:rgba(0,223,190,.16);color:#00a88f;display:grid;place-items:center;margin:10px auto 14px}
-.done .tick svg{width:44px;height:44px}
-.done h2{margin:0 0 6px;font-size:22px}
-.kv{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
-.kv:last-child{border-bottom:0}
-.kv span{color:var(--muted)}
-.kv b{text-align:left}
-
-/* Tracking */
-.order-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
-.order-head h3{margin:0;font-size:18px}
-.badge{display:inline-block;background:rgba(0,223,190,.16);color:#008a75;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700;white-space:nowrap}
+.app{max-width:760px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+header{background:var(--navy);color:#fff;padding:calc(var(--safe-top) + 12px) 16px 12px;position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px}
+header img{height:26px;display:block}
+header .tag{font-size:13px;background:rgba(255,255,255,.14);border-radius:999px;padding:2px 10px;font-weight:700}
+header .sp{flex:1}
+.hbtn{background:rgba(255,255,255,.12);border:0;color:#fff;border-radius:10px;padding:6px 12px;cursor:pointer;font-size:14px;font-weight:600}
+main{flex:1;padding:16px 14px calc(var(--safe-bottom) + 96px)}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.auth{max-width:420px;margin:30px auto}
+.auth h2{margin:0 0 4px;font-size:22px}
 .muted{color:var(--muted);font-size:14px}
-.timeline{list-style:none;margin:16px 0 4px;padding:0}
-.timeline li{position:relative;padding:0 34px 18px 0;color:#9aabbf;font-weight:600}
-.timeline li:last-child{padding-bottom:0}
-.timeline li:before{content:"";position:absolute;right:7px;top:8px;bottom:-8px;width:2px;background:var(--line)}
-.timeline li:last-child:before{display:none}
-.timeline li:after{content:"";position:absolute;right:0;top:5px;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #c9d5e3}
-.timeline li.done{color:var(--ink)}
-.timeline li.done:after{background:var(--teal);border-color:var(--teal)}
-.timeline li.done:before{background:var(--teal)}
-.timeline li.now{color:var(--navy);font-weight:800}
-.timeline li.now:after{background:var(--navy);border-color:var(--navy);box-shadow:0 0 0 5px rgba(9,60,113,.14)}
-.delivery{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-radius:16px;padding:16px;margin:14px 0 0;display:flex;align-items:center;gap:12px}
-.delivery svg{width:30px;height:30px;flex:none;color:var(--teal)}
-.delivery small{display:block;opacity:.8}
-.delivery b{font-size:18px}
-.money{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
-.money div{background:var(--bg);border-radius:14px;padding:12px 4px}
-.money span{display:block;font-size:12px;color:var(--muted)}
-.money b{font-size:16px}
-.money .rem{background:rgba(51,112,231,.1)}
-.money .rem b{color:var(--blue)}
-.note{background:#fff8e6;border-radius:12px;padding:10px 12px;font-size:14px;margin-top:12px}
-
-/* Modal */
+label.f{display:block;font-size:14px;font-weight:600;margin:0 0 6px;color:var(--muted)}
+.input,select.input{width:100%;border:1.5px solid var(--line);background:#fbfdff;border-radius:12px;padding:10px 12px;outline:none;font-size:16px}
+.input:focus{border-color:var(--blue);background:#fff}
+.input:disabled{opacity:.6}
+[dir=ltr].input{text-align:right}
+.field{margin-bottom:12px}
+.btn{border:0;border-radius:12px;padding:11px 16px;font-size:16px;font-weight:800;cursor:pointer;background:var(--navy);color:#fff}
+.btn.block{width:100%}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+.btn.danger{background:#fff;color:var(--danger);border:1.5px solid #f3c9c9}
+.btn.sm{padding:6px 12px;font-size:14px;border-radius:10px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.err{background:#fdeeee;color:var(--danger);border-radius:10px;padding:8px 12px;font-size:14px;margin-bottom:10px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;cursor:pointer;font-size:14px;font-weight:700}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.date-in{border:1.5px solid var(--line);border-radius:999px;padding:5px 12px;background:#fff}
+.day-h{font-weight:800;color:var(--navy);margin:16px 4px 8px;font-size:15px}
+.appt{display:flex;gap:12px;align-items:flex-start}
+.appt .time{min-width:64px;text-align:center;background:var(--bg);border-radius:12px;padding:8px 4px;font-weight:800;color:var(--navy);font-size:15px;line-height:1.3}
+.appt .time small{display:block;font-size:11px;color:var(--muted);font-weight:600}
+.appt .body{flex:1;min-width:0}
+.name{font-weight:800;font-size:16px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.pill{font-size:12.5px;font-weight:700;border-radius:999px;padding:2px 10px;background:var(--bg);color:var(--navy)}
+.pill.teal{background:rgba(0,223,190,.16);color:#007a68}
+.pill.blue{background:rgba(51,112,231,.12);color:var(--blue)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row .grow{flex:1;min-width:140px}
+a.tel{color:var(--blue);text-decoration:none;font-weight:700;direction:ltr;display:inline-block}
+.status-sel{border:1.5px solid var(--line);border-radius:10px;padding:5px 8px;background:#fff;font-weight:700;font-size:14px}
+.st-ok{border-color:#9fe3d6;background:#effcf9}
+.st-wait{border-color:#f1d9a6;background:#fff9ec}
+.st-bad{border-color:#f3c9c9;background:#fdf3f3}
+.money{display:flex;gap:6px;margin-top:8px}
+.money div{flex:1;background:var(--bg);border-radius:10px;padding:6px;text-align:center;font-size:13px}
+.money b{display:block;font-size:15px}
+.empty{color:var(--muted);text-align:center;padding:28px 0}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 6px calc(var(--safe-bottom) + 6px);z-index:6}
+nav.tabs .in{display:flex;max-width:760px;width:100%}
+nav.tabs button{flex:1;border:0;background:none;padding:6px 4px;border-radius:12px;cursor:pointer;color:var(--muted);font-weight:700;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav.tabs button svg{width:22px;height:22px}
+nav.tabs button.on{color:var(--navy);background:var(--bg)}
 .modal{position:fixed;inset:0;background:rgba(9,30,60,.5);display:flex;align-items:flex-end;justify-content:center;z-index:20}
-.sheet{background:#fff;width:100%;max-width:520px;border-radius:24px 24px 0 0;padding:22px 20px calc(var(--safe-bottom) + 22px);animation:up .25s ease}
-@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
-.sheet h3{margin:0 0 12px;font-size:19px}
-.sheet ol{margin:0 0 18px;padding:0 20px 0 0}
-.sheet li{margin-bottom:8px}
-.tabs{display:flex;background:var(--bg);border-radius:12px;padding:4px;margin-bottom:14px}
-.tabs button{flex:1;border:0;background:transparent;padding:8px;border-radius:9px;font-weight:700;cursor:pointer}
-.tabs button.on{background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.08)}
-.demo{background:#fff3cd;color:#7a5b00;font-size:13px;text-align:center;padding:6px}
-.spinner{width:22px;height:22px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
-.spinner.dark{border-color:var(--line);border-top-color:var(--navy)}
+.sheet{background:#fff;width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 18px calc(var(--safe-bottom) + 18px)}
+@media(min-width:700px){.modal{align-items:center}.sheet{border-radius:20px}}
+.sheet h3{margin:0 0 12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.perms label{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;margin-bottom:6px;cursor:pointer;font-weight:600;font-size:15px}
+.perms input{width:18px;height:18px;accent-color:var(--navy)}
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.photos img{width:100%;border-radius:12px;display:block}
+.toast{position:fixed;bottom:calc(var(--safe-bottom) + 84px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;z-index:30;font-weight:700;font-size:14px;max-width:90%;text-align:center}
+.spinner{width:22px;height:22px;border:3px solid var(--line);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
 @keyframes spin{to{transform:rotate(360deg)}}
-.center{text-align:center;padding:16px}
+.center{text-align:center;padding:24px}
+.ulist .u{display:flex;align-items:center;gap:10px}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.off{opacity:.55}
+.dash-top{display:flex;align-items:center;gap:8px;margin:0 4px 12px;font-size:13px;color:var(--muted);font-weight:700}
+.live{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 rgba(0,223,190,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(0,223,190,0)}100%{box-shadow:0 0 0 0 rgba(0,223,190,0)}}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+@media(min-width:620px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.kpi .l{font-size:13px;color:var(--muted);font-weight:700}
+.kpi .v{font-size:30px;font-weight:800;color:var(--navy);line-height:1.2}
+.kpi.bad .v{color:var(--danger)}
+.kpi.hero{background:var(--navy);border-color:var(--navy)}.kpi.hero .l{color:rgba(255,255,255,.75)}.kpi.hero .v{color:#fff}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:2px 10px;margin:0 0 10px}
+.sec-h h3{margin:0;font-size:16px;color:var(--navy)}
+.bars .b{display:grid;grid-template-columns:120px 1fr 44px;align-items:center;gap:10px;padding:7px 6px;border-radius:10px;cursor:default}
+.bars .b.go{cursor:pointer}.bars .b.go:hover{background:var(--bg)}
+.bars .lbl{font-weight:700;font-size:14px}
+.bars .trk{height:12px;background:var(--bg);border-radius:999px;overflow:hidden}
+.bars .fill{height:100%;border-radius:999px;transition:width .5s}
+.bars .n{font-weight:800;text-align:left;font-size:16px;color:var(--navy)}
+.flash{animation:flash 1.6s}
+.kpi.flash{animation:flashk 1.6s}
+@keyframes flashk{0%{box-shadow:0 0 0 4px rgba(0,223,190,.7)}100%{box-shadow:0 0 0 0 rgba(0,223,190,0)}}
+@keyframes flash{0%{background:rgba(0,223,190,.35)}100%{background:transparent}}
+.who{display:flex;flex-wrap:wrap;gap:6px;padding:0 6px 10px 6px;margin-top:-2px}
+.who .nm{font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px;background:#fff;border:1.5px solid var(--line);color:var(--ink);cursor:default}
+.who .nm.go{cursor:pointer}.who .nm.go:hover{border-color:var(--blue);color:var(--blue)}
+.who .nm small{color:var(--muted);font-weight:700;margin-inline-start:4px}
+.who .more{font-size:13px;font-weight:800;color:var(--blue);padding:3px 6px;cursor:pointer;background:none;border:0}
+.dash{display:flex;flex-direction:column;gap:10px;height:calc(100dvh - 172px - var(--safe-top) - var(--safe-bottom));min-height:520px}
+.dtable{flex:1;min-height:150px;display:flex;flex-direction:column;margin:0;padding:12px 14px}
+.dtable .sec-h{margin-bottom:6px}
+.livetag{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:#007a68}
+.tw{flex:1;overflow:auto;margin:0 -6px}
+.tw table{width:100%;border-collapse:collapse;font-size:14px}
+.tw th{position:sticky;top:0;background:#fff;text-align:right;font-size:12px;color:var(--muted);font-weight:800;padding:4px 6px;border-bottom:1px solid var(--line)}
+.tw td{padding:7px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tw td.nm{font-weight:800;white-space:normal}
+.tw td.tm{font-weight:800;color:var(--navy)}.tw td.tm small{color:var(--muted);font-size:11px}
+.tw tr{cursor:pointer}.tw tr.dim{opacity:.5}
+.tw tr.next td{background:rgba(0,223,190,.1)}
+.nx{font-size:11px;background:var(--teal);color:#063b33;border-radius:999px;padding:0 7px;font-weight:800;vertical-align:middle}
+.sp{font-size:12px;font-weight:800;border-radius:999px;padding:1px 8px;background:color-mix(in srgb,var(--c) 18%,#fff);color:var(--ink);border:1px solid color-mix(in srgb,var(--c) 55%,#fff)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:none}
+@media(min-width:620px){.tiles{grid-template-columns:repeat(4,1fr)}}
+.tile{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 12px;cursor:pointer;min-width:0}
+.tile:hover{border-color:#c9d6e6}
+.tile .t{font-size:12.5px;font-weight:800;color:var(--muted)}
+.tile .big{font-size:26px;font-weight:800;color:var(--navy);line-height:1.15;margin-bottom:4px}
+.tile.late .big{color:var(--danger)}
+.tile .r{display:flex;justify-content:space-between;gap:6px;font-size:12.5px;line-height:1.75;font-weight:600}
+.tile .r span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.tile .r i{width:7px;height:7px;border-radius:50%;flex:none;display:inline-block}
+.tile .r b{color:var(--navy);flex:none}
+.tile.flash,.tile .r.flash{animation:flash 1.6s;border-radius:8px}
+.late-i{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.late-i:first-of-type{border-top:0}
 </style>
 </head>
 <body>
 <div class="app">
-  <div id="demoBar" class="demo hidden">وضع تجريبي: البيانات دي للتجربة بس ومش متوصلة بالشيت</div>
   <header>
-    <button id="backBtn" class="back hidden" aria-label="رجوع">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-    </button>
-    <img class="logo" id="hdrLogo" src="logo-white.png" alt="قدرة">
-    <div class="title hidden" id="hdrTitle"></div>
+    <img src="../logo-white.png" alt="قدرة">
+    <span class="tag">الموظفين</span>
+    <span class="sp"></span>
+    <span id="who" class="hidden" style="font-size:14px;font-weight:700"></span>
+    <button class="hbtn hidden" id="acctBtn">حسابي</button>
   </header>
-
-  <main>
-    <!-- HOME -->
-    <section id="home" class="screen">
-      <div class="hero">
-        <h1>أهلاً بيك في مركز قدرة</h1>
-        <p>احجز ميعادك وتابع طلبك من موبايلك</p>
-      </div>
-      <div class="actions">
-        <button class="action" data-go="book">
-          <div class="ic teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 3v3M16 3v3M3 9.5h18M12 13v4M10 15h4"/></svg></div>
-          <div><b>احجز ميعاد</b><span>كشف، مقاسات، بروفة أو صيانة</span></div>
-          <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>
-        </button>
-        <button class="action" data-go="track">
-          <div class="ic blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg></div>
-          <div><b>تابع طلبك</b><span>حالة الطرف، ميعاد الاستلام والتكلفة</span></div>
-          <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 6l-6 6 6 6"/></svg>
-        </button>
-      </div>
-
-      <div id="contactWrap" class="hidden">
-        <div class="section-title">تواصل معانا</div>
-        <div class="contacts" id="contacts"></div>
-        <div class="address hidden" id="address"></div>
-      </div>
-
-      <button class="install-cta hidden" id="installBtn">📲 ثبّت الأبلكيشن على موبايلك</button>
-    </section>
-
-    <!-- BOOK -->
-    <section id="book" class="screen hidden">
-      <div class="card">
-        <p class="step-label"><i>1</i> نوع الزيارة</p>
-        <div class="chips" id="types"></div>
-        <div id="levelWrap" class="hidden">
-          <p class="step-label" style="margin-top:16px"><i>+</i> مستوى البتر</p>
-          <div class="chips" id="levels"></div>
-        </div>
-      </div>
-      <div class="card">
-        <p class="step-label"><i>2</i> اختار اليوم</p>
-        <div id="days"></div>
-        <p class="step-label" style="margin-top:16px"><i>3</i> اختار الساعة</p>
-        <div id="slots"><div class="empty">اختار يوم الأول</div></div>
-      </div>
-      <div class="card">
-        <p class="step-label"><i>4</i> بياناتك</p>
-        <div class="field"><label class="f" for="bName">الاسم بالكامل</label>
-          <input class="input" id="bName" autocomplete="off" placeholder="مثال: أحمد محمد علي"></div>
-        <div class="field"><label class="f" for="bPhone">رقم الموبايل</label>
-          <input class="input" id="bPhone" type="tel" inputmode="tel" dir="ltr" autocomplete="off" placeholder="01xxxxxxxxx"></div>
-        <div class="field"><label class="f">صورة البتر (اختياري)</label>
-          <div class="photo-btns" id="photoBtns">
-            <label class="photo-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>صوّر بالكاميرا
-              <input type="file" accept="image/*" capture="environment" id="camInput" hidden></label>
-            <label class="photo-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/></svg>اختار من الصور
-              <input type="file" accept="image/*" multiple id="galInput" hidden></label>
-          </div>
-          <div class="thumbs" id="thumbs"></div>
-          <p class="hint">لحد ٣ صور. الصور بتوصل للمركز بس وبتساعد الأخصائي يجهز قبل الزيارة.</p></div>
-        <div class="field"><label class="f" for="bNotes">ملاحظات (اختياري)</label>
-          <textarea class="input" id="bNotes" rows="2" placeholder="أي حاجة تحب تقولهالنا"></textarea></div>
-      </div>
-      <div id="bErr" class="err hidden"></div>
-      <button class="btn" id="bSubmit" disabled>تأكيد الحجز</button>
-    </section>
-
-    <!-- BOOK DONE -->
-    <section id="booked" class="screen hidden">
-      <div class="done">
-        <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-        <h2 id="doneTitle">تم الحجز</h2>
-        <p class="muted" id="doneSub"></p>
-      </div>
-      <div class="card" id="doneCard"></div>
-      <button class="btn" data-go="home">الرجوع للرئيسية</button>
-    </section>
-
-    <!-- TRACK -->
-    <section id="track" class="screen hidden">
-      <form class="card" id="tForm">
-        <div class="field"><label class="f" for="tQuery">رقم الموبايل أو رقم الطلب</label>
-          <input class="input" id="tQuery" dir="ltr" autocapitalize="characters" autocomplete="off" placeholder="01xxxxxxxxx  أو  Q-1001"></div>
-        <div id="tErr" class="err hidden"></div>
-        <button class="btn" id="tSubmit" type="submit">عرض الطلب</button>
-        <p class="muted" style="margin:10px 0 0;text-align:center">اكتب رقم الموبايل اللي سجلت بيه، أو رقم الطلب المكتوب في الإيصال</p>
-      </form>
-      <div id="tResult"></div>
-    </section>
-  </main>
+  <main id="main"><div class="center"><span class="spinner"></span></div></main>
+  <nav class="tabs hidden" id="tabs"><div class="in" id="tabsIn"></div></nav>
 </div>
-
-<!-- Install modal -->
-<div class="modal hidden" id="installModal">
-  <div class="sheet">
-    <h3>ثبّت أبلكيشن قدرة</h3>
-    <div class="tabs"><button data-os="ios">آيفون</button><button data-os="android">أندرويد</button></div>
-    <ol id="osIos">
-      <li>افتح اللينك ده من <b>Safari</b></li>
-      <li>دوس على زرار المشاركة <b>⬆︎</b> تحت</li>
-      <li>اختار <b>"إضافة إلى الشاشة الرئيسية"</b></li>
-      <li>دوس <b>"إضافة"</b></li>
-    </ol>
-    <ol id="osAndroid" class="hidden">
-      <li>افتح اللينك من <b>Chrome</b></li>
-      <li>دوس على النقط التلاتة <b>⋮</b> فوق</li>
-      <li>اختار <b>"تثبيت التطبيق"</b> أو <b>"إضافة إلى الشاشة الرئيسية"</b></li>
-    </ol>
-    <button class="btn ghost" id="closeModal">تمام</button>
-  </div>
-</div>
+<div id="modalRoot"></div>
 
 <script>
-/* ══════════ الإعداد: حط هنا لينك الـ Web App بتاع Apps Script ══════════ */
+/* ═══ لينك الـ API (نفس لينك أبلكيشن المرضى) ═══ */
 const API_URL = "https://script.google.com/macros/s/AKfycbxdbMf_KsuX3jxbJgy8QXi0ehY4ttbkWtGMB9UvM4kAud-7mC9MAl_2eklYWQ_0OFibUw/exec";
-/* ═════════════════════════════════════════════════════════════════════ */
 
-const DEMO = !/^https:\/\/script\.google\.com\//.test(API_URL);
 const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
-const DAY_AR = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-const ICON = {
-  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/></svg>',
-  wa:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 001.8-1.2 2.2 2.2 0 00.1-1.2c0-.1-.2-.2-.5-.3z"/></svg>',
-  map:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0119 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
-  fb:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 8V6.5c0-.8.2-1.2 1.4-1.2H17V2.2A20 20 0 0014.6 2C12.2 2 10.6 3.4 10.6 6v2H8v3.4h2.6V22H14V11.4h2.7L17 8z"/></svg>',
-  truck:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 3v3M16 3v3M3 9.5h18M8.5 14.5l2.5 2.5 4.5-4.5"/></svg>'
-};
-
-/* ---------- helpers ---------- */
-const store = {
-  get(k){ try{ return localStorage.getItem('qudra.'+k) || ''; }catch(e){ return ''; } },
-  set(k,v){ try{ localStorage.setItem('qudra.'+k, v); }catch(e){} }
-};
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const toLatin = s => String(s||'').replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-const ymdToDate = ymd => { const [y,m,d] = ymd.split('-').map(Number); return new Date(y, m-1, d); };
+const nf = new Intl.NumberFormat('ar-EG');
 const toYmd = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-const fmtDay = ymd => ymd ? new Intl.DateTimeFormat('ar-EG',{weekday:'long',day:'numeric',month:'long'}).format(ymdToDate(ymd)) : '—';
-const fmtTime = t => { if(!t) return ''; let [h,m] = t.split(':').map(Number); const pm = h >= 12; h = h % 12 || 12;
-  return new Intl.NumberFormat('ar-EG').format(h) + ':' + new Intl.NumberFormat('ar-EG',{minimumIntegerDigits:2}).format(m) + (pm ? ' م' : ' ص'); };
-const money = n => new Intl.NumberFormat('ar-EG').format(Math.round(n||0)) + ' ج';
-const normPhone = v => { let p = toLatin(v).replace(/\D/g,''); if(p.startsWith('0020')) p = p.slice(4); else if(p.startsWith('20') && p.length===12) p = p.slice(2);
-  if(p.length===10 && p[0]==='1') p = '0'+p; return p; };
-const validPhone = p => /^01[0125]\d{8}$/.test(p);
+const ymdToDate = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const fmtDay = s => s ? new Intl.DateTimeFormat('ar-EG',{weekday:'long',day:'numeric',month:'long'}).format(ymdToDate(s)) : '—';
+const fmtTime = t => { if(!t) return ''; let [h,m] = t.split(':').map(Number); const pm = h >= 12; h = h % 12 || 12; return nf.format(h)+':'+String(m).padStart(2,'0').replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]); };
+const ampm = t => t && +t.split(':')[0] >= 12 ? 'م' : 'ص';
+const money = n => nf.format(Math.round(n||0)) + ' ج';
+const ss = { get(k){ try{return sessionStorage.getItem('qs.'+k)||'';}catch(e){return '';} }, set(k,v){ try{ v ? sessionStorage.setItem('qs.'+k,v) : sessionStorage.removeItem('qs.'+k);}catch(e){} } };
 
-/* ---------- API ---------- */
+let TOKEN = ss.get('token'), ME = null, PERMS = [], VIEW = '';
+const can = p => !!ME && ME.perms.includes(p);
+
 async function api(action, data = {}){
-  if (DEMO) return demoApi(action, data);
-  const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({ action, ...data }) });
-  const json = await res.json();
-  if (!json.ok) throw new Error(json.error || 'حصل خطأ، جرّب تاني');
-  return json;
-}
-
-/* ---------- Demo mode (لحد ما تحط لينك الـ API) ---------- */
-const demoBooked = {};
-async function demoApi(action, d){
-  await new Promise(r => setTimeout(r, 350));
-  const today = toYmd(new Date());
-  if (action === 'config') return { ok:true, name:'مركز قدرة للأطراف الصناعية', workDays:[6,0,1,2,3,4], daysAhead:14, holidays:[], today,
-    visitTypes:['كشف واستشارة','أخذ مقاسات','بروفة','استلام الطرف','صيانة'],
-    levels:['تحت الركبة','فوق الركبة','مفصل الركبة','مفصل الحوض','القدم','تحت الكوع','فوق الكوع','مفصل الكتف','اليد والأصابع','مش متأكد'],
-    orderStatuses:['تم أخذ المقاسات','تحت التصنيع','جاهز للبروفة','جاهز للاستلام','تم الاستلام'],
-    contact:{ phone:'01000000000', whatsapp:'01000000000', address:'العنوان هيتكتب هنا من شيت الإعدادات', maps:'https://maps.google.com', facebook:'https://facebook.com' } };
-  if (action === 'slots') { const out = []; for (let m = 600; m + 30 <= 1080; m += 30) { const t = String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
-      out.push({ time:t, available: !demoBooked[d.date+t] && (m/30) % 5 !== 2 }); } return { ok:true, slots: out }; }
-  if (action === 'book') { demoBooked[d.date+d.time] = 1; return { ok:true, ref:'A-DEMO-1', date:d.date, time:d.time, status:'في انتظار التأكيد', photos:(d.photos||[]).length }; }
-  if (action === 'track') {
-    const q = toLatin(d.q).toUpperCase().replace(/\s/g,'');
-    if (normPhone(q) !== '01000000000' && q !== 'Q-1001' && q !== '1001')
-      throw new Error('مفيش طلب بالبيانات دي. للتجربة: 01000000000 أو Q-1001');
-    const del = new Date(); del.setDate(del.getDate()+10);
-    return { ok:true, statuses:['تم أخذ المقاسات','تحت التصنيع','جاهز للبروفة','جاهز للاستلام','تم الاستلام'],
-      order:{ id:'Q-1001', name:'مريض تجريبي', type:'طرف سفلي تحت الركبة', measureDate:today, fittingDate:'', deliveryDate:toYmd(del),
-        status:'تحت التصنيع', cost:25000, paid:10000, remaining:15000, note:'هنكلمك قبل ميعاد البروفة بيوم' },
-      appointments:[{ date:toYmd(del), time:'11:00', type:'استلام الطرف', status:'مؤكد' }] };
+  const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({ action: 'staff.' + action, token: TOKEN, ...data }) });
+  const j = await res.json();
+  if (!j.ok) {
+    if (j.error === 'AUTH') { TOKEN = ''; ss.set('token',''); ME = null; showLogin('انتهت الجلسة، ادخل تاني'); throw new Error('AUTH'); }
+    throw new Error(j.error || 'حصل خطأ');
   }
+  return j;
 }
+function toast(msg){ document.querySelectorAll('.toast').forEach(x => x.remove()); const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 3200); }
+function modal(html){ const r = $('#modalRoot'); r.innerHTML = `<div class="modal"><div class="sheet">${html}</div></div>`;
+  r.querySelector('.modal').onclick = e => { if (e.target.classList.contains('modal')) closeModal(); }; return r.querySelector('.sheet'); }
+function closeModal(){ $('#modalRoot').innerHTML = ''; }
+function busy(btn, on, label){ if(!btn) return; btn.disabled = on; if (on) { btn.dataset.l = btn.textContent; btn.innerHTML = '<span class="spinner" style="width:18px;height:18px;border-width:2px;border-top-color:#fff"></span>'; } else btn.textContent = label || btn.dataset.l || ''; }
 
-/* ---------- Navigation ---------- */
-const TITLES = { book:'احجز ميعاد', booked:'تأكيد الحجز', track:'تابع طلبك' };
-function go(id, push = true){
-  $$('main > section').forEach(s => s.classList.add('hidden'));
-  $('#'+id).classList.remove('hidden');
-  const isHome = id === 'home';
-  $('#backBtn').classList.toggle('hidden', isHome);
-  $('#hdrLogo').classList.toggle('hidden', !isHome);
-  $('#hdrTitle').classList.toggle('hidden', isHome);
-  $('#hdrTitle').textContent = TITLES[id] || '';
-  if (id === 'book') initBook();
-  if (id === 'track') initTrack();
-  window.scrollTo(0,0);
-  if (push) history.pushState({ id }, '', id === 'home' ? '#' : '#'+id);
+/* ═══ الدخول ═══ */
+function showSetup(){
+  $('#tabs').classList.add('hidden'); $('#who').classList.add('hidden'); $('#acctBtn').classList.add('hidden');
+  $('#main').innerHTML = `<div class="card auth"><h2>أول مرة: اعمل حساب الأونر</h2><p class="muted">الحساب ده بس هو اللي يقدر يعمل الموظفين ويحدد صلاحياتهم.</p>
+  <form id="f"><div class="field"><label class="f">اسمك</label><input class="input" id="n" required></div>
+  <div class="field"><label class="f">اسم المستخدم (إنجليزي)</label><input class="input" id="u" dir="ltr" autocapitalize="none" autocomplete="username" required></div>
+  <div class="field"><label class="f">الباسورد (6 على الأقل)</label><input class="input" id="p" type="password" dir="ltr" autocomplete="new-password" required></div>
+  <div class="field"><label class="f">تأكيد الباسورد</label><input class="input" id="p2" type="password" dir="ltr" autocomplete="new-password" required></div>
+  <div id="e" class="err hidden"></div><button class="btn block" id="b">إنشاء حساب الأونر</button></form></div>`;
+  $('#f').onsubmit = async e => { e.preventDefault(); const er = $('#e'); er.classList.add('hidden');
+    if ($('#p').value !== $('#p2').value) { er.textContent = 'الباسورد مش متطابق'; er.classList.remove('hidden'); return; }
+    busy($('#b'), true);
+    try { const r = await api('setupOwner', { name:$('#n').value, username:$('#u').value, password:$('#p').value }); onLogin(r); }
+    catch (x) { er.textContent = x.message; er.classList.remove('hidden'); busy($('#b'), false); } };
 }
-window.addEventListener('popstate', e => go((e.state && e.state.id) || 'home', false));
-document.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) go(b.dataset.go); });
-$('#backBtn').onclick = () => history.length > 1 ? history.back() : go('home');
+function showLogin(msg){
+  $('#tabs').classList.add('hidden'); $('#who').classList.add('hidden'); $('#acctBtn').classList.add('hidden'); closeModal();
+  $('#main').innerHTML = `<div class="card auth"><h2>تسجيل الدخول</h2><p class="muted">ادخل باليوزر والباسورد اللي الأونر عملهولك.</p>
+  <form id="f"><div class="field"><label class="f">اسم المستخدم</label><input class="input" id="u" dir="ltr" autocapitalize="none" autocomplete="username" required></div>
+  <div class="field"><label class="f">الباسورد</label><input class="input" id="p" type="password" dir="ltr" autocomplete="current-password" required></div>
+  <div id="e" class="err ${msg ? '' : 'hidden'}">${esc(msg||'')}</div><button class="btn block" id="b">دخول</button></form></div>`;
+  $('#f').onsubmit = async e => { e.preventDefault(); $('#e').classList.add('hidden'); busy($('#b'), true);
+    try { const r = await api('login', { username:$('#u').value, password:$('#p').value }); onLogin(r); }
+    catch (x) { if (x.message !== 'AUTH') { $('#e').textContent = x.message; $('#e').classList.remove('hidden'); } busy($('#b'), false); } };
+}
+function onLogin(r){ TOKEN = r.token || TOKEN; ss.set('token', TOKEN); ME = r.me; PERMS = r.perms || PERMS; startApp(); }
 
-/* ---------- Config / Home ---------- */
-let CFG = null;
-async function loadConfig(){
-  if (CFG) return CFG;
-  CFG = await api('config');
-  const c = CFG.contact || {}, list = [];
-  const intl = p => { const n = normPhone(p); return n.startsWith('0') ? '20'+n.slice(1) : n; };
-  if (c.phone) list.push(`<a class="contact" href="tel:${esc(normPhone(c.phone))}">${ICON.phone}اتصل</a>`);
-  if (c.whatsapp) list.push(`<a class="contact" href="https://wa.me/${esc(intl(c.whatsapp))}" target="_blank" rel="noopener">${ICON.wa}واتساب</a>`);
-  if (c.maps) list.push(`<a class="contact" href="${esc(c.maps)}" target="_blank" rel="noopener">${ICON.map}الموقع</a>`);
-  if (c.facebook) list.push(`<a class="contact" href="${esc(c.facebook)}" target="_blank" rel="noopener">${ICON.fb}فيسبوك</a>`);
-  if (list.length) { $('#contacts').innerHTML = list.join(''); $('#contacts').style.gridTemplateColumns = `repeat(${list.length},1fr)`; $('#contactWrap').classList.remove('hidden'); }
-  if (c.address) { $('#address').textContent = '📍 ' + c.address; $('#address').classList.remove('hidden'); }
-  return CFG;
+/* ═══ التابات ═══ */
+const ICONS = {
+  dash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V4M16 20v-6M22 20H2"/></svg>',
+  appts:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 3v3M16 3v3M3 9.5h18"/></svg>',
+  orders:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg>',
+  settings:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>',
+  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0113 0M16 4.5a3.5 3.5 0 010 7M18 14a6 6 0 013.5 6"/></svg>'
+};
+function startApp(){
+  $('#who').textContent = ME.name; $('#who').classList.remove('hidden'); $('#acctBtn').classList.remove('hidden');
+  const tabs = [];
+  if (can('dash.view')) tabs.push(['dash','اللوحة']);
+  if (can('appts.view')) tabs.push(['appts','المواعيد']);
+  if (can('orders.view')) tabs.push(['orders','الطلبات']);
+  if (can('settings.edit')) tabs.push(['settings','الإعدادات']);
+  if (can('owner')) tabs.push(['users','المستخدمين']);
+  if (!tabs.length) { $('#tabs').classList.add('hidden'); $('#main').innerHTML = '<div class="card empty">حسابك لسه مالوش صلاحيات. كلّم الأونر.</div>'; return; }
+  $('#tabsIn').innerHTML = tabs.map(([k,l]) => `<button data-tab="${k}">${ICONS[k]}${l}</button>`).join('');
+  $('#tabs').classList.remove('hidden');
+  $('#tabsIn').onclick = e => { const b = e.target.closest('[data-tab]'); if (b) go(b.dataset.tab); };
+  go(tabs.some(t => t[0] === VIEW) ? VIEW : tabs[0][0]);
+  startPoll();
 }
+function go(v){ VIEW = v; document.querySelectorAll('#tabsIn button').forEach(b => b.classList.toggle('on', b.dataset.tab === v));
+  ({ dash: viewDash, appts: viewAppts, orders: viewOrders, settings: viewSettings, users: viewUsers })[v](); window.scrollTo(0,0); }
 
-/* ---------- Booking ---------- */
-const B = { type:'', date:'', time:'', level:'' };
-let CAL = null;
-const WD_SAT_FIRST = ['سبت','حد','اتنين','تلات','أربع','خميس','جمعة'];
-function renderCal(){
-  const box = $('#days');
-  if (!CAL.allowed.size) { box.innerHTML = '<div class="empty">مفيش أيام متاحة دلوقتي</div>'; return; }
-  const m = CAL.month, y = m.getFullYear(), mo = m.getMonth();
-  const daysIn = new Date(y, mo + 1, 0).getDate();
-  const lead = (new Date(y, mo, 1).getDay() + 1) % 7;
-  const nf = new Intl.NumberFormat('ar-EG');
-  let cells = WD_SAT_FIRST.map(w => `<div class="cal-wd">${w}</div>`).join('');
-  for (let k = 0; k < lead; k++) cells += '<span class="cday blank"></span>';
-  for (let d = 1; d <= daysIn; d++) {
-    const dt = new Date(y, mo, d), ymd = toYmd(dt), ok = CAL.allowed.has(ymd);
-    const off = !CAL.workDays.includes(dt.getDay()) || CAL.holidays.has(ymd);
-    cells += off
-      ? `<button class="cday off" disabled aria-label="${fmtDay(ymd)} - إجازة">${nf.format(d)}<small>إجازة</small></button>`
-      : `<button class="cday${ymd === CAL.today ? ' today' : ''}${ymd === B.date ? ' on' : ''}" data-date="${ymd}" ${ok ? '' : 'disabled'} aria-label="${fmtDay(ymd)}">${nf.format(d)}</button>`;
-  }
-  const offNames = [6,0,1,2,3,4,5].filter(k => !CAL.workDays.includes(k)).map(k => DAY_AR[k]);
-  const chev = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
-  box.innerHTML = `
-    <div class="cal-head">
-      <button class="cal-nav" id="calPrev" aria-label="الشهر اللي فات" ${m <= CAL.min ? 'disabled' : ''}>${chev('M9 6l6 6-6 6')}</button>
-      <b>${new Intl.DateTimeFormat('ar-EG',{month:'long',year:'numeric'}).format(m)}</b>
-      <button class="cal-nav" id="calNext" aria-label="الشهر الجاي" ${m >= CAL.max ? 'disabled' : ''}>${chev('M15 6l-6 6 6 6')}</button>
-    </div>
-    <div class="cal-grid">${cells}</div>
-    <div class="cal-legend"><span><i style="background:#eef4fa"></i>متاح</span><span><i style="background:var(--navy)"></i>اختيارك</span><span><i style="box-shadow:inset 0 0 0 2px var(--teal)"></i>النهاردة</span><span><i style="background:#fdeeee"></i>إجازة</span></div>
-    ${offNames.length ? `<div class="off-note">🚫 المركز إجازة يوم ${offNames.join(' و')}</div>` : ''}
-    ${B.date ? `<p class="sel-day">📅 ${fmtDay(B.date)}</p>` : ''}`;
-  $('#calPrev').onclick = () => { CAL.month = new Date(y, mo - 1, 1); renderCal(); };
-  $('#calNext').onclick = () => { CAL.month = new Date(y, mo + 1, 1); renderCal(); };
-}
-let bookReady = false;
-async function initBook(){
-  if (bookReady) return;
-  $('#types').innerHTML = $('#days').innerHTML = '<span class="spinner dark"></span>';
+/* ═══ التحديث التلقائي ═══
+   كل 15 ثانية بنسأل السيرفر: فيه حاجة اتغيرت في الطلبات أو المواعيد؟ لو آه، الشاشة بتتحدث لوحدها. */
+let STAMP = '', POLL = null;
+function startPoll(){ clearInterval(POLL); POLL = setInterval(poll, 15000); }
+async function poll(){
+  if (document.hidden || !ME || !TOKEN) return;
   try {
-    const c = await loadConfig();
-    $('#types').innerHTML = c.visitTypes.map(t => `<button class="chip" data-type="${esc(t)}">${esc(t)}</button>`).join('');
-    const lv = c.levels || [];
-    $('#levels').innerHTML = lv.map(t => `<button class="chip" data-level="${esc(t)}">${esc(t)}</button>`).join('');
-    $('#levelWrap').classList.toggle('hidden', !lv.length);
-    const today = c.today || toYmd(new Date()), start = ymdToDate(today), allowed = new Set();
-    for (let k = 0; k <= c.daysAhead; k++) {
-      const d = new Date(start); d.setDate(start.getDate() + k);
-      const ymd = toYmd(d);
-      if (c.workDays.includes(d.getDay()) && !(c.holidays||[]).includes(ymd)) allowed.add(ymd);
-    }
-    const last = new Date(start); last.setDate(start.getDate() + c.daysAhead);
-    CAL = { today, allowed, workDays: c.workDays, holidays: new Set(c.holidays || []), min: new Date(start.getFullYear(), start.getMonth(), 1), max: new Date(last.getFullYear(), last.getMonth(), 1) };
-    CAL.month = new Date(CAL.min);
-    const firstFree = [...allowed][0];
-    if (firstFree) CAL.month = new Date(ymdToDate(firstFree).getFullYear(), ymdToDate(firstFree).getMonth(), 1);
-    renderCal();
-    bookReady = true;
-  } catch (e) { $('#types').innerHTML = `<div class="err">${esc(e.message)}</div>`; $('#days').innerHTML = ''; }
+    const r = await api('stamp');
+    const changed = STAMP && r.stamp !== STAMP; STAMP = r.stamp;
+    if (!changed) return;
+    const a = document.activeElement, editing = $('#modalRoot').innerHTML || (a && /^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName) && a.id !== 'q');
+    if (editing) { STAMP = ''; return; }            // نستنى لحد ما يخلص اللي بيعمله
+    if (VIEW === 'dash') loadDash();
+    else if (VIEW === 'orders') loadOrders();
+    else if (VIEW === 'appts') viewAppts();
+  } catch (e) {}
 }
+document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
 
-$('#levels').addEventListener('click', e => { const b = e.target.closest('.chip'); if(!b) return;
-  const same = B.level === b.dataset.level; B.level = same ? '' : b.dataset.level;
-  $$('#levels .chip').forEach(x => x.classList.toggle('on', !same && x === b)); });
-$('#types').addEventListener('click', e => { const b = e.target.closest('.chip'); if(!b) return;
-  $$('#types .chip').forEach(x => x.classList.toggle('on', x === b)); B.type = b.dataset.type; checkBook(); });
-
-$('#days').addEventListener('click', async e => { const b = e.target.closest('.cday[data-date]'); if(!b || b.disabled) return;
-  B.date = b.dataset.date; B.time = ''; checkBook(); renderCal();
-  const picked = B.date;
-  const box = $('#slots'); box.innerHTML = '<div class="center"><span class="spinner dark"></span></div>';
+/* ═══ اللوحة ═══
+   كلها في شاشة واحدة: جدول مواعيد النهاردة لايف فوق، وتحته مربعات الحجوزات والطلبات والمتأخرة والأسبوع. */
+const OCOL = { 'تم أخذ المقاسات':'#8fb3f5', 'تحت التصنيع':'#3370e7', 'جاهز للبروفة':'#f2b84b', 'جاهز للاستلام':'#00dfbe', 'تم الاستلام':'#093c71', '':'#c4d0de' };
+const ACOL = { 'في انتظار التأكيد':'#f2b84b', 'مؤكد':'#3370e7', 'تم الحضور':'#00dfbe', 'لم يحضر':'#d64545', 'ملغي':'#c4d0de' };
+let DPREV = {};
+function viewDash(){
+  $('#main').innerHTML = `<div class="dash" id="dash"><div class="center"><span class="spinner"></span></div></div>`;
+  DPREV = {}; loadDash();
+}
+function fl(key, v){ const f = DPREV[key] !== undefined && DPREV[key] !== v; DPREV[key] = v; return f ? 'flash' : ''; }
+function tile(go, title, big, rows, cls){
+  return `<div class="tile ${cls||''} ${fl('t:'+title, big)}" data-go="${go}"><div class="t">${title}</div><div class="big">${nf.format(big)}</div>
+    ${rows.map(([l, n, c]) => `<div class="r ${fl('r:'+title+l, n)}"><span><i style="background:${c||'#c4d0de'}"></i>${esc(l)}</span><b>${typeof n === 'number' ? nf.format(n) : n}</b></div>`).join('')}</div>`;
+}
+async function loadDash(){
   try {
-    const r = await api('slots', { date: B.date });
-    if (B.date !== picked) return;
-    const free = r.slots.filter(s => s.available).length;
-    box.innerHTML = r.slots.length && free ? `<div class="slots">${r.slots.map(s =>
-      `<button class="slot" data-time="${s.time}" ${s.available ? '' : 'disabled'}>${fmtTime(s.time)}</button>`).join('')}</div>`
-      : '<div class="empty">اليوم ده كامل، اختار يوم تاني</div>';
-  } catch (err) { box.innerHTML = `<div class="err">${esc(err.message)}</div>`; }
-});
-
-$('#slots').addEventListener('click', e => { const b = e.target.closest('.slot'); if(!b || b.disabled) return;
-  $$('#slots .slot').forEach(x => x.classList.toggle('on', x === b)); B.time = b.dataset.time; checkBook(); });
-
-['#bName','#bPhone'].forEach(s => $(s).addEventListener('input', checkBook));
-
-/* ---------- صور البتر ---------- */
-const MAX_PHOTOS = 3;
-let PHOTOS = [];
-function shrinkImage(file){
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file), img = new Image();
-    img.onload = () => {
-      const max = 1600, k = Math.min(1, max / Math.max(img.width, img.height));
-      const c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
-      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-      URL.revokeObjectURL(url); resolve(c.toDataURL('image/jpeg', 0.82));
-    };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('مقدرناش نقرا الصورة دي، جرّب صورة تانية')); };
-    img.src = url;
-  });
-}
-function renderThumbs(){
-  $('#thumbs').innerHTML = PHOTOS.map((d, i) => `<div class="thumb"><img src="${d}" alt="صورة ${i+1}"><button type="button" data-rm="${i}" aria-label="شيل الصورة">×</button></div>`).join('');
-  $('#photoBtns').querySelectorAll('.photo-btn').forEach(b => b.classList.toggle('off', PHOTOS.length >= MAX_PHOTOS));
-}
-async function addPhotos(files){
-  const err = $('#bErr'); err.classList.add('hidden');
-  for (const f of [...files]) {
-    if (PHOTOS.length >= MAX_PHOTOS) { err.textContent = 'أقصى عدد ٣ صور'; err.classList.remove('hidden'); break; }
-    if (!/^image\//.test(f.type) && !/\.(jpe?g|png|webp|heic|heif)$/i.test(f.name)) continue;
-    try { PHOTOS.push(await shrinkImage(f)); } catch (e) { err.textContent = e.message; err.classList.remove('hidden'); }
-  }
-  renderThumbs();
-}
-['#camInput','#galInput'].forEach(sel => $(sel).addEventListener('change', e => { addPhotos(e.target.files); e.target.value = ''; }));
-$('#thumbs').addEventListener('click', e => { const b = e.target.closest('[data-rm]'); if (!b) return; PHOTOS.splice(+b.dataset.rm, 1); renderThumbs(); });
-function checkBook(){
-  $('#bSubmit').disabled = !(B.type && B.date && B.time && $('#bName').value.trim().length >= 3 && validPhone(normPhone($('#bPhone').value)));
+    const r = await api('dashboard'); STAMP = r.stamp;
+    if (VIEW !== 'dash' || !$('#dash')) return;
+    const o = r.orders, a = r.appts, nowT = r.at;
+    const list = a.todayList || [];
+    const nextI = list.findIndex(x => x.time >= nowT && !/ملغي|لم يحضر|تم الحضور/.test(x.status));
+    const rows = list.map((x, i) => `<tr class="${i === nextI ? 'next' : ''} ${/ملغي|لم يحضر/.test(x.status) ? 'dim' : ''}">
+        <td class="tm">${fmtTime(x.time)} <small>${ampm(x.time)}</small></td>
+        <td class="nm">${esc(x.name)}${i === nextI ? ' <span class="nx">الجاي</span>' : ''}</td>
+        <td>${esc(x.level || '—')}</td>
+        <td><span class="sp" style="--c:${ACOL[x.status] || '#c4d0de'}">${esc(x.status || '—')}</span></td></tr>`).join('');
+    const oRows = (o.counts[''] ? [...o.statuses, ''] : o.statuses).map(s => [s || 'من غير حالة', o.counts[s] || 0, OCOL[s]]);
+    const weekRows = [['استلام متوقع', o.dueWeek, '#00dfbe'], ['مواعيد', a.week, '#3370e7'], ['مستني تأكيد', a.pending, '#f2b84b']];
+    if (r.money) weekRows.push(['الباقي فلوس', money(r.money.remaining), '#093c71']);
+    $('#dash').innerHTML = `
+      <div class="card dtable"><div class="sec-h"><h3>مواعيد النهاردة</h3><span class="livetag"><span class="live"></span>لايف <span class="muted" style="font-weight:700">آخر تحديث ${fmtTime(nowT)} ${ampm(nowT)}</span></span></div>
+        <div class="tw">${list.length ? `<table><thead><tr><th>الساعة</th><th>الاسم</th><th>مستوى البتر</th><th>الحالة</th></tr></thead><tbody>${rows}</tbody></table>` : '<div class="empty">مفيش مواعيد النهاردة</div>'}</div></div>
+      <div class="tiles">
+        ${tile('a', 'حجوزات النهاردة', a.todayTotal, a.statuses.map(s => [s, a.today[s] || 0, ACOL[s]]))}
+        ${tile('o', 'الطلبات المفتوحة', o.open, oRows)}
+        <div class="tile late ${fl('t:late', o.late)}" data-go="o"><div class="t">طلبات متأخرة</div><div class="big">${nf.format(o.late)}</div>
+          ${o.lateList.slice(0, 4).map(x => `<div class="r"><span><i style="background:#d64545"></i>${esc(x.name)}</span><b dir="ltr">${esc(x.id)}</b></div>`).join('') || '<div class="r"><span>مفيش تأخير 👌</span></div>'}
+          ${o.late > 4 ? `<div class="r"><span class="muted">+${nf.format(o.late - 4)} كمان</span></div>` : ''}</div>
+        ${tile('o', 'الأسبوع ده', o.dueWeek + a.week, weekRows)}
+      </div>`;
+    document.querySelectorAll('#dash [data-go]').forEach(t => t.onclick = () => {
+      if (t.dataset.go === 'o' && can('orders.view')) { OQ = { q:'', status:'' }; go('orders'); }
+      else if (t.dataset.go === 'a' && can('appts.view')) { AR.mode = 'today'; go('appts'); } });
+    document.querySelectorAll('#dash tbody tr').forEach(t => t.onclick = () => { if (can('appts.view')) { AR.mode = 'today'; go('appts'); } });
+  } catch (e) { if (e.message !== 'AUTH' && $('#dash')) $('#dash').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
 }
 
-$('#bSubmit').onclick = async () => {
-  const btn = $('#bSubmit'), err = $('#bErr');
-  err.classList.add('hidden'); btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>' + (PHOTOS.length ? ' جاري رفع الصور...' : '');
-  const name = $('#bName').value.trim(), phone = normPhone($('#bPhone').value);
+/* ═══ المواعيد ═══ */
+let AR = { mode:'today', from:'', to:'' };
+function rangeFor(mode){ const t = new Date(); const d = n => { const x = new Date(t); x.setDate(t.getDate()+n); return toYmd(x); };
+  return mode === 'today' ? [d(0), d(0)] : mode === 'tomorrow' ? [d(1), d(1)] : mode === 'week' ? [d(0), d(6)] : [AR.from, AR.to]; }
+function stClass(s){ return /مؤكد|تم الحضور|تم الاستلام|جاهز/.test(s) ? 'st-ok' : /ملغي|لم يحضر/.test(s) ? 'st-bad' : 'st-wait'; }
+async function viewAppts(){
+  const [from, to] = rangeFor(AR.mode);
+  $('#main').innerHTML = `<div class="toolbar">
+    ${[['today','النهاردة'],['tomorrow','بكرة'],['week','الأسبوع']].map(([k,l]) => `<button class="chip ${AR.mode===k?'on':''}" data-m="${k}">${l}</button>`).join('')}
+    <input type="date" class="date-in" id="pick" value="${AR.mode==='pick'?AR.from:''}"></div><div id="list"><div class="center"><span class="spinner"></span></div></div>`;
+  document.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { AR.mode = b.dataset.m; viewAppts(); });
+  $('#pick').onchange = e => { if (!e.target.value) return; AR = { mode:'pick', from:e.target.value, to:e.target.value }; viewAppts(); };
   try {
-    const r = await api('book', { name, phone, date:B.date, time:B.time, type:B.type, notes:$('#bNotes').value.trim(), photos: PHOTOS, level: B.level });
-    const pending = r.status !== 'مؤكد';
-    $('#doneTitle').textContent = pending ? 'طلب الحجز وصل' : 'تم تأكيد الحجز';
-    $('#doneSub').textContent = pending ? 'هنكلمك قريب عشان نأكد الميعاد' : 'مستنيينك في الميعاد';
-    $('#doneCard').innerHTML = `
-      <div class="kv"><span>نوع الزيارة</span><b>${esc(B.type)}</b></div>
-      ${B.level ? `<div class="kv"><span>مستوى البتر</span><b>${esc(B.level)}</b></div>` : ''}
-      <div class="kv"><span>اليوم</span><b>${fmtDay(r.date)}</b></div>
-      <div class="kv"><span>الساعة</span><b>${fmtTime(r.time)}</b></div>
-      <div class="kv"><span>رقم الحجز</span><b dir="ltr">${esc(r.ref)}</b></div>
-      <div class="kv"><span>الحالة</span><b>${esc(r.status)}</b></div>
-      ${r.photos ? `<div class="kv"><span>الصور</span><b>وصلت ${new Intl.NumberFormat('ar-EG').format(r.photos)} ✓</b></div>` : ''}`;
-    Object.assign(B, { type:'', date:'', time:'', level:'' }); bookReady = false; $('#bNotes').value = ''; PHOTOS = []; renderThumbs(); $('#slots').innerHTML = '<div class="empty">اختار يوم الأول</div>';
-    go('booked');
-  } catch (e) {
-    err.textContent = e.message; err.classList.remove('hidden');
-    if (/اتحجز/.test(e.message) && B.date) $(`#days .cday[data-date="${B.date}"]`)?.click();
-  } finally { btn.textContent = 'تأكيد الحجز'; checkBook(); }
+    const r = await api('appts', { from, to });
+    if (!r.appts.length) { $('#list').innerHTML = '<div class="card empty">مفيش مواعيد في الفترة دي</div>'; return; }
+    let html = '', day = '';
+    r.appts.forEach(a => {
+      if (a.date !== day) { day = a.date; html += `<div class="day-h">${fmtDay(day)}</div>`; }
+      html += `<div class="card appt" data-ref="${esc(a.ref)}"><div class="time">${fmtTime(a.time)}<small>${ampm(a.time)}</small></div><div class="body">
+        <div class="name">${esc(a.name)}</div><a class="tel" href="tel:${esc(a.phone)}">${esc(a.phone)}</a>
+        <div class="meta"><span class="pill">${esc(a.type||'—')}</span>${a.level?`<span class="pill blue">${esc(a.level)}</span>`:''}${a.order?`<span class="pill teal">طلب ${esc(a.order)}</span>`:''}</div>
+        ${a.notes?`<div class="muted">💬 ${esc(a.notes)}</div>`:''}
+        <div class="row" style="margin-top:6px">
+          ${can('appts.status') ? `<select class="status-sel ${stClass(a.status)}" data-st="${esc(a.ref)}">${r.statuses.map(s => `<option ${s===a.status?'selected':''}>${esc(s)}</option>`).join('')}</select>` : `<span class="pill">${esc(a.status||'—')}</span>`}
+          ${a.photos && can('photos.view') ? `<button class="btn ghost sm" data-ph="${esc(a.ref)}">📷 الصور (${nf.format(a.photos)})</button>` : ''}
+        </div></div></div>`;
+    });
+    $('#list').innerHTML = html;
+    document.querySelectorAll('[data-st]').forEach(sel => { sel.dataset.prev = sel.value; sel.onchange = async () => {
+      const v = sel.value; sel.disabled = true;
+      try { const x = await api('setApptStatus', { ref: sel.dataset.st, status: v }); sel.dataset.prev = v; sel.className = 'status-sel ' + stClass(v);
+        toast(x.order ? `اتسجل الحضور، والطلب \u2068${x.order}\u2069 جاهز` : 'اتحفظت الحالة'); if (x.order) viewAppts(); }
+      catch (e) { if (e.message !== 'AUTH') toast(e.message); sel.value = sel.dataset.prev; }
+      finally { sel.disabled = false; } }; });
+    document.querySelectorAll('[data-ph]').forEach(b => b.onclick = () => showPhotos(b.dataset.ph));
+  } catch (e) { if (e.message !== 'AUTH') $('#list').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+async function showPhotos(ref){
+  const s = modal('<h3>صور المريض</h3><div class="center"><span class="spinner"></span></div><button class="btn ghost block" onclick="closeModal()">قفل</button>');
+  try { const r = await api('photos', { ref }); s.querySelector('.center').outerHTML = r.images.length ? `<div class="photos" style="margin-bottom:12px">${r.images.map(i => `<img src="${i}" alt="صورة">`).join('')}</div>` : '<div class="empty">مفيش صور</div>'; }
+  catch (e) { s.querySelector('.center').outerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+
+/* ═══ الطلبات ═══ */
+let OQ = { q:'', status:'' }, OSTAT = [];
+async function viewOrders(){
+  $('#main').innerHTML = `<div class="toolbar"><input class="input" style="flex:1;min-width:180px" id="q" placeholder="ابحث بالاسم أو الموبايل أو رقم الطلب" value="${esc(OQ.q)}">
+    <select class="status-sel" id="sf"><option value="">كل الحالات</option></select>
+    ${can('orders.edit') ? '<button class="btn sm" id="newO">+ طلب جديد</button>' : ''}</div><div id="list"><div class="center"><span class="spinner"></span></div></div>`;
+  let t; $('#q').oninput = e => { clearTimeout(t); t = setTimeout(() => { OQ.q = e.target.value.trim(); loadOrders(); }, 350); };
+  $('#sf').onchange = e => { OQ.status = e.target.value; loadOrders(); };
+  if ($('#newO')) $('#newO').onclick = newOrder;
+  loadOrders();
+}
+async function loadOrders(){
+  try {
+    const r = await api('orders', OQ); OSTAT = r.statuses;
+    const sf = $('#sf'); if (sf && sf.options.length === 1) { sf.innerHTML += r.statuses.map(s => `<option ${s===OQ.status?'selected':''}>${esc(s)}</option>`).join(''); }
+    if (!r.orders.length) { $('#list').innerHTML = '<div class="card empty">مفيش طلبات</div>'; return; }
+    $('#list').innerHTML = r.orders.map(o => `<div class="card">
+      <div class="row"><div class="grow"><div class="name">${esc(o.name)} <span class="muted" style="font-weight:700" dir="ltr">${esc(o.id)}</span></div>
+      <a class="tel" href="tel:${esc(o.phone)}">${esc(o.phone)}</a></div>
+      ${can('orders.status') ? `<select class="status-sel ${stClass(o.status)}" data-ost="${esc(o.id)}"><option value="">—</option>${OSTAT.map(s => `<option ${s===o.status?'selected':''}>${esc(s)}</option>`).join('')}</select>` : `<span class="pill">${esc(o.status||'—')}</span>`}</div>
+      <div class="meta">${o.type?`<span class="pill blue">${esc(o.type)}</span>`:''}${o.deliveryDate?`<span class="pill teal">الاستلام: ${fmtDay(o.deliveryDate)}</span>`:''}</div>
+      ${o.cost !== undefined ? `<div class="money"><div>الإجمالي<b>${money(o.cost)}</b></div><div>المدفوع<b>${money(o.paid)}</b></div><div>الباقي<b>${money(o.remaining)}</b></div></div>` : ''}
+      <div style="margin-top:8px"><button class="btn ghost sm" data-od="${esc(o.id)}">التفاصيل${can('orders.edit')||can('money.edit')?' والتعديل':''}</button></div></div>`).join('');
+    const byId = Object.fromEntries(r.orders.map(o => [o.id, o]));
+    document.querySelectorAll('[data-ost]').forEach(sel => { sel.dataset.prev = sel.value; sel.onchange = async () => {
+      sel.disabled = true;
+      try { await api('updateOrder', { id: sel.dataset.ost, fields: { status: sel.value } }); sel.dataset.prev = sel.value; sel.className = 'status-sel ' + stClass(sel.value); toast('اتحفظت حالة الطلب'); }
+      catch (e) { if (e.message !== 'AUTH') toast(e.message); sel.value = sel.dataset.prev; } finally { sel.disabled = false; } }; });
+    document.querySelectorAll('[data-od]').forEach(b => b.onclick = () => orderDetails(byId[b.dataset.od]));
+  } catch (e) { if (e.message !== 'AUTH') $('#list').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+function orderDetails(o){
+  const ed = can('orders.edit'), me = can('money.edit'), mv = o.cost !== undefined;
+  const f = (k, l, v, type, ok, ltr) => `<div class="field"><label class="f">${l}</label><input class="input" data-k="${k}" type="${type||'text'}" value="${esc(v||'')}" ${ok?'':'disabled'} ${ltr?'dir="ltr"':''}></div>`;
+  const s = modal(`<h3>طلب <span dir="ltr">${esc(o.id)}</span></h3>
+    <div class="grid2">${f('name','اسم المريض',o.name,'text',ed)}${f('phone','الموبايل',o.phone,'tel',ed,true)}</div>
+    ${f('type','نوع الطرف',o.type,'text',ed)}
+    <div class="grid2">${f('measureDate','تاريخ المقاسات',o.measureDate,'date',ed)}${f('fittingDate','تاريخ البروفة',o.fittingDate,'date',ed)}</div>
+    ${f('deliveryDate','تاريخ الاستلام المتوقع',o.deliveryDate,'date',ed)}
+    ${mv ? `<div class="grid2">${f('cost','التكلفة الإجمالية',o.cost,'number',me)}${f('paid','المدفوع',o.paid,'number',me)}</div>` : ''}
+    <div class="field"><label class="f">ملاحظات للمريض (بتظهر له)</label><textarea class="input" data-k="note" rows="2" ${ed?'':'disabled'}>${esc(o.note)}</textarea></div>
+    <div class="field"><label class="f">ملاحظات داخلية</label><textarea class="input" data-k="internal" rows="2" ${ed?'':'disabled'}>${esc(o.internal)}</textarea></div>
+    <div id="e" class="err hidden"></div>
+    <div class="row">${ed||me ? '<button class="btn grow" id="sv">حفظ</button>' : ''}<button class="btn ghost grow" onclick="closeModal()">قفل</button></div>`);
+  const sv = s.querySelector('#sv'); if (!sv) return;
+  sv.onclick = async () => {
+    const fields = {}; s.querySelectorAll('[data-k]').forEach(el => { if (!el.disabled && String(el.value) !== String(o[el.dataset.k] ?? '')) fields[el.dataset.k] = el.value; });
+    if (!Object.keys(fields).length) { closeModal(); return; }
+    busy(sv, true);
+    try { await api('updateOrder', { id: o.id, fields }); closeModal(); toast('اتحفظ الطلب'); loadOrders(); }
+    catch (e) { if (e.message !== 'AUTH') { s.querySelector('#e').textContent = e.message; s.querySelector('#e').classList.remove('hidden'); } busy(sv, false); }
+  };
+}
+function newOrder(){
+  const s = modal(`<h3>طلب جديد</h3><div class="field"><label class="f">اسم المريض</label><input class="input" id="nn"></div>
+    <div class="field"><label class="f">الموبايل</label><input class="input" id="np" type="tel" dir="ltr"></div>
+    <div class="field"><label class="f">نوع الطرف</label><input class="input" id="nt"></div>
+    <div id="e" class="err hidden"></div><div class="row"><button class="btn grow" id="sv">إنشاء</button><button class="btn ghost grow" onclick="closeModal()">إلغاء</button></div>`);
+  s.querySelector('#sv').onclick = async () => { const b = s.querySelector('#sv'); busy(b, true);
+    try { const r = await api('createOrder', { name: s.querySelector('#nn').value, phone: s.querySelector('#np').value, type: s.querySelector('#nt').value }); closeModal(); toast('اتعمل الطلب \u2068' + r.id + '\u2069'); loadOrders(); }
+    catch (e) { if (e.message !== 'AUTH') { s.querySelector('#e').textContent = e.message; s.querySelector('#e').classList.remove('hidden'); } busy(b, false); } };
+}
+
+/* ═══ الإعدادات ═══ */
+async function viewSettings(){
+  $('#main').innerHTML = '<div class="center"><span class="spinner"></span></div>';
+  try {
+    const r = await api('settings');
+    $('#main').innerHTML = `<div class="card"><h3 style="margin:0 0 4px">إعدادات الحجز والمركز</h3><p class="muted" style="margin:0 0 12px">القوايم بتتفصل بفاصلة (,). أي تعديل بيظهر في أبلكيشن المرضى على طول.</p>
+      ${r.settings.map(x => `<div class="field"><label class="f">${esc(x.key)}</label><input class="input" data-key="${esc(x.key)}" value="${esc(x.value)}"></div>`).join('')}
+      <div id="e" class="err hidden"></div><button class="btn block" id="sv">حفظ الإعدادات</button></div>`;
+    $('#sv').onclick = async () => { const values = {}; document.querySelectorAll('[data-key]').forEach(i => values[i.dataset.key] = i.value); busy($('#sv'), true);
+      try { await api('saveSettings', { values }); toast('اتحفظت الإعدادات'); } catch (e) { if (e.message !== 'AUTH') { $('#e').textContent = e.message; $('#e').classList.remove('hidden'); } }
+      finally { busy($('#sv'), false); } };
+  } catch (e) { if (e.message !== 'AUTH') $('#main').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+
+/* ═══ المستخدمين (الأونر بس) ═══ */
+let USERS = [];
+async function viewUsers(){
+  $('#main').innerHTML = '<div class="toolbar"><h3 style="margin:0;flex:1">المستخدمين والصلاحيات</h3><button class="btn sm" id="nu">+ مستخدم جديد</button></div><div id="list"><div class="center"><span class="spinner"></span></div></div>';
+  $('#nu').onclick = () => userForm(null);
+  try { const r = await api('users'); USERS = r.users; PERMS = r.perms; renderUsers(); }
+  catch (e) { if (e.message !== 'AUTH') $('#list').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+function renderUsers(){
+  const label = k => (PERMS.find(p => p.key === k) || {}).label || k;
+  $('#list').innerHTML = `<div class="ulist">${USERS.map(u => `<div class="card ${u.active?'':'off'}"><div class="u"><div class="avatar">${esc((u.name||u.username).trim().charAt(0))}</div>
+    <div style="flex:1;min-width:0"><div class="name">${esc(u.name)} ${u.owner?'<span class="pill teal">الأونر</span>':''}${u.active?'':'<span class="pill" style="color:var(--danger)">موقوف</span>'}</div><div class="muted" dir="ltr" style="text-align:right">${esc(u.username)}</div></div>
+    <button class="btn ghost sm" data-eu="${esc(u.username)}">تعديل</button></div>
+    ${u.owner ? '<p class="muted" style="margin:8px 0 0">كل الصلاحيات</p>' : `<div class="meta">${u.perms.length ? u.perms.map(p => `<span class="pill">${esc(label(p))}</span>`).join('') : '<span class="muted">مالوش صلاحيات</span>'}</div>`}</div>`).join('')}</div>`;
+  document.querySelectorAll('[data-eu]').forEach(b => b.onclick = () => userForm(USERS.find(u => u.username === b.dataset.eu)));
+}
+function userForm(u){
+  const isNew = !u, owner = u && u.owner;
+  const s = modal(`<h3>${isNew ? 'مستخدم جديد' : 'تعديل ' + esc(u.name)}</h3>
+    <div class="field"><label class="f">الاسم</label><input class="input" id="un" value="${esc(u?u.name:'')}"></div>
+    <div class="field"><label class="f">اسم المستخدم (إنجليزي)</label><input class="input" id="uu" dir="ltr" autocapitalize="none" value="${esc(u?u.username:'')}" ${isNew?'':'disabled'}></div>
+    <div class="field"><label class="f">${isNew ? 'الباسورد (6 على الأقل)' : 'باسورد جديد (سيبه فاضي لو مش هتغيّره)'}</label><input class="input" id="up" type="text" dir="ltr" autocomplete="off"></div>
+    ${owner ? '<p class="muted">حساب الأونر ليه كل الصلاحيات دايمًا.</p>' : `<label class="f">الصلاحيات</label><div class="perms">${PERMS.map(p => `<label><input type="checkbox" value="${p.key}" ${u && u.perms.includes(p.key) ? 'checked' : ''}>${esc(p.label)}</label>`).join('')}</div>
+    <div class="perms" style="margin-top:10px"><label><input type="checkbox" id="ua" ${!u || u.active ? 'checked' : ''}>الحساب شغّال (شيل العلامة عشان توقفه)</label></div>`}
+    <div id="e" class="err hidden"></div>
+    <div class="row" style="margin-top:8px"><button class="btn grow" id="sv">حفظ</button>${!isNew && !owner ? '<button class="btn danger" id="rm">مسح</button>' : ''}<button class="btn ghost" onclick="closeModal()">إلغاء</button></div>`);
+  const err = m => { const e = s.querySelector('#e'); e.textContent = m; e.classList.remove('hidden'); };
+  s.querySelector('#sv').onclick = async () => { const b = s.querySelector('#sv'); busy(b, true);
+    const perms = [...s.querySelectorAll('.perms input[value]:checked')].map(i => i.value);
+    try { const r = await api('saveUser', { username: s.querySelector('#uu').value, name: s.querySelector('#un').value, password: s.querySelector('#up').value, perms, active: owner ? true : s.querySelector('#ua').checked });
+      USERS = r.users; closeModal(); renderUsers(); toast('اتحفظ المستخدم'); }
+    catch (e) { if (e.message !== 'AUTH') err(e.message); busy(b, false); } };
+  const rm = s.querySelector('#rm'); if (rm) rm.onclick = async () => {
+    if (rm.dataset.sure !== '1') { rm.dataset.sure = '1'; rm.textContent = 'متأكد؟ دوس تاني'; return; }
+    busy(rm, true); try { const r = await api('saveUser', { username: u.username, remove: true }); USERS = r.users; closeModal(); renderUsers(); toast('اتمسح المستخدم'); }
+    catch (e) { if (e.message !== 'AUTH') err(e.message); busy(rm, false); } };
+}
+
+/* ═══ حسابي ═══ */
+$('#acctBtn').onclick = () => {
+  const s = modal(`<h3>حسابي</h3><p class="muted" style="margin-top:-6px">${esc(ME.name)} · <span dir="ltr">${esc(ME.username)}</span></p>
+    <div class="field"><label class="f">الباسورد الحالي</label><input class="input" id="op" type="password" dir="ltr" autocomplete="current-password"></div>
+    <div class="field"><label class="f">الباسورد الجديد</label><input class="input" id="np" type="password" dir="ltr" autocomplete="new-password"></div>
+    <div id="e" class="err hidden"></div>
+    <div class="row"><button class="btn grow" id="cp">تغيير الباسورد</button><button class="btn danger grow" id="lo">تسجيل خروج</button></div>`);
+  s.querySelector('#cp').onclick = async () => { const b = s.querySelector('#cp'); busy(b, true);
+    try { await api('changePassword', { oldPassword: s.querySelector('#op').value, newPassword: s.querySelector('#np').value }); closeModal(); toast('اتغيّر الباسورد'); }
+    catch (e) { if (e.message !== 'AUTH') { s.querySelector('#e').textContent = e.message; s.querySelector('#e').classList.remove('hidden'); } busy(b, false); } };
+  s.querySelector('#lo').onclick = async () => { try { await api('logout'); } catch (e) {} TOKEN = ''; ss.set('token',''); ME = null; showLogin(); };
 };
 
-/* ---------- Tracking ---------- */
-function initTrack(){}
-$('#tForm').onsubmit = async e => {
-  e.preventDefault();
-  const btn = $('#tSubmit'), err = $('#tErr'), out = $('#tResult');
-  const q = toLatin($('#tQuery').value).trim().toUpperCase();
-  err.classList.add('hidden');
-  if (!q) { err.textContent = 'اكتب رقم الموبايل أو رقم الطلب'; err.classList.remove('hidden'); return; }
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>'; out.innerHTML = '';
+/* ═══ البداية ═══ */
+(async () => {
   try {
-    const r = await api('track', { q });
-    renderOrders(r);
-  } catch (ex) { err.textContent = ex.message; err.classList.remove('hidden'); }
-  finally { btn.disabled = false; btn.textContent = 'عرض الطلب'; }
-};
-
-function orderHtml(o, steps){
-  const idx = steps.indexOf(o.status);
-  const timeline = steps.map((s,i) => `<li class="${i < idx ? 'done' : i === idx ? (i === steps.length-1 ? 'done' : 'now') : ''}">${esc(s)}</li>`).join('');
-  const delivered = idx === steps.length - 1 && idx !== -1;
-  return `
-    <div class="card">
-      <div class="order-head"><div><h3>${esc(o.type || 'طلبك')}</h3><div class="muted">طلب رقم <span dir="ltr">${esc(o.id)}</span> · ${esc(o.name)}</div></div>
-        <span class="badge">${esc(o.status || '—')}</span></div>
-      ${idx !== -1 ? `<ul class="timeline">${timeline}</ul>` : ''}
-      ${o.deliveryDate && !delivered ? `<div class="delivery">${ICON.truck}<div><small>ميعاد الاستلام المتوقع</small><b>${fmtDay(o.deliveryDate)}</b></div></div>` : ''}
-      ${o.note ? `<div class="note">💬 ${esc(o.note)}</div>` : ''}
-      <div class="money" style="margin-top:14px">
-        <div><span>الإجمالي</span><b>${money(o.cost)}</b></div>
-        <div><span>المدفوع</span><b>${money(o.paid)}</b></div>
-        <div class="rem"><span>الباقي</span><b>${money(o.remaining)}</b></div>
-      </div>
-      ${o.measureDate ? `<div class="kv" style="margin-top:8px"><span>تاريخ المقاسات</span><b>${fmtDay(o.measureDate)}</b></div>` : ''}
-      ${o.fittingDate ? `<div class="kv"><span>تاريخ البروفة</span><b>${fmtDay(o.fittingDate)}</b></div>` : ''}
-    </div>`;
-}
-
-function renderOrders(r){
-  const orders = r.orders || (r.order ? [r.order] : []), steps = r.statuses || [];
-  const appts = (r.appointments||[]).map(a => `<div class="kv"><span>${esc(a.type || 'ميعاد')}</span><b>${fmtDay(a.date)} - ${fmtTime(a.time)}</b></div>`).join('');
-  $('#tResult').innerHTML =
-    (orders.length > 1 ? `<p class="section-title" style="margin-top:6px">عندك ${new Intl.NumberFormat('ar-EG').format(orders.length)} طلبات</p>` : '') +
-    orders.map(o => orderHtml(o, steps)).join('') +
-    (appts ? `<div class="card"><p class="step-label" style="margin-bottom:4px">مواعيدك الجاية</p>${appts}</div>` : '') +
-    `<button class="btn ghost" data-go="book">احجز ميعاد</button>`;
-  $('#tResult').scrollIntoView({ behavior:'smooth', block:'start' });
-}
-
-/* ---------- Install ---------- */
-let deferredPrompt = null;
-const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-if (!standalone) $('#installBtn').classList.remove('hidden');
-window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; });
-window.addEventListener('appinstalled', () => $('#installBtn').classList.add('hidden'));
-function showOs(os){ $$('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.os === os));
-  $('#osIos').classList.toggle('hidden', os !== 'ios'); $('#osAndroid').classList.toggle('hidden', os !== 'android'); }
-$('#installBtn').onclick = async () => {
-  if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; return; }
-  showOs(isIOS ? 'ios' : 'android'); $('#installModal').classList.remove('hidden');
-};
-$$('.tabs button').forEach(b => b.onclick = () => showOs(b.dataset.os));
-$('#closeModal').onclick = () => $('#installModal').classList.add('hidden');
-$('#installModal').onclick = e => { if (e.target.id === 'installModal') $('#installModal').classList.add('hidden'); };
-
-/* ---------- Start ---------- */
-// كل فتحة بتبدأ فاضية: امسح أي بيانات اتحفظت قبل كده على الجهاز
-try { Object.keys(localStorage).filter(k => k.startsWith('qudra.')).forEach(k => localStorage.removeItem(k)); } catch (e) {}
-document.querySelectorAll('input, textarea').forEach(el => { el.value = ''; });
-window.addEventListener('pageshow', e => { if (e.persisted) location.reload(); });
-if (DEMO) $('#demoBar').classList.remove('hidden');
-const startAt = location.hash.slice(1);
-history.replaceState({ id:'home' }, '', location.pathname + location.search);
-loadConfig().catch(() => {});
-if (TITLES[startAt] && startAt !== 'booked') go(startAt);
-if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+    if (TOKEN) { try { const r = await api('me'); ME = r.me; PERMS = r.perms; startApp(); return; } catch (e) { if (e.message === 'AUTH') return; } }
+    const st = await (await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'staff.status' }) })).json();
+    PERMS = st.perms || []; st.hasOwner ? showLogin() : showSetup();
+  } catch (e) { $('#main').innerHTML = `<div class="card err">مقدرناش نوصل للسيرفر. اتأكد من النت وجرّب تاني.</div>`; }
+})();
 </script>
 </body>
 </html>
