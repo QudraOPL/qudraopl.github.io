@@ -145,6 +145,18 @@ nav.tabs button.on{color:var(--navy);background:var(--bg)}
 .tile .r i{width:7px;height:7px;border-radius:50%;flex:none;display:inline-block}
 .tile .r b{color:var(--navy);flex:none}
 .tile.flash,.tile .r.flash{animation:flash 1.6s;border-radius:8px}
+.sitem{display:flex;gap:12px;align-items:center}
+.sitem .q{min-width:74px;text-align:center;background:var(--bg);border-radius:12px;padding:6px 4px;line-height:1.2}
+.sitem .q b{display:block;font-size:22px;color:var(--navy)}.sitem .q small{font-size:12px;color:var(--muted);font-weight:700}
+.sitem.low .q{background:#fdeeee}.sitem.low .q b{color:var(--danger)}
+.pill.red{background:#fdeeee;color:var(--danger)}
+.cnt-row{display:grid;grid-template-columns:1fr 70px 90px;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.cnt-row:first-child{border-top:0}
+.cnt-row .sys{text-align:center;font-weight:800;color:var(--muted)}
+.cnt-row input{text-align:center;padding:8px 6px}
+.diff{font-size:12px;font-weight:800}.diff.plus{color:#007a68}.diff.minus{color:var(--danger)}
+.countbar{position:sticky;bottom:calc(var(--safe-bottom) + 76px);background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;display:flex;gap:8px;align-items:center;box-shadow:0 6px 20px rgba(9,60,113,.12)}
+.log-i{padding:8px 0;border-top:1px solid var(--line);font-size:14px}.log-i:first-child{border-top:0}
 .late-i{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
 .late-i:first-of-type{border-top:0}
 </style>
@@ -225,6 +237,7 @@ function onLogin(r){ TOKEN = r.token || TOKEN; ss.set('token', TOKEN); ME = r.me
 
 /* ═══ التابات ═══ */
 const ICONS = {
+  stock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M7 21v-8h10v8M7 17h10"/></svg>',
   dash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V4M16 20v-6M22 20H2"/></svg>',
   appts:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 3v3M16 3v3M3 9.5h18"/></svg>',
   orders:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg>',
@@ -237,6 +250,7 @@ function startApp(){
   if (can('dash.view')) tabs.push(['dash','اللوحة']);
   if (can('appts.view')) tabs.push(['appts','المواعيد']);
   if (can('orders.view')) tabs.push(['orders','الطلبات']);
+  if (can('stock.view')) tabs.push(['stock','المخزن']);
   if (can('settings.edit')) tabs.push(['settings','الإعدادات']);
   if (can('owner')) tabs.push(['users','المستخدمين']);
   if (!tabs.length) { $('#tabs').classList.add('hidden'); $('#main').innerHTML = '<div class="card empty">حسابك لسه مالوش صلاحيات. كلّم الأونر.</div>'; return; }
@@ -247,7 +261,7 @@ function startApp(){
   startPoll();
 }
 function go(v){ VIEW = v; document.querySelectorAll('#tabsIn button').forEach(b => b.classList.toggle('on', b.dataset.tab === v));
-  ({ dash: viewDash, appts: viewAppts, orders: viewOrders, settings: viewSettings, users: viewUsers })[v](); window.scrollTo(0,0); }
+  ({ dash: viewDash, stock: viewStock, appts: viewAppts, orders: viewOrders, settings: viewSettings, users: viewUsers })[v](); window.scrollTo(0,0); }
 
 /* ═══ التحديث التلقائي ═══
    كل 15 ثانية بنسأل السيرفر: فيه حاجة اتغيرت في الطلبات أو المواعيد؟ لو آه، الشاشة بتتحدث لوحدها. */
@@ -264,6 +278,7 @@ async function poll(){
     if (VIEW === 'dash') loadDash();
     else if (VIEW === 'orders') loadOrders();
     else if (VIEW === 'appts') viewAppts();
+    else if (VIEW === 'stock' && !SC.counting) loadStock();
   } catch (e) {}
 }
 document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
@@ -419,6 +434,123 @@ function newOrder(){
   s.querySelector('#sv').onclick = async () => { const b = s.querySelector('#sv'); busy(b, true);
     try { const r = await api('createOrder', { name: s.querySelector('#nn').value, phone: s.querySelector('#np').value, type: s.querySelector('#nt').value }); closeModal(); toast('اتعمل الطلب \u2068' + r.id + '\u2069'); loadOrders(); }
     catch (e) { if (e.message !== 'AUTH') { s.querySelector('#e').textContent = e.message; s.querySelector('#e').classList.remove('hidden'); } busy(b, false); } };
+}
+
+/* ═══ المخزن ═══ */
+let SC = { q:'', kind:'', low:false, counting:false, items:[], counts:{} };
+function viewStock(){
+  SC.counting = false;
+  $('#main').innerHTML = `<div class="toolbar"><input class="input" style="flex:1;min-width:180px" id="sq" placeholder="ابحث بالاسم أو الكود أو المكان" value="${esc(SC.q)}">
+    ${can('stock.count') ? `<button class="btn ghost sm" id="startCount">📋 جرد</button>` : ''}${can('stock.edit') ? `<button class="btn sm" id="newItem">+ صنف</button>` : ''}</div>
+    <div class="toolbar" id="sChips"></div><div id="list"><div class="center"><span class="spinner"></span></div></div>`;
+  if ($('#startCount')) $('#startCount').onclick = startCount;
+  if ($('#newItem')) $('#newItem').onclick = () => itemForm();
+  let t; $('#sq').oninput = e => { clearTimeout(t); t = setTimeout(() => { SC.q = e.target.value.trim(); renderStock(); }, 250); };
+  loadStock();
+}
+async function loadStock(){
+  try { const r = await api('stock'); SC.items = r.items; if (VIEW === 'stock' && !SC.counting) renderStock(); }
+  catch (e) { if (e.message !== 'AUTH' && $('#list')) $('#list').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+const isLow = x => x.min > 0 && x.qty <= x.min;
+function stockFiltered(){
+  const q = SC.q.toLowerCase();
+  return SC.items.filter(x => (!SC.kind || x.kind === SC.kind) && (!SC.low || isLow(x)) &&
+    (!q || (x.name + ' ' + x.code + ' ' + x.place + ' ' + x.cat).toLowerCase().includes(q)));
+}
+function renderStock(){
+  if (!$('#list')) return;
+  const low = SC.items.filter(isLow).length;
+  $('#sChips').innerHTML = [['', 'الكل'], ['منتج', 'منتجات'], ['خامة', 'خامات']].map(([k, l]) => `<button class="chip ${!SC.low && SC.kind === k ? 'on' : ''}" data-k="${k}">${l}</button>`).join('')
+    + `<button class="chip ${SC.low ? 'on' : ''}" data-low="1" style="${low ? 'border-color:#f3c9c9;color:' + (SC.low ? '#fff' : 'var(--danger)') : ''}">ناقص (${nf.format(low)})</button>`
+    ;
+  document.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { SC.kind = b.dataset.k; SC.low = false; renderStock(); });
+  $('[data-low]').onclick = () => { SC.low = !SC.low; renderStock(); };
+  const list = stockFiltered();
+  if (!list.length) { $('#list').innerHTML = `<div class="card empty">${SC.items.length ? 'مفيش أصناف بالبحث ده' : 'المخزن فاضي. ' + (can('stock.edit') ? 'ابدأ بـ "+ صنف".' : '')}</div>`; return; }
+  $('#list').innerHTML = list.map(x => `<div class="card sitem ${isLow(x) ? 'low' : ''}">
+      <div class="q"><b>${nf.format(x.qty)}</b><small>${esc(x.unit || '')}</small></div>
+      <div style="flex:1;min-width:0"><div class="name">${esc(x.name)} <span class="muted" dir="ltr" style="font-weight:700">${esc(x.code)}</span></div>
+        <div class="meta"><span class="pill ${x.kind === 'خامة' ? 'teal' : 'blue'}">${esc(x.kind)}</span>${x.cat ? `<span class="pill">${esc(x.cat)}</span>` : ''}${x.place ? `<span class="pill">📍 ${esc(x.place)}</span>` : ''}${isLow(x) ? `<span class="pill red">ناقص (الحد ${nf.format(x.min)})</span>` : ''}</div>
+        <div class="muted" style="font-size:12.5px">${x.lastCount ? `آخر جرد ${fmtDay(x.lastCount)}${x.lastBy ? ' — ' + esc(x.lastBy) : ''}` : 'لسه ما اتجردش'}</div>
+        <div class="row" style="margin-top:6px">
+          ${can('stock.move') ? `<button class="btn ghost sm" data-mv="in" data-c="${esc(x.code)}">+ إضافة</button><button class="btn ghost sm" data-mv="out" data-c="${esc(x.code)}">− صرف</button>` : ''}
+          <button class="btn ghost sm" data-log="${esc(x.code)}">السجل</button>
+          ${can('stock.edit') ? `<button class="btn ghost sm" data-ed="${esc(x.code)}">تعديل</button>` : ''}
+        </div></div></div>`).join('');
+  const by = Object.fromEntries(SC.items.map(x => [x.code, x]));
+  document.querySelectorAll('[data-mv]').forEach(b => b.onclick = () => moveForm(by[b.dataset.c], b.dataset.mv));
+  document.querySelectorAll('[data-log]').forEach(b => b.onclick = () => showStockLog(by[b.dataset.log]));
+  document.querySelectorAll('[data-ed]').forEach(b => b.onclick = () => itemForm(by[b.dataset.ed]));
+}
+function moveForm(x, type){
+  const s = modal(`<h3>${type === 'in' ? 'إضافة للمخزن' : 'صرف من المخزن'}</h3><p class="muted" style="margin-top:-6px">${esc(x.name)} — الموجود ${nf.format(x.qty)} ${esc(x.unit)}</p>
+    <div class="field"><label class="f">الكمية</label><input class="input" id="mq" inputmode="decimal" dir="ltr" autofocus></div>
+    <div class="field"><label class="f">ملاحظة ${type === 'out' ? '(لمين أو لأنهي طلب)' : '(منين / فاتورة)'}</label><input class="input" id="mn"></div>
+    <div id="me" class="err hidden"></div><div class="grid2"><button class="btn ghost" onclick="closeModal()">إلغاء</button><button class="btn" id="mb">حفظ</button></div>`);
+  s.querySelector('#mb').onclick = async () => { const b = s.querySelector('#mb'); busy(b, true);
+    try { const r = await api('stockMove', { code: x.code, type, qty: s.querySelector('#mq').value, note: s.querySelector('#mn').value });
+      x.qty = r.qty; closeModal(); toast(type === 'in' ? 'اتضاف للمخزن' : 'اتصرف من المخزن'); renderStock(); }
+    catch (e) { if (e.message !== 'AUTH') { s.querySelector('#me').textContent = e.message; s.querySelector('#me').classList.remove('hidden'); } busy(b, false); } };
+}
+function itemForm(x){
+  const e = !!x; x = x || { kind:'منتج' };
+  const cats = [...new Set(SC.items.map(i => i.cat).filter(Boolean))], units = [...new Set(['قطعة','كيلو','متر','لتر','علبة', ...SC.items.map(i => i.unit).filter(Boolean)])];
+  const s = modal(`<h3>${e ? 'تعديل صنف' : 'صنف جديد'}</h3>
+    <div class="field"><label class="f">اسم الصنف</label><input class="input" id="i_name" value="${esc(x.name||'')}"></div>
+    <div class="grid2"><div class="field"><label class="f">النوع</label><select class="input" id="i_kind">${['منتج','خامة'].map(k => `<option ${k===x.kind?'selected':''}>${k}</option>`).join('')}</select></div>
+      <div class="field"><label class="f">الفئة</label><input class="input" id="i_cat" list="dl_cat" value="${esc(x.cat||'')}" placeholder="أقدام، ركب، خامات..."></div></div>
+    <div class="grid2"><div class="field"><label class="f">الوحدة</label><input class="input" id="i_unit" list="dl_unit" value="${esc(x.unit||'')}"></div>
+      <div class="field"><label class="f">الحد الأدنى (ينبهك لو قلّ عنه)</label><input class="input" id="i_min" inputmode="decimal" dir="ltr" value="${x.min||''}"></div></div>
+    ${e ? '' : `<div class="field"><label class="f">الكمية الموجودة دلوقتي</label><input class="input" id="i_qty" inputmode="decimal" dir="ltr"></div>`}
+    <div class="field"><label class="f">المكان (رف / دولاب)</label><input class="input" id="i_place" value="${esc(x.place||'')}"></div>
+    <div class="field"><label class="f">ملاحظات</label><input class="input" id="i_note" value="${esc(x.note||'')}"></div>
+    <datalist id="dl_cat">${cats.map(c => `<option value="${esc(c)}">`).join('')}</datalist><datalist id="dl_unit">${units.map(c => `<option value="${esc(c)}">`).join('')}</datalist>
+    <div id="ie" class="err hidden"></div>
+    <div class="grid2"><button class="btn ghost" onclick="closeModal()">إلغاء</button><button class="btn" id="ib">حفظ</button></div>
+    ${e ? `<button class="btn danger block" id="idel" style="margin-top:10px">مسح الصنف</button>` : ''}`);
+  const v = id => (s.querySelector('#' + id) || {}).value;
+  s.querySelector('#ib').onclick = async () => { const b = s.querySelector('#ib'); busy(b, true);
+    try { await api('stockSave', { code: x.code, name: v('i_name'), kind: v('i_kind'), cat: v('i_cat'), unit: v('i_unit'), min: v('i_min'), qty: v('i_qty'), place: v('i_place'), note: v('i_note') });
+      closeModal(); toast(e ? 'اتحفظ التعديل' : 'اتضاف الصنف'); loadStock(); }
+    catch (er) { if (er.message !== 'AUTH') { s.querySelector('#ie').textContent = er.message; s.querySelector('#ie').classList.remove('hidden'); } busy(b, false); } };
+  if (e) s.querySelector('#idel').onclick = async () => {
+    const b = s.querySelector('#idel');
+    if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'متأكد؟ دوس تاني للمسح'; return; }
+    busy(b, true);
+    try { await api('stockRemove', { code: x.code }); closeModal(); toast('اتمسح الصنف'); loadStock(); }
+    catch (er) { if (er.message !== 'AUTH') toast(er.message); busy(b, false); } };
+}
+async function showStockLog(x){
+  const s = modal(`<h3>سجل ${esc(x.name)}</h3><div class="center"><span class="spinner"></span></div><button class="btn ghost block" onclick="closeModal()">قفل</button>`);
+  try { const r = await api('stockLog', { code: x.code });
+    s.querySelector('.center').outerHTML = r.log.length ? `<div style="margin-bottom:12px">${r.log.map(l => `<div class="log-i"><div class="row"><b class="grow">${esc(l.type)} ${l.type === 'جرد' ? (l.qty ? `<span class="diff ${l.qty > 0 ? 'plus' : 'minus'}">(${l.qty > 0 ? '+' : ''}${nf.format(l.qty)})</span>` : '<span class="diff plus">(مطابق)</span>') : nf.format(l.qty)}</b><span class="muted" dir="ltr">${esc(l.at)}</span></div>
+      <div class="muted">من ${nf.format(l.before)} لـ ${nf.format(l.after)} — ${esc(l.by)}${l.note ? ' — ' + esc(l.note) : ''}</div></div>`).join('')}</div>` : '<div class="empty">مفيش حركات</div>'; }
+  catch (e) { s.querySelector('.center').outerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+function startCount(){
+  SC.counting = true; SC.counts = {};
+  const list = stockFiltered();
+  $('#main').innerHTML = `<div class="card"><h3 style="margin:0 0 4px">جرد ${SC.low ? 'الأصناف الناقصة' : SC.kind ? (SC.kind === 'منتج' ? 'المنتجات' : 'الخامات') : 'المخزن'}</h3>
+      <p class="muted" style="margin:0">اعدّ كل صنف واكتب العدد الفعلي. اللي تسيبه فاضي مش هيتسجل.</p></div>
+    <div class="card"><div class="cnt-row" style="font-size:12px;font-weight:800;color:var(--muted);border:0;padding-top:0"><span>الصنف</span><span style="text-align:center">في السيستم</span><span style="text-align:center">العدد الفعلي</span></div>
+    ${list.map(x => `<div class="cnt-row"><div><div class="name" style="font-size:15px">${esc(x.name)}</div><div class="muted" style="font-size:12px">${esc(x.code)}${x.place ? ' — ' + esc(x.place) : ''}</div><div class="diff" data-df="${esc(x.code)}"></div></div>
+      <div class="sys">${nf.format(x.qty)}<div style="font-size:11px">${esc(x.unit)}</div></div><input class="input" data-cnt="${esc(x.code)}" data-sys="${x.qty}" inputmode="decimal" dir="ltr"></div>`).join('')}</div>
+    <div class="countbar"><span class="grow muted" id="cInfo" style="font-weight:700">اتعدّ ٠ من ${nf.format(list.length)}</span><button class="btn ghost sm" id="cCancel">إلغاء</button><button class="btn sm" id="cSave">حفظ الجرد</button></div>`;
+  const upd = () => { const n = Object.values(SC.counts).filter(v => v !== '').length; $('#cInfo').textContent = `اتعدّ ${nf.format(n)} من ${nf.format(list.length)}`; };
+  document.querySelectorAll('[data-cnt]').forEach(i => i.oninput = () => {
+    const v = i.value.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).trim(); SC.counts[i.dataset.cnt] = v;
+    const d = $(`[data-df="${CSS.escape(i.dataset.cnt)}"]`), diff = v === '' ? null : Number(v) - Number(i.dataset.sys);
+    d.className = 'diff ' + (diff > 0 ? 'plus' : diff < 0 ? 'minus' : 'plus');
+    d.textContent = diff === null || isNaN(diff) ? '' : diff === 0 ? '✓ مطابق' : (diff > 0 ? 'زيادة ' : 'عجز ') + nf.format(Math.abs(diff));
+    upd(); });
+  $('#cCancel').onclick = () => { SC.counting = false; viewStock(); };
+  $('#cSave').onclick = async () => {
+    const counts = Object.entries(SC.counts).filter(([, v]) => v !== '').map(([code, qty]) => ({ code, qty }));
+    if (!counts.length) { toast('اكتب العدد الفعلي لصنف واحد على الأقل'); return; }
+    const b = $('#cSave'); busy(b, true);
+    try { const r = await api('stockCount', { counts }); SC.counting = false; toast(`اتسجل جرد ${nf.format(r.counted)} صنف، و${nf.format(r.changed)} فيهم كميتهم اتعدلت`); viewStock(); }
+    catch (e) { if (e.message !== 'AUTH') toast(e.message); busy(b, false); } };
 }
 
 /* ═══ الإعدادات ═══ */
