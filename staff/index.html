@@ -92,6 +92,30 @@ nav.tabs button.on{color:var(--navy);background:var(--bg)}
 .ulist .u{display:flex;align-items:center;gap:10px}
 .avatar{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
 .off{opacity:.55}
+.dash-top{display:flex;align-items:center;gap:8px;margin:0 4px 12px;font-size:13px;color:var(--muted);font-weight:700}
+.live{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 rgba(0,223,190,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(0,223,190,0)}100%{box-shadow:0 0 0 0 rgba(0,223,190,0)}}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+@media(min-width:620px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.kpi .l{font-size:13px;color:var(--muted);font-weight:700}
+.kpi .v{font-size:30px;font-weight:800;color:var(--navy);line-height:1.2}
+.kpi.bad .v{color:var(--danger)}
+.kpi.hero{background:var(--navy);border-color:var(--navy)}.kpi.hero .l{color:rgba(255,255,255,.75)}.kpi.hero .v{color:#fff}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:2px 10px;margin:0 0 10px}
+.sec-h h3{margin:0;font-size:16px;color:var(--navy)}
+.bars .b{display:grid;grid-template-columns:120px 1fr 44px;align-items:center;gap:10px;padding:7px 6px;border-radius:10px;cursor:default}
+.bars .b.go{cursor:pointer}.bars .b.go:hover{background:var(--bg)}
+.bars .lbl{font-weight:700;font-size:14px}
+.bars .trk{height:12px;background:var(--bg);border-radius:999px;overflow:hidden}
+.bars .fill{height:100%;border-radius:999px;transition:width .5s}
+.bars .n{font-weight:800;text-align:left;font-size:16px;color:var(--navy)}
+.flash{animation:flash 1.6s}
+.kpi.flash{animation:flashk 1.6s}
+@keyframes flashk{0%{box-shadow:0 0 0 4px rgba(0,223,190,.7)}100%{box-shadow:0 0 0 0 rgba(0,223,190,0)}}
+@keyframes flash{0%{background:rgba(0,223,190,.35)}100%{background:transparent}}
+.late-i{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.late-i:first-of-type{border-top:0}
 </style>
 </head>
 <body>
@@ -170,6 +194,7 @@ function onLogin(r){ TOKEN = r.token || TOKEN; ss.set('token', TOKEN); ME = r.me
 
 /* ═══ التابات ═══ */
 const ICONS = {
+  dash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V4M16 20v-6M22 20H2"/></svg>',
   appts:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 3v3M16 3v3M3 9.5h18"/></svg>',
   orders:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg>',
   settings:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>',
@@ -178,6 +203,7 @@ const ICONS = {
 function startApp(){
   $('#who').textContent = ME.name; $('#who').classList.remove('hidden'); $('#acctBtn').classList.remove('hidden');
   const tabs = [];
+  if (can('dash.view')) tabs.push(['dash','اللوحة']);
   if (can('appts.view')) tabs.push(['appts','المواعيد']);
   if (can('orders.view')) tabs.push(['orders','الطلبات']);
   if (can('settings.edit')) tabs.push(['settings','الإعدادات']);
@@ -187,9 +213,67 @@ function startApp(){
   $('#tabs').classList.remove('hidden');
   $('#tabsIn').onclick = e => { const b = e.target.closest('[data-tab]'); if (b) go(b.dataset.tab); };
   go(tabs.some(t => t[0] === VIEW) ? VIEW : tabs[0][0]);
+  startPoll();
 }
 function go(v){ VIEW = v; document.querySelectorAll('#tabsIn button').forEach(b => b.classList.toggle('on', b.dataset.tab === v));
-  ({ appts: viewAppts, orders: viewOrders, settings: viewSettings, users: viewUsers })[v](); window.scrollTo(0,0); }
+  ({ dash: viewDash, appts: viewAppts, orders: viewOrders, settings: viewSettings, users: viewUsers })[v](); window.scrollTo(0,0); }
+
+/* ═══ التحديث التلقائي ═══
+   كل 15 ثانية بنسأل السيرفر: فيه حاجة اتغيرت في الطلبات أو المواعيد؟ لو آه، الشاشة بتتحدث لوحدها. */
+let STAMP = '', POLL = null;
+function startPoll(){ clearInterval(POLL); POLL = setInterval(poll, 15000); }
+async function poll(){
+  if (document.hidden || !ME || !TOKEN) return;
+  try {
+    const r = await api('stamp');
+    const changed = STAMP && r.stamp !== STAMP; STAMP = r.stamp;
+    if (!changed) return;
+    const a = document.activeElement, editing = $('#modalRoot').innerHTML || (a && /^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName) && a.id !== 'q');
+    if (editing) { STAMP = ''; return; }            // نستنى لحد ما يخلص اللي بيعمله
+    if (VIEW === 'dash') loadDash();
+    else if (VIEW === 'orders') loadOrders();
+    else if (VIEW === 'appts') viewAppts();
+  } catch (e) {}
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
+
+/* ═══ اللوحة ═══ */
+const OCOL = { 'تم أخذ المقاسات':'#8fb3f5', 'تحت التصنيع':'#3370e7', 'جاهز للبروفة':'#f2b84b', 'جاهز للاستلام':'#00dfbe', 'تم الاستلام':'#093c71', '':'#c4d0de' };
+const ACOL = { 'في انتظار التأكيد':'#f2b84b', 'مؤكد':'#3370e7', 'تم الحضور':'#00dfbe', 'لم يحضر':'#d64545', 'ملغي':'#c4d0de' };
+let DPREV = {};
+function viewDash(){
+  $('#main').innerHTML = `<div class="dash-top"><span class="live"></span><span id="dAt">بيتحدث تلقائي</span></div><div id="dash"><div class="center"><span class="spinner"></span></div></div>`;
+  DPREV = {}; loadDash();
+}
+function bars(statuses, counts, colors, kind){
+  const max = Math.max(1, ...statuses.map(s => counts[s] || 0));
+  const goable = kind === 'o' ? can('orders.view') : can('appts.view');
+  return `<div class="bars">${statuses.map(s => { const n = counts[s] || 0, key = kind + ':' + s, fl = DPREV[key] !== undefined && DPREV[key] !== n;
+    DPREV[key] = n;
+    return `<div class="b ${goable?'go':''} ${fl?'flash':''}" data-go="${kind}" data-s="${esc(s)}"><span class="lbl">${esc(s || 'من غير حالة')}</span>
+      <span class="trk"><span class="fill" style="display:block;width:${n ? Math.max(4, n / max * 100) : 0}%;background:${colors[s]||'#8fb3f5'}"></span></span><span class="n">${nf.format(n)}</span></div>`; }).join('')}</div>`;
+}
+async function loadDash(){
+  try {
+    const r = await api('dashboard'); STAMP = r.stamp;
+    if (VIEW !== 'dash' || !$('#dash')) return;
+    const o = r.orders, a = r.appts;
+    const kpi = (l, v, cls, key) => { const fl = DPREV[key] !== undefined && DPREV[key] !== v; DPREV[key] = v; return `<div class="kpi ${cls||''} ${fl?'flash':''}"><div class="l">${l}</div><div class="v">${nf.format(v)}</div></div>`; };
+    const oStatuses = o.counts[''] ? [...o.statuses, ''] : o.statuses;
+    $('#dash').innerHTML = `<div class="kpis">
+        ${kpi('طلبات مفتوحة', o.open, 'hero', 'k:open')}
+        ${kpi('متأخرة عن ميعاد الاستلام', o.late, o.late ? 'bad' : '', 'k:late')}
+        ${kpi('استلام الأسبوع ده', o.dueWeek, '', 'k:week')}
+        ${kpi('مواعيد النهاردة', a.todayTotal, '', 'k:today')}</div>
+      <div class="card"><div class="sec-h"><h3>الطلبات حسب الحالة</h3><span class="muted">الإجمالي ${nf.format(o.total)}</span></div>${bars(oStatuses, o.counts, OCOL, 'o')}</div>
+      <div class="card"><div class="sec-h"><h3>مواعيد النهاردة حسب الحالة</h3><span class="muted">${nf.format(a.week)} في الأسبوع · ${nf.format(a.pending)} مستني تأكيد</span></div>${bars(a.statuses, a.today, ACOL, 'a')}</div>
+      ${r.money ? `<div class="card"><div class="sec-h"><h3>الفلوس (كل الطلبات)</h3></div><div class="money"><div>الإجمالي<b>${money(r.money.cost)}</b></div><div>المدفوع<b>${money(r.money.paid)}</b></div><div>الباقي<b>${money(r.money.remaining)}</b></div></div></div>` : ''}
+      ${o.lateList.length ? `<div class="card"><div class="sec-h"><h3 style="color:var(--danger)">طلبات متأخرة</h3></div>${o.lateList.map(x => `<div class="late-i"><div style="flex:1"><div class="name" style="font-size:15px">${esc(x.name)} <span class="muted" dir="ltr">${esc(x.id)}</span></div><div class="muted">كان المفروض يستلم ${fmtDay(x.deliveryDate)}</div></div><span class="pill">${esc(x.status||'—')}</span></div>`).join('')}</div>` : ''}`;
+    $('#dAt').textContent = 'بيتحدث تلقائي · آخر تحديث ' + fmtTime(r.at) + ' ' + ampm(r.at);
+    document.querySelectorAll('.b.go').forEach(b => b.onclick = () => {
+      if (b.dataset.go === 'o') { OQ = { q:'', status: b.dataset.s }; go('orders'); } else { AR.mode = 'today'; go('appts'); } });
+  } catch (e) { if (e.message !== 'AUTH' && $('#dash')) $('#dash').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
 
 /* ═══ المواعيد ═══ */
 let AR = { mode:'today', from:'', to:'' };
