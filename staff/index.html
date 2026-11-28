@@ -157,6 +157,15 @@ nav.tabs button.on{color:var(--navy);background:var(--bg)}
 .diff{font-size:12px;font-weight:800}.diff.plus{color:#007a68}.diff.minus{color:var(--danger)}
 .countbar{position:sticky;bottom:calc(var(--safe-bottom) + 76px);background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;display:flex;gap:8px;align-items:center;box-shadow:0 6px 20px rgba(9,60,113,.12)}
 .log-i{padding:8px 0;border-top:1px solid var(--line);font-size:14px}.log-i:first-child{border-top:0}
+.hc-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.hc-h b{font-size:16px;color:var(--navy)}
+.hc-g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.hc-w{text-align:center;font-size:12px;font-weight:800;color:var(--muted);padding:2px 0}
+.hc-d{border:0;background:#eef4fa;border-radius:10px;padding:8px 0;font-weight:800;font-size:15px;cursor:pointer;line-height:1.1;color:var(--ink)}
+.hc-d small{display:block;font-size:9px;font-weight:700}
+.hc-d.td{box-shadow:inset 0 0 0 2px var(--teal)}
+.hc-d.on{background:var(--danger);color:#fff}
+.hc-d.wk{background:#fdeeee;color:#c98b8b}
+.hc-d:disabled{cursor:default}.hc-d:disabled:not(.wk){opacity:.35}
 .late-i{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
 .late-i:first-of-type{border-top:0}
 </style>
@@ -211,12 +220,12 @@ function busy(btn, on, label){ if(!btn) return; btn.disabled = on; if (on) { btn
 /* ═══ الدخول ═══ */
 function showSetup(){
   $('#tabs').classList.add('hidden'); $('#who').classList.add('hidden'); $('#acctBtn').classList.add('hidden');
-  $('#main').innerHTML = `<div class="card auth"><h2>أول مرة: اعمل حساب الأونر</h2><p class="muted">الحساب ده بس هو اللي يقدر يعمل الموظفين ويحدد صلاحياتهم.</p>
+  $('#main').innerHTML = `<div class="card auth"><h2>أول مرة: اعمل الحساب الرئيسي</h2><p class="muted">الحساب ده بس هو اللي يقدر يعمل الموظفين ويحدد صلاحياتهم.</p>
   <form id="f"><div class="field"><label class="f">اسمك</label><input class="input" id="n" required></div>
   <div class="field"><label class="f">اسم المستخدم (إنجليزي)</label><input class="input" id="u" dir="ltr" autocapitalize="none" autocomplete="username" required></div>
   <div class="field"><label class="f">الباسورد (6 على الأقل)</label><input class="input" id="p" type="password" dir="ltr" autocomplete="new-password" required></div>
   <div class="field"><label class="f">تأكيد الباسورد</label><input class="input" id="p2" type="password" dir="ltr" autocomplete="new-password" required></div>
-  <div id="e" class="err hidden"></div><button class="btn block" id="b">إنشاء حساب الأونر</button></form></div>`;
+  <div id="e" class="err hidden"></div><button class="btn block" id="b">إنشاء الحساب</button></form></div>`;
   $('#f').onsubmit = async e => { e.preventDefault(); const er = $('#e'); er.classList.add('hidden');
     if ($('#p').value !== $('#p2').value) { er.textContent = 'الباسورد مش متطابق'; er.classList.remove('hidden'); return; }
     busy($('#b'), true);
@@ -225,7 +234,7 @@ function showSetup(){
 }
 function showLogin(msg){
   $('#tabs').classList.add('hidden'); $('#who').classList.add('hidden'); $('#acctBtn').classList.add('hidden'); closeModal();
-  $('#main').innerHTML = `<div class="card auth"><h2>تسجيل الدخول</h2><p class="muted">ادخل باليوزر والباسورد اللي الأونر عملهولك.</p>
+  $('#main').innerHTML = `<div class="card auth"><h2>تسجيل الدخول</h2><p class="muted">ادخل باليوزر والباسورد اللي الإدارة عملتهولك.</p>
   <form id="f"><div class="field"><label class="f">اسم المستخدم</label><input class="input" id="u" dir="ltr" autocapitalize="none" autocomplete="username" required></div>
   <div class="field"><label class="f">الباسورد</label><input class="input" id="p" type="password" dir="ltr" autocomplete="current-password" required></div>
   <div id="e" class="err ${msg ? '' : 'hidden'}">${esc(msg||'')}</div><button class="btn block" id="b">دخول</button></form></div>`;
@@ -253,7 +262,7 @@ function startApp(){
   if (can('stock.view')) tabs.push(['stock','المخزن']);
   if (can('settings.edit')) tabs.push(['settings','الإعدادات']);
   if (can('owner')) tabs.push(['users','المستخدمين']);
-  if (!tabs.length) { $('#tabs').classList.add('hidden'); $('#main').innerHTML = '<div class="card empty">حسابك لسه مالوش صلاحيات. كلّم الأونر.</div>'; return; }
+  if (!tabs.length) { $('#tabs').classList.add('hidden'); $('#main').innerHTML = '<div class="card empty">حسابك لسه مالوش صلاحيات. كلّم الإدارة.</div>'; return; }
   $('#tabsIn').innerHTML = tabs.map(([k,l]) => `<button data-tab="${k}">${ICONS[k]}${l}</button>`).join('');
   $('#tabs').classList.remove('hidden');
   $('#tabsIn').onclick = e => { const b = e.target.closest('[data-tab]'); if (b) go(b.dataset.tab); };
@@ -559,12 +568,60 @@ async function viewSettings(){
   try {
     const r = await api('settings');
     $('#main').innerHTML = `<div class="card"><h3 style="margin:0 0 4px">إعدادات الحجز والمركز</h3><p class="muted" style="margin:0 0 12px">القوايم بتتفصل بفاصلة (,). أي تعديل بيظهر في أبلكيشن المرضى على طول.</p>
-      ${r.settings.map(x => `<div class="field"><label class="f">${esc(x.key)}</label><input class="input" data-key="${esc(x.key)}" value="${esc(x.value)}"></div>`).join('')}
+      ${r.settings.map(x => x.key === HOLI_KEY
+        ? `<div class="field"><label class="f">أيام الإجازة (غير الإجازة الأسبوعية)</label><input type="hidden" data-key="${esc(x.key)}" value="${esc(x.value)}">
+           <button class="btn ghost block" id="holiBtn" type="button">📅 اختار أيام الإجازة من الكالندر</button><div class="meta" id="holiList"></div></div>`
+        : `<div class="field"><label class="f">${esc(x.key)}</label><input class="input" data-key="${esc(x.key)}" value="${esc(x.value)}"></div>`).join('')}
       <div id="e" class="err hidden"></div><button class="btn block" id="sv">حفظ الإعدادات</button></div>`;
     $('#sv').onclick = async () => { const values = {}; document.querySelectorAll('[data-key]').forEach(i => values[i.dataset.key] = i.value); busy($('#sv'), true);
       try { await api('saveSettings', { values }); toast('اتحفظت الإعدادات'); } catch (e) { if (e.message !== 'AUTH') { $('#e').textContent = e.message; $('#e').classList.remove('hidden'); } }
       finally { busy($('#sv'), false); } };
+    if ($('#holiBtn')) { showHoliList(); $('#holiBtn').onclick = holidayPicker; }
   } catch (e) { if (e.message !== 'AUTH') $('#main').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+
+/* ═══ أيام الإجازة: كالندر يعلّم عليه الأيام، وبتتقفل في أبلكيشن الحجز ═══ */
+const HOLI_KEY = 'أيام إجازة خاصة';
+const DAY_IDX = { 'الأحد':0, 'الاثنين':1, 'الإثنين':1, 'الثلاثاء':2, 'الأربعاء':3, 'الاربعاء':3, 'الخميس':4, 'الجمعة':5, 'السبت':6 };
+const holiInput = () => document.querySelector(`[data-key="${HOLI_KEY}"]`);
+const parseHoli = v => String(v || '').replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).split(/[,،\n]/).map(x => x.trim()).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x));
+function showHoliList(){
+  const today = toYmd(new Date()), list = parseHoli(holiInput().value).filter(d => d >= today).sort();
+  $('#holiList').innerHTML = list.length ? list.map(d => `<span class="pill red">${fmtDay(d)}</span>`).join('') : '<span class="muted">مفيش أيام إجازة جاية</span>';
+}
+function holidayPicker(){
+  const today = toYmd(new Date());
+  const sel = new Set(parseHoli(holiInput().value).filter(d => d >= today));
+  const wdIn = document.querySelector('[data-key="أيام العمل"]');
+  const work = wdIn ? wdIn.value.split(/[,،]/).map(x => DAY_IDX[x.trim()]).filter(x => x !== undefined) : [6,0,1,2,3,4];
+  const now = new Date(); let cur = new Date(now.getFullYear(), now.getMonth(), 1);
+  const minM = new Date(cur), maxM = new Date(now.getFullYear(), now.getMonth() + 12, 1);
+  const s = modal(`<h3>أيام الإجازة</h3><p class="muted" style="margin:-6px 0 10px">دوس على أي يوم عشان تخليه إجازة، ودوس تاني عشان تلغيها. الأيام دي هتظهر "إجازة" في كالندر الحجز ومحدش هيقدر يحجز فيها.</p>
+    <div class="hcal"><div class="hc-h"><button class="btn ghost sm" id="hp" aria-label="الشهر اللي فات">›</button><b id="hm"></b><button class="btn ghost sm" id="hn" aria-label="الشهر الجاي">‹</button></div><div class="hc-g" id="hg"></div></div>
+    <div class="meta" id="hsel" style="margin:10px 0"></div><div id="he" class="err hidden"></div>
+    <div class="grid2"><button class="btn ghost" onclick="closeModal()">إلغاء</button><button class="btn" id="hs">حفظ</button></div>`);
+  const draw = () => {
+    s.querySelector('#hm').textContent = new Intl.DateTimeFormat('ar-EG', { month:'long', year:'numeric' }).format(cur);
+    s.querySelector('#hp').disabled = cur <= minM; s.querySelector('#hn').disabled = cur >= maxM;
+    const first = cur.getDay(), days = new Date(cur.getFullYear(), cur.getMonth() + 1, 0).getDate();
+    let h = ['ح','ن','ث','ر','خ','ج','س'].map(d => `<span class="hc-w">${d}</span>`).join('') + '<span></span>'.repeat(first);
+    for (let d = 1; d <= days; d++) {
+      const ymd = toYmd(new Date(cur.getFullYear(), cur.getMonth(), d)), dow = new Date(cur.getFullYear(), cur.getMonth(), d).getDay();
+      const past = ymd < today, weekly = !work.includes(dow);
+      h += `<button class="hc-d ${sel.has(ymd) ? 'on' : ''} ${weekly ? 'wk' : ''} ${ymd === today ? 'td' : ''}" data-d="${ymd}" ${past || weekly ? 'disabled' : ''}>${nf.format(d)}${weekly ? '<small>إجازة</small>' : ''}</button>`;
+    }
+    s.querySelector('#hg').innerHTML = h;
+    s.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { const d = b.dataset.d; sel.has(d) ? sel.delete(d) : sel.add(d); draw(); });
+    const list = [...sel].sort();
+    s.querySelector('#hsel').innerHTML = list.length ? list.map(d => `<span class="pill red">${fmtDay(d)}</span>`).join('') : '<span class="muted">مفيش أيام متعلّم عليها</span>';
+  };
+  s.querySelector('#hp').onclick = () => { cur = new Date(cur.getFullYear(), cur.getMonth() - 1, 1); draw(); };
+  s.querySelector('#hn').onclick = () => { cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1); draw(); };
+  draw();
+  s.querySelector('#hs').onclick = async () => { const b = s.querySelector('#hs'); busy(b, true);
+    const v = [...sel].sort().join(',');
+    try { await api('saveSettings', { values: { [HOLI_KEY]: v } }); holiInput().value = v; showHoliList(); closeModal(); toast('اتحفظت أيام الإجازة'); }
+    catch (e) { if (e.message !== 'AUTH') { s.querySelector('#he').textContent = e.message; s.querySelector('#he').classList.remove('hidden'); } busy(b, false); } };
 }
 
 /* ═══ المستخدمين (الأونر بس) ═══ */
@@ -578,9 +635,9 @@ async function viewUsers(){
 function renderUsers(){
   const label = k => (PERMS.find(p => p.key === k) || {}).label || k;
   $('#list').innerHTML = `<div class="ulist">${USERS.map(u => `<div class="card ${u.active?'':'off'}"><div class="u"><div class="avatar">${esc((u.name||u.username).trim().charAt(0))}</div>
-    <div style="flex:1;min-width:0"><div class="name">${esc(u.name)} ${u.owner?'<span class="pill teal">الأونر</span>':''}${u.active?'':'<span class="pill" style="color:var(--danger)">موقوف</span>'}</div><div class="muted" dir="ltr" style="text-align:right">${esc(u.username)}</div></div>
+    <div style="flex:1;min-width:0"><div class="name">${esc(u.name)} ${u.admin?'<span class="pill blue">أدمن</span>':''}${u.active?'':'<span class="pill" style="color:var(--danger)">موقوف</span>'}</div><div class="muted" dir="ltr" style="text-align:right">${esc(u.username)}</div></div>
     <button class="btn ghost sm" data-eu="${esc(u.username)}">تعديل</button></div>
-    ${u.owner ? '<p class="muted" style="margin:8px 0 0">كل الصلاحيات</p>' : `<div class="meta">${u.perms.length ? u.perms.map(p => `<span class="pill">${esc(label(p))}</span>`).join('') : '<span class="muted">مالوش صلاحيات</span>'}</div>`}</div>`).join('')}</div>`;
+    ${u.owner ? '<p class="muted" style="margin:8px 0 0">كل الصلاحيات</p>' : u.admin ? '<p class="muted" style="margin:8px 0 0">كل الصلاحيات ما عدا المستخدمين</p>' : `<div class="meta">${u.perms.length ? u.perms.map(p => `<span class="pill">${esc(label(p))}</span>`).join('') : '<span class="muted">مالوش صلاحيات</span>'}</div>`}</div>`).join('')}</div>`;
   document.querySelectorAll('[data-eu]').forEach(b => b.onclick = () => userForm(USERS.find(u => u.username === b.dataset.eu)));
 }
 function userForm(u){
@@ -589,13 +646,16 @@ function userForm(u){
     <div class="field"><label class="f">الاسم</label><input class="input" id="un" value="${esc(u?u.name:'')}"></div>
     <div class="field"><label class="f">اسم المستخدم (إنجليزي)</label><input class="input" id="uu" dir="ltr" autocapitalize="none" value="${esc(u?u.username:'')}" ${isNew?'':'disabled'}></div>
     <div class="field"><label class="f">${isNew ? 'الباسورد (6 على الأقل)' : 'باسورد جديد (سيبه فاضي لو مش هتغيّره)'}</label><input class="input" id="up" type="text" dir="ltr" autocomplete="off"></div>
-    ${owner ? '<p class="muted">حساب الأونر ليه كل الصلاحيات دايمًا.</p>' : `<label class="f">الصلاحيات</label><div class="perms">${PERMS.map(p => `<label><input type="checkbox" value="${p.key}" ${u && u.perms.includes(p.key) ? 'checked' : ''}>${esc(p.label)}</label>`).join('')}</div>
+    ${owner ? '<p class="muted">الحساب ده ليه كل الصلاحيات.</p>' : `<label class="f">الصلاحيات</label><div class="perms">${PERMS.map(p => `<label><input type="checkbox" value="${p.key}" ${u && u.perms.includes(p.key) ? 'checked' : ''}>${esc(p.label)}</label>`).join('')}</div>
     <div class="perms" style="margin-top:10px"><label><input type="checkbox" id="ua" ${!u || u.active ? 'checked' : ''}>الحساب شغّال (شيل العلامة عشان توقفه)</label></div>`}
     <div id="e" class="err hidden"></div>
     <div class="row" style="margin-top:8px"><button class="btn grow" id="sv">حفظ</button>${!isNew && !owner ? '<button class="btn danger" id="rm">مسح</button>' : ''}<button class="btn ghost" onclick="closeModal()">إلغاء</button></div>`);
   const err = m => { const e = s.querySelector('#e'); e.textContent = m; e.classList.remove('hidden'); };
+  const adm = s.querySelector('.perms input[value="admin"]');
+  const syncAdmin = () => { if (!adm) return; s.querySelectorAll('.perms input[value]').forEach(i => { if (i !== adm) { i.disabled = adm.checked; i.closest('label').style.opacity = adm.checked ? .45 : 1; } }); };
+  if (adm) { adm.closest('label').style.borderColor = 'var(--blue)'; adm.onchange = syncAdmin; syncAdmin(); }
   s.querySelector('#sv').onclick = async () => { const b = s.querySelector('#sv'); busy(b, true);
-    const perms = [...s.querySelectorAll('.perms input[value]:checked')].map(i => i.value);
+    const perms = adm && adm.checked ? ['admin'] : [...s.querySelectorAll('.perms input[value]:checked')].map(i => i.value);
     try { const r = await api('saveUser', { username: s.querySelector('#uu').value, name: s.querySelector('#un').value, password: s.querySelector('#up').value, perms, active: owner ? true : s.querySelector('#ua').checked });
       USERS = r.users; closeModal(); renderUsers(); toast('اتحفظ المستخدم'); }
     catch (e) { if (e.message !== 'AUTH') err(e.message); busy(b, false); } };
