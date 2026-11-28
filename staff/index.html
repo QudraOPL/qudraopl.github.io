@@ -166,6 +166,8 @@ nav.tabs button.on{color:var(--navy);background:var(--bg)}
 .hc-d.on{background:var(--danger);color:#fff}
 .hc-d.wk{background:#fdeeee;color:#c98b8b}
 .hc-d:disabled{cursor:default}.hc-d:disabled:not(.wk){opacity:.35}
+.role-i{padding:10px 0;border-top:1px solid var(--line)}.role-i:first-of-type{border-top:0}
+.perms.roles label{align-items:flex-start}.perms.roles input{margin-top:4px}
 .late-i{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
 .late-i:first-of-type{border-top:0}
 </style>
@@ -567,7 +569,7 @@ async function viewSettings(){
   $('#main').innerHTML = '<div class="center"><span class="spinner"></span></div>';
   try {
     const r = await api('settings');
-    $('#main').innerHTML = `<div class="card"><h3 style="margin:0 0 4px">إعدادات الحجز والمركز</h3><p class="muted" style="margin:0 0 12px">القوايم بتتفصل بفاصلة (,). أي تعديل بيظهر في أبلكيشن المرضى على طول.</p>
+    $('#main').innerHTML = (can('admin') ? '<div id="rolesBox"></div>' : '') + `<div class="card"><h3 style="margin:0 0 4px">إعدادات الحجز والمركز</h3><p class="muted" style="margin:0 0 12px">القوايم بتتفصل بفاصلة (,). أي تعديل بيظهر في أبلكيشن المرضى على طول.</p>
       ${r.settings.map(x => x.key === HOLI_KEY
         ? `<div class="field"><label class="f">أيام الإجازة (غير الإجازة الأسبوعية)</label><input type="hidden" data-key="${esc(x.key)}" value="${esc(x.value)}">
            <button class="btn ghost block" id="holiBtn" type="button">📅 اختار أيام الإجازة من الكالندر</button><div class="meta" id="holiList"></div></div>`
@@ -577,7 +579,51 @@ async function viewSettings(){
       try { await api('saveSettings', { values }); toast('اتحفظت الإعدادات'); } catch (e) { if (e.message !== 'AUTH') { $('#e').textContent = e.message; $('#e').classList.remove('hidden'); } }
       finally { busy($('#sv'), false); } };
     if ($('#holiBtn')) { showHoliList(); $('#holiBtn').onclick = holidayPicker; }
+    if ($('#rolesBox')) loadRoles();
   } catch (e) { if (e.message !== 'AUTH') $('#main').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+
+/* ═══ الأدوار (الأونر والأدمن بس) ═══ */
+let ROLES = [];
+const permLabel = k => (PERMS.find(p => p.key === k) || {}).label || k;
+async function loadRoles(){
+  const box = $('#rolesBox'); if (!box) return;
+  box.innerHTML = '<div class="card"><div class="center"><span class="spinner"></span></div></div>';
+  try { const r = await api('roles'); ROLES = r.roles; if (r.perms) PERMS = r.perms; renderRoles(); }
+  catch (e) { if (e.message !== 'AUTH') box.innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+function renderRoles(){
+  const box = $('#rolesBox'); if (!box) return;
+  box.innerHTML = `<div class="card"><div class="row" style="margin-bottom:4px"><h3 class="grow" style="margin:0">الأدوار والصلاحيات</h3><button class="btn sm" id="newRole">+ دور جديد</button></div>
+    <p class="muted" style="margin:0 0 10px">اعمل دور لكل وظيفة وحدد صلاحياته، وبعدين ادّيه للموظفين من تاب المستخدمين. أي تعديل في الدور بيتطبق على كل اللي واخدينه على طول.</p>
+    ${ROLES.length ? ROLES.map((r, i) => `<div class="role-i"><div class="row"><b class="grow">${esc(r.name)}</b><span class="muted" style="font-size:13px">${r.users.length ? nf.format(r.users.length) + ' موظف' : 'محدش واخده'}</span><button class="btn ghost sm" data-role="${i}">تعديل</button></div>
+      <div class="meta">${r.perms.length ? r.perms.map(p => `<span class="pill ${p === 'admin' ? 'blue' : ''}">${esc(permLabel(p))}</span>`).join('') : '<span class="muted">مالوش صلاحيات</span>'}</div>
+      ${r.users.length ? `<div class="muted" style="font-size:12.5px">${r.users.map(esc).join('، ')}</div>` : ''}</div>`).join('') : '<div class="empty" style="padding:12px 0">لسه مفيش أدوار. ابدأ بـ "+ دور جديد"، مثلاً: ريسبشن، فني، مخزن.</div>'}</div>`;
+  $('#newRole').onclick = () => roleForm();
+  box.querySelectorAll('[data-role]').forEach(b => b.onclick = () => roleForm(ROLES[+b.dataset.role]));
+}
+function roleForm(r){
+  const isNew = !r, lockedAdmin = r && r.perms.includes('admin') && !ME.owner;
+  if (lockedAdmin) { toast('الدور ده فيه صلاحية الأدمن، الحساب الرئيسي بس يقدر يعدّله'); return; }
+  const list = PERMS.filter(p => p.key !== 'admin' || ME.owner);
+  const s = modal(`<h3>${isNew ? 'دور جديد' : 'تعديل دور ' + esc(r.name)}</h3>
+    <div class="field"><label class="f">اسم الدور</label><input class="input" id="rn" value="${esc(r ? r.name : '')}" placeholder="مثلاً: ريسبشن"></div>
+    <label class="f">صلاحيات الدور</label><div class="perms">${list.map(p => `<label><input type="checkbox" value="${p.key}" ${r && r.perms.includes(p.key) ? 'checked' : ''}>${esc(p.label)}</label>`).join('')}</div>
+    <div id="re" class="err hidden"></div>
+    <div class="row" style="margin-top:8px"><button class="btn grow" id="rs">حفظ</button>${isNew ? '' : '<button class="btn danger" id="rd">مسح</button>'}<button class="btn ghost" onclick="closeModal()">إلغاء</button></div>`);
+  const adm = s.querySelector('.perms input[value="admin"]');
+  const sync = () => { if (!adm) return; s.querySelectorAll('.perms input[value]').forEach(i => { if (i !== adm) { i.disabled = adm.checked; i.closest('label').style.opacity = adm.checked ? .45 : 1; } }); };
+  if (adm) { adm.closest('label').style.borderColor = 'var(--blue)'; adm.onchange = sync; sync(); }
+  const err = m => { const e = s.querySelector('#re'); e.textContent = m; e.classList.remove('hidden'); };
+  s.querySelector('#rs').onclick = async () => { const b = s.querySelector('#rs'); busy(b, true);
+    const perms = adm && adm.checked ? ['admin'] : [...s.querySelectorAll('.perms input[value]:checked')].map(i => i.value);
+    try { const x = await api('saveRole', { oldName: r ? r.name : '', name: s.querySelector('#rn').value, perms }); ROLES = x.roles; closeModal(); renderRoles(); toast('اتحفظ الدور'); }
+    catch (e) { if (e.message !== 'AUTH') err(e.message); busy(b, false); } };
+  const rd = s.querySelector('#rd'); if (rd) rd.onclick = async () => {
+    if (rd.dataset.sure !== '1') { rd.dataset.sure = '1'; rd.textContent = r.users.length ? `هيتشال من ${nf.format(r.users.length)} موظف. دوس تاني` : 'متأكد؟ دوس تاني'; return; }
+    busy(rd, true);
+    try { const x = await api('saveRole', { oldName: r.name, remove: true }); ROLES = x.roles; closeModal(); renderRoles(); toast('اتمسح الدور'); }
+    catch (e) { if (e.message !== 'AUTH') err(e.message); busy(rd, false); } };
 }
 
 /* ═══ أيام الإجازة: كالندر يعلّم عليه الأيام، وبتتقفل في أبلكيشن الحجز ═══ */
@@ -629,15 +675,15 @@ let USERS = [];
 async function viewUsers(){
   $('#main').innerHTML = '<div class="toolbar"><h3 style="margin:0;flex:1">المستخدمين والصلاحيات</h3><button class="btn sm" id="nu">+ مستخدم جديد</button></div><div id="list"><div class="center"><span class="spinner"></span></div></div>';
   $('#nu').onclick = () => userForm(null);
-  try { const r = await api('users'); USERS = r.users; PERMS = r.perms; renderUsers(); }
+  try { const r = await api('users'); USERS = r.users; PERMS = r.perms; ROLES = r.roles || []; renderUsers(); }
   catch (e) { if (e.message !== 'AUTH') $('#list').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
 }
 function renderUsers(){
   const label = k => (PERMS.find(p => p.key === k) || {}).label || k;
   $('#list').innerHTML = `<div class="ulist">${USERS.map(u => `<div class="card ${u.active?'':'off'}"><div class="u"><div class="avatar">${esc((u.name||u.username).trim().charAt(0))}</div>
-    <div style="flex:1;min-width:0"><div class="name">${esc(u.name)} ${u.admin?'<span class="pill blue">أدمن</span>':''}${u.active?'':'<span class="pill" style="color:var(--danger)">موقوف</span>'}</div><div class="muted" dir="ltr" style="text-align:right">${esc(u.username)}</div></div>
+    <div style="flex:1;min-width:0"><div class="name">${esc(u.name)} ${u.admin?'<span class="pill blue">أدمن</span>':''}${(u.roles||[]).map(r => `<span class="pill teal">${esc(r)}</span>`).join('')}${u.active?'':'<span class="pill" style="color:var(--danger)">موقوف</span>'}</div><div class="muted" dir="ltr" style="text-align:right">${esc(u.username)}</div></div>
     <button class="btn ghost sm" data-eu="${esc(u.username)}">تعديل</button></div>
-    ${u.owner ? '<p class="muted" style="margin:8px 0 0">كل الصلاحيات</p>' : u.admin ? '<p class="muted" style="margin:8px 0 0">كل الصلاحيات ما عدا المستخدمين</p>' : `<div class="meta">${u.perms.length ? u.perms.map(p => `<span class="pill">${esc(label(p))}</span>`).join('') : '<span class="muted">مالوش صلاحيات</span>'}</div>`}</div>`).join('')}</div>`;
+    ${u.owner ? '<p class="muted" style="margin:8px 0 0">كل الصلاحيات</p>' : u.admin ? '<p class="muted" style="margin:8px 0 0">كل الصلاحيات ما عدا المستخدمين</p>' : `<div class="meta">${u.perms.filter(p => !p.startsWith('role:')).map(p => `<span class="pill">${esc(label(p))}</span>`).join('') || (u.roles && u.roles.length ? '' : '<span class="muted">مالوش صلاحيات</span>')}</div>`}</div>`).join('')}</div>`;
   document.querySelectorAll('[data-eu]').forEach(b => b.onclick = () => userForm(USERS.find(u => u.username === b.dataset.eu)));
 }
 function userForm(u){
@@ -646,7 +692,8 @@ function userForm(u){
     <div class="field"><label class="f">الاسم</label><input class="input" id="un" value="${esc(u?u.name:'')}"></div>
     <div class="field"><label class="f">اسم المستخدم (إنجليزي)</label><input class="input" id="uu" dir="ltr" autocapitalize="none" value="${esc(u?u.username:'')}" ${isNew?'':'disabled'}></div>
     <div class="field"><label class="f">${isNew ? 'الباسورد (6 على الأقل)' : 'باسورد جديد (سيبه فاضي لو مش هتغيّره)'}</label><input class="input" id="up" type="text" dir="ltr" autocomplete="off"></div>
-    ${owner ? '<p class="muted">الحساب ده ليه كل الصلاحيات.</p>' : `<label class="f">الصلاحيات</label><div class="perms">${PERMS.map(p => `<label><input type="checkbox" value="${p.key}" ${u && u.perms.includes(p.key) ? 'checked' : ''}>${esc(p.label)}</label>`).join('')}</div>
+    ${owner ? '<p class="muted">الحساب ده ليه كل الصلاحيات.</p>' : `${ROLES.length ? `<label class="f">الدور</label><div class="perms roles">${ROLES.map(r => `<label><input type="checkbox" value="role:${esc(r.name)}" ${u && u.perms.includes('role:' + r.name) ? 'checked' : ''}><span><b>${esc(r.name)}</b><small class="muted" style="display:block;font-size:12px;font-weight:600">${r.perms.map(permLabel).map(esc).join('، ') || 'مالوش صلاحيات'}</small></span></label>`).join('')}</div>
+      <label class="f" style="margin-top:10px">صلاحيات زيادة (غير اللي في الدور)</label>` : `<label class="f">الصلاحيات</label><p class="muted" style="margin:-4px 0 8px;font-size:13px">ممكن تعمل أدوار جاهزة من الإعدادات.</p>`}<div class="perms">${PERMS.map(p => `<label><input type="checkbox" value="${p.key}" ${u && u.perms.includes(p.key) ? 'checked' : ''}>${esc(p.label)}</label>`).join('')}</div>
     <div class="perms" style="margin-top:10px"><label><input type="checkbox" id="ua" ${!u || u.active ? 'checked' : ''}>الحساب شغّال (شيل العلامة عشان توقفه)</label></div>`}
     <div id="e" class="err hidden"></div>
     <div class="row" style="margin-top:8px"><button class="btn grow" id="sv">حفظ</button>${!isNew && !owner ? '<button class="btn danger" id="rm">مسح</button>' : ''}<button class="btn ghost" onclick="closeModal()">إلغاء</button></div>`);
